@@ -22,7 +22,7 @@
 
       <my-loaders />
 
-      <myy-footer style="margin-bottom: 2rem" />
+      <my-footer style="margin-bottom: 2rem" />
 
       <!-- footer styles to overlap the wavy footer above -->
       <the-footer style="position: absolute; bottom: 0; width: 100%; z-index: 1000" />
