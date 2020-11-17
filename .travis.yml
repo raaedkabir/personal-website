@@ -1,12 +1,12 @@
 language: node_js
 node_js:
   - '14'
+os: linux
+dist: bionic
 cache:
   npm: true
   directories:
     - node_modules
-# script:
-#   - npm test
 before_deploy:
   - npm i -g travis-ci-cloudfront-invalidation
   - npm run build
@@ -15,8 +15,8 @@ deploy:
   access_key_id: $AWS_ACCESS_KEY_ID
   secret_access_key: $AWS_SECRET_ACCESS_KEY
   bucket: $S3_BUCKET
-  skip_cleanup: false
-  local-dir: dist
+  cleanup: true
+  local_dir: dist
   on:
     branch: master
 after_deploy:
