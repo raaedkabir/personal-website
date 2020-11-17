@@ -1,24 +1,14 @@
-# v3
+## Personal Website
 
-## Project setup
-```
-npm install
-```
+<div align="center">
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+[![forthebadge](https://forthebadge.com/images/badges/made-with-vue.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/powered-by-coffee.svg)](https://forthebadge.com)
 
-### Compiles and minifies for production
-```
-npm run build
-```
+</div>
 
-### Lints and fixes files
-```
-npm run lint
-```
+---
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+**Architecture:**
+
+- Frontend: VueJS with vue-router and vuex
+- Hosting: AWS S3, CloudFront, Route 53
