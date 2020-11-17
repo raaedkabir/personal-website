@@ -77,9 +77,12 @@ export default class Home extends Vue {
       delay: 1,
       opacity: 0,
       width: 0,
-      left: '-100%',
-      ease: Power4.easeOut
-      //   onComplete:
+      left: '-100vw',
+      ease: Power4.easeOut,
+      onComplete() {
+        this._targets[0].style.opacity = 0;
+        console.log(this._targets[0]);
+      }
     });
   }
 }
@@ -122,7 +125,6 @@ export default class Home extends Vue {
     position: absolute;
     top: 0;
     right: -35rem;
-    // transform: translateY(100%);
     height: 100vh;
     width: 35rem;
     background-image: linear-gradient(45deg, var(--clr-secondary), var(--clr-secondary-2));
