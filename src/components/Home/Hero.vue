@@ -81,7 +81,6 @@ export default class Home extends Vue {
       ease: Power4.easeOut,
       onComplete() {
         this._targets[0].style.opacity = 0;
-        console.log(this._targets[0]);
       }
     });
   }
