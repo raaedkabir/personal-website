@@ -14,7 +14,7 @@
 
 - DNS setup with Route 53
 - SSL Certificate from Certificate Manager
-- Staitc hosting on S3
+- Static hosting on S3
 - Distribution with CloudFront
 
 ---
