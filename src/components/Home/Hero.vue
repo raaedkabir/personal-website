@@ -13,13 +13,19 @@
     </div>
     <ul class="contact" ref="social">
       <li>
-        <a href="#"><img src="@/assets/images/linkedin.png" alt="linkedin"/></a>
+        <a href="https://www.linkedin.com/in/raaedkabir/" target="_blank" rel="noopener noreferrer">
+          <img src="@/assets/images/social_icons/linkedin.svg" alt="LinkedIn Link" />
+        </a>
       </li>
       <li>
-        <a href="#"><img src="@/assets/images/twitter.png" alt="twitter"/></a>
+        <a href="https://github.com/ToddLowell" target="_blank" rel="noopener noreferrer">
+          <img src="@/assets/images/social_icons/github.svg" alt="GitHub Link" />
+        </a>
       </li>
       <li>
-        <a href="#"><img src="@/assets/images/reddit.png" alt="reddit"/></a>
+        <a href="https://codepen.io/toddlowell" target="_blank" rel="noopener noreferrer">
+          <img src="@/assets/images/social_icons/codepen.svg" alt="CodePen Link" />
+        </a>
       </li>
     </ul>
   </section>
