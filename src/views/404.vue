@@ -6,7 +6,9 @@
         You've wandered off the path stranger.<br />The button will help guide your way. Don't
         resist the button.
       </p>
-      <a href="index.html" class="btn">Go to Home Page</a>
+      <router-link to="/" class="btn">
+        Go to Home Page
+      </router-link>
     </div>
   </div>
 </template>
@@ -16,8 +18,10 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
+@import '@/assets/scss/abstracts/_mixins.scss';
+
 .error404 {
-  background-image: url('./assets/images/bg-error404.jpg');
+  background-image: url('../assets/images/bg-error404.jpg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
