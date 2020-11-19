@@ -12,17 +12,15 @@
     </section>
     <section class="home__works">
       <div class="container">
-        <h2 class="heading__secondary">My Works <span>_</span></h2>
+        <h2 class="heading__section">My Works <span>_</span></h2>
         <div class="home__works--container one">
           <img src="@/assets/images/works/motor_dashboard.png" alt="" class="home__works--image" />
           <p class="title">Motor Dashboard</p>
           <p class="details">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae veniam laborum sint, dolor
-            numquam nam in error minus. Distinctio tempore vero maxime veniam voluptates deserunt,
-            quod magni cupiditate officiis incidunt.
+            Made with Vue.
           </p>
         </div>
-        <div class="home__works--container two">
+        <!-- <div class="home__works--container two">
           <img
             src="https://source.unsplash.com/featured/?computer"
             alt=""
@@ -47,49 +45,42 @@
             numquam nam in error minus. Distinctio tempore vero maxime veniam voluptates deserunt,
             quod magni cupiditate officiis incidunt.
           </p>
-        </div>
+        </div> -->
         <div class="home__works--container four">
-          <img
-            src="https://source.unsplash.com/featured/?internet"
-            alt=""
-            class="home__works--image"
-          />
-          <p class="title">Lorem Ipsum</p>
+          <img src="@/assets/images/works/tech_site.png" alt="" class="home__works--image" />
+          <p class="title">Tech Website Design</p>
           <p class="details">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae veniam laborum sint, dolor
-            numquam nam in error minus. Distinctio tempore vero maxime veniam voluptates deserunt,
-            quod magni cupiditate officiis incidunt.
+            Designed in Photoshop.
           </p>
         </div>
         <div class="home__works--container five">
-          <img src="https://source.unsplash.com/featured/?tech" alt="" class="home__works--image" />
-          <p class="title">Lorem Ipsum</p>
+          <a href="/project_generator_site/index.html">
+            <img
+              src="@/assets/images/works/project_generator_site.jpg"
+              alt=""
+              class="home__works--image"
+            />
+          </a>
+          <p class="title">Project Generator</p>
           <p class="details">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae veniam laborum sint, dolor
-            numquam nam in error minus. Distinctio tempore vero maxime veniam voluptates deserunt,
-            quod magni cupiditate officiis incidunt.
+            Made in HTML & CSS.
           </p>
         </div>
         <div class="home__works--container six">
-          <img src="https://source.unsplash.com/featured/?wifi" alt="" class="home__works--image" />
-          <p class="title">Lorem Ipsum</p>
-          <p class="details">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae veniam laborum sint, dolor
-            numquam nam in error minus. Distinctio tempore vero maxime veniam voluptates deserunt,
-            quod magni cupiditate officiis incidunt.
-          </p>
+          <router-link to="/components">
+            <img
+              src="@/assets/images/works/component_library.png"
+              alt=""
+              class="home__works--image"
+            />
+          </router-link>
+          <p class="title">Pure CSS Components</p>
         </div>
         <div class="home__works--container seven">
-          <img
-            src="https://source.unsplash.com/featured/?laptop"
-            alt=""
-            class="home__works--image"
-          />
+          <img src="@/assets/images/works/lorem_image.jpg" alt="" class="home__works--image" />
           <p class="title">Lorem Ipsum</p>
           <p class="details">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae veniam laborum sint, dolor
-            numquam nam in error minus. Distinctio tempore vero maxime veniam voluptates deserunt,
-            quod magni cupiditate officiis incidunt.
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
           </p>
         </div>
       </div>
