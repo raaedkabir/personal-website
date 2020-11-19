@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
+
+        <link rel="stylesheet" href="css/icon-font.css">
+        <link rel="stylesheet" href="sass/main.css">
+        <!-- <link rel="shortcut icon" type="image/png" href="img/favicon.png"> -->
+        
+        <script>
+            function closeNav() {
+                document.getElementById("navi-toggle").checked = false;
+            }
+        </script>
+
+        <title>Website</title>
+    </head>
+    <body>
+        <div class="navigation">
+            <input type="checkbox" class="navigation__checkbox" id="navi-toggle">
+            <label for="navi-toggle" class="navigation__button"><span class="navigation__icon"></span>&nbsp;</label>
+            <div class="navigation__background">&nbsp;</div>
+            <nav class="navigation__nav">
+                <ul class="navigation__list">
+                    <li class="navigation__item"><a href="#" class="navigation__link" onclick="closeNav()">About Us</a></li>
+                    <li class="navigation__item"><a href="#" class="navigation__link" onclick="closeNav()">Devices</a></li>
+                    <li class="navigation__item"><a href="#" class="navigation__link" onclick="closeNav()">Testimonials</a></li>
+                    <li class="navigation__item"><a href="#" class="navigation__link" onclick="closeNav()">Sign Up!</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <header class="header">
+            <div class="header__logo-box"><img src="img/logo.png" alt="Logo" class="header__logo"></div>
+
+            <div class="header__text-box">
+                <h1 class="heading-primary">
+                    <span class="heading-primary--main">Project Generator</span>
+                    <span class="heading-primary--sub">for Arduino and Raspberry&nbsp;Pi</span>
+                </h1>
+                <a href="#" class="btn btn--white btn--animated">Get Started!</a>
+            </div>
+        </header>
+
+        <main>
+            <section class="section-about">
+                <div class="u-center-text u-margin-bottom-big">
+                    <h2 class="heading-secondary">Exciting Projects for Everyone</h2>
+                </div>
+
+                <div class="row">
+                    <div class="col-1-of-2">
+                        <h3 class="heading-tertiary u-margin-bottom-small">Arduino</h3>
+                        <p class="paragraph">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam labore eum nostrum saepe illum quod officiis, laboriosam mollitia libero, amet commodi, modi aspernatur iusto quae? Iusto est quidem veniam voluptate.</p>
+                        <h3 class="heading-tertiary u-margin-bottom-small">Arduino</h3>
+                        <p class="paragraph">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus porro necessitatibus voluptatem. Soluta totam mollitia, non rerum ipsa laudantium iure error, excepturi vel est, accusantium velit reiciendis. Maxime, sunt a?</p>                        
+                    
+                        <a href="#" class="btn-text">Learn more &rarr;</a>
+                    </div>
+                    <div class="col-1-of-2">
+                        <div class="composition">
+                            <img src="img/project-2.jpg" alt="Photo 1" class="composition__photo composition__photo--p1">
+                            <img src="img/project-1.jpg" alt="Photo 2" class="composition__photo composition__photo--p2">
+                            <img src="img/project-3.jpg" alt="Photo 3" class="composition__photo composition__photo--p3">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section-features">
+                <div class="row">
+                    <div class="col-1-of-3">
+                        <div class="feature-box">
+                            <i class="feature-box__icon icon-basic-world"></i>
+                            <h3 class="heading-tertiary u-margin-bottom-small">Get Projects from All Around the Web</h3>
+                            <p class="feature-box__text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias tenetur illo voluptates, nesciunt a ut rerum ab rem molestiae, cumque vero neque consequatur explicabo numquam suscipit autem. Aliquid, obcaecati nisi!</p>
+                        </div>
+                    </div>
+                    <div class="col-1-of-3">
+                        <div class="feature-box">
+                            <i class="feature-box__icon icon-basic-book-pen"></i>
+                            <h3 class="heading-tertiary u-margin-bottom-small">Follow Step-by-Step Instructions</h3>
+                            <p class="feature-box__text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Natus perferendis mollitia libero corporis velit minus provident nihil, incidunt recusandae fugit temporibus facere repudiandae adipisci. Earum minus magnam aspernatur reiciendis perferendis!</p>
+                        </div>
+                    </div>
+                    <div class="col-1-of-3">
+                        <div class="feature-box">
+                            <i class="feature-box__icon icon-basic-message-txt"></i>
+                            <h3 class="heading-tertiary u-margin-bottom-small">Chat with others doing similar projects</h3>
+                            <p class="feature-box__text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis enim sit dolorem quos fugiat, consequatur eligendi ex necessitatibus, numquam ut tempore deserunt nam similique! Non in veniam quasi nam quam!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section-tours" id="section-tours">
+                <div class="u-center-text u-margin-bottom-big">
+                    <h2 class="heading-secondary">Choose Your Device</h2>
+                </div>
+
+                <div class="row">
+                    <div class="col-1-of-2">
+                        <div class="card">
+                            <div class="card__side card__side--front">
+                                <div class="card__picture card__picture--1">
+                                    &nbsp;
+                                </div>
+                                <h4 class="card__heading">
+                                    <span class="card__heading-span card__heading-span--1">Raspberry&nbsp;Pi</span>
+                                </h4>
+                                <div class="card__details">
+                                    <ul>
+                                        <li>Raspberry&nbsp;Pi iz gud.</li>
+                                        <li>WiFi enabdled.</li>
+                                        <li>I have no life.</li>
+                                        <li>Send help please.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card__side card__side--back card__side--back-1">
+                                <div class="card__cta">
+                                    <p class="card__backtext">Work in Progress</p> 
+                                    <a href="#" class="btn btn--white">Get Started!</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-1-of-2">
+                        <div class="card">
+                            <div class="card">
+                                <div class="card__side card__side--front">
+                                    <div class="card__picture card__picture--2">
+                                        &nbsp;
+                                    </div>
+                                    <h4 class="card__heading">
+                                        <span class="card__heading-span card__heading-span--2">Arduino</span>
+                                    </h4>
+                                    <div class="card__details">
+                                        <ul>
+                                            <li>Arduino is okay.</li>
+                                            <li>Iz cheap.</li>
+                                            <li>Is easy to use.</li>
+                                            <li>Isn't IoT ready.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="card__side card__side--back card__side--back-2">
+                                    <div class="card__cta">
+                                        <p class="card__backtext">Click Below</p> 
+                                        <a href="#popup" class="btn btn--white">Get Started!</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section-stories">
+                <div class="bg-video">
+                    <video class="bg-video__content" autoplay muted loop>
+                        <source src="img/video.mp4" type="video/mp4"> 
+                        <source src="img/video.webm" type="video/webm">
+                        Your browswer is not supported!
+                    </video>
+                </div>
+                <div class="u-center-text u-margin-bottom-big">
+                    <h2 class="heading-secondary">We've helped all these people</h2>
+                </div>
+
+                <div class="row">
+                    <div class="story">
+                        <figure class="story__shape">
+                            <img src="img/story.jpg" alt="person" class="story__image">
+                            <figcaption class="story__caption">Brendanus Low</figcaption>
+                        </figure>
+                        <div class="story__text">
+                            <h3 class="heading-tertiary u-margin-bottom-small">It worked great!</h3>
+                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Consequatur magni porro officia mollitia incidunt dolorum ipsa, id earum exercitationem eligendi quia placeat excepturi, quos inventore itaque! Cupiditate ipsum voluptas et.
+                                Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="u-center-text">
+                    <a href="#" class="btn-text">Read More &rarr;</a>
+                </div>
+            </section>
+
+            <section class="section-book">
+                <div class="row">
+                    <div class="book">
+                        <div class="book__form">
+                            <form action="#" class="form">
+                                <div class="u-margin-bottom-medium">
+                                    <h2 class="heading-secondary">Subscribe to our newsletter!</h2>
+                                </div>
+
+                                <div class="form__group">
+                                    <input type="text" class="form__input" id="name" placeholder="Full Name" required>
+                                    <label for="name" class="form__label">Full Name</label>
+                                </div>
+
+                                <div class="form__group">
+                                    <input type="email" class="form__input" id="email" placeholder="Email Address" required>
+                                    <label for="email" class="form__label">Email Address</label>
+                                </div>
+
+                                <div class="form__group">
+                                    <div class="form__radio-group">
+                                        <input type="radio" class="form__radio-input" id="rpi" name="radio">
+                                        <label for="rpi" class="form__radio-label">
+                                            <span class="form__radio-button"></span>
+                                            Raspberry&nbsp;Pi
+                                        </label>
+                                    </div>
+                                    <div class="form__radio-group u-margin-bottom-small">
+                                        <input type="radio" class="form__radio-input" id="arduino" name="radio">
+                                        <label for="arduino" class="form__radio-label">
+                                            <span class="form__radio-button"></span>
+                                            Arduino
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form__group u-margin-bottom-small">
+                                    <button class="btn btn--green">Continue &rarr;</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="footer__logo-box">
+                <img src="img/logo.png" alt="logo" class="footer__logo">
+            </div>
+            <div class="row">
+                <div class="col-1-of-2">
+                    <div class="footer__navigation">
+                        <ul class="footer__list">
+                            <li class="footer__item"><a href="#" class="footer__link">Company</a></li>
+                            <li class="footer__item"><a href="#" class="footer__link">Contact Us</a></li>
+                            <li class="footer__item"><a href="#" class="footer__link">Privacy Policy</a></li>
+                            <li class="footer__item"><a href="#" class="footer__link">Terms</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-1-of-2">
+                    <p class="footer__copyright">
+                        Built by <a href="#" class="footer__link">No One</a> for some reason. 
+                    </p>
+                </div>
+            </div>
+        </footer>
+
+        <div class="popup" id="popup">
+            <div class="popup__content">
+                <div class="popup__left">
+                    <img src="img/arduino-logo.png" alt="" class="popup__img">
+                    <img src="img/rpi-logo.png" alt="" class="popup__img">
+                </div>
+                <div class="popup__right">
+                    <a href="#section-tours" class="popup__close">&times;</a>
+                    <h2 class="heading-secondary u-margin-bottom-small">Start Now</h2>
+                    <h3 class="heading-tertiary u-margin-bottom-small">Important &ndash; Please read first!</h3>
+                    <p class="popup__text">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit sit dolorem minima, quis voluptates aliquid laudantium a nobis quisquam quo quidem consequatur dicta labore, veritatis nesciunt! Quod, esse. Eius, doloribus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus nulla cupiditate deserunt beatae aliquid qui molestias repellat, omnis natus facere quo perferendis ad dolores aut in repudiandae architecto facilis dicta.
+                    </p>
+                    <a href="#" class="btn btn--green">Click Here</a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
