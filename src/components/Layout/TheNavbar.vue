@@ -167,21 +167,22 @@ export default class Home extends Vue {
 .navbar {
   position: fixed;
   top: 0;
-  right: -200px;
+  right: 0;
+  transform: translateX(100%);
   width: var(--navbar-size);
   height: 100vh;
   background-image: linear-gradient(45deg, var(--clr-secondary), var(--clr-secondary-2));
   display: grid;
   place-items: center;
   transition: all 0.5s;
-  z-index: -10;
+  z-index: -1;
 
   @include respond(phone) {
     width: var(--navbar-size-small);
   }
 
   &.active {
-    right: 0;
+    transform: translateX(0);
     z-index: initial;
   }
 
