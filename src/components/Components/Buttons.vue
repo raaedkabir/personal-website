@@ -1,6 +1,6 @@
 <template>
   <section class="buttons">
-    <svg viewBox="0 0 560 259" class="headerSVG">
+    <!-- <svg viewBox="0 0 560 259" class="headerSVG">
       <text transform="matrix(1 0 0 1 -0.00007 116.14385)">
         <tspan x="0" y="0" font-family="'Montserrat'" font-size="157px">STARS</tspan>
         <tspan x="0" y="139" font-family="'Montserrat'" font-size="181px">DEAD</tspan>
@@ -10,9 +10,10 @@
         <tspan x="0" y="0" font-family="'Montserrat'" font-size="19px">OF</tspan>
         <tspan x="-6.28906" y="17" font-family="'Montserrat'" font-size="19px">THE</tspan>
       </text>
-    </svg>
+    </svg> -->
     <div class="container">
-      <h1 class="heading__primary">Buttons</h1>
+      <h1 class="heading__primary">Pure CSS Component Library</h1>
+      <h2 class="heading__secondary">Buttons</h2>
 
       <div class="showcase__btn">
         <a href="#" class="btn--1">Hover</a>

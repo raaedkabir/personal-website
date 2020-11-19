@@ -1,7 +1,7 @@
 <template>
   <section class="text">
     <div class="container">
-      <h1 class="heading__primary">Text Effects</h1>
+      <h2 class="heading__secondary">Text Effects</h2>
 
       <div class="showcase__text">
         <ul class="text-effect--1">

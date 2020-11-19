@@ -1,7 +1,7 @@
 <template>
   <section class="menu">
     <div class="container">
-      <h1 class="heading__primary">Menu Effects</h1>
+      <h2 class="heading__secondary">Menu Effects</h2>
 
       <div class="showcase__menu">
         <ul class="menu-effect--1">

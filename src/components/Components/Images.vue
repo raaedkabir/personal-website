@@ -1,7 +1,7 @@
 <template>
   <section class="image">
     <div class="container">
-      <h1 class="heading__primary">Image Captions</h1>
+      <h2 class="heading__secondary">Image Captions</h2>
 
       <div class="showcase__image">
         <div class="image-effect--1">

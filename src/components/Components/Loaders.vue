@@ -1,7 +1,7 @@
 <template>
   <section class="loader">
     <div class="container">
-      <h1 class="heading__primary">Loader Effects</h1>
+      <h2 class="heading__secondary">Loader Effects</h2>
       <div class="showcase__loader">
         <div class="loader-effect--1">
           <span style="--i: 1"></span>
@@ -48,6 +48,10 @@ export default class Home extends Vue {}
 
 <style lang="scss" scoped>
 @import '@/assets/scss/abstracts/_mixins.scss';
+
+h2 {
+  color: #000;
+}
 
 .showcase {
   &__loader {
