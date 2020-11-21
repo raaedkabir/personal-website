@@ -3,6 +3,12 @@ node_js:
   - '14'
 os: linux
 dist: bionic
+notifications:
+  email:
+    recipients:
+      - raaed.kabir@gmail.com
+    on_success: always
+    on_failure: always
 cache:
   npm: true
   directories:
