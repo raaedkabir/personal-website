@@ -19,7 +19,7 @@
         <a href="#" class="btn--1">Hover</a>
         <a href="#" class="btn--2">Hover</a>
         <a href="#" class="btn--3">Hover</a>
-        <div style="position: relative; width: 100%; height: 100%">
+        <div class="btn--4__wrapper">
           <a href="#" class="btn--4">Hover</a>
         </div>
         <a href="#" class="btn--5">Hover</a>
@@ -235,6 +235,12 @@ section.buttons {
       letter-spacing: 8px;
       border: 7px solid #e1332d;
     }
+
+    &__wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
   }
 
   &--5 {
@@ -440,6 +446,7 @@ section.buttons {
     letter-spacing: 2px;
     position: relative;
 
+    // // second folding card
     // &::before {
     //     content: "BUTTON";
     //     position: absolute;

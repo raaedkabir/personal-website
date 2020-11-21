@@ -4,26 +4,26 @@
       <h2 class="heading__secondary">Loader Effects</h2>
       <div class="showcase__loader">
         <div class="loader-effect--1">
-          <span style="--i: 1"></span>
-          <span style="--i: 2"></span>
-          <span style="--i: 3"></span>
-          <span style="--i: 4"></span>
-          <span style="--i: 5"></span>
-          <span style="--i: 6"></span>
-          <span style="--i: 7"></span>
-          <span style="--i: 8"></span>
-          <span style="--i: 9"></span>
-          <span style="--i: 10"></span>
-          <span style="--i: 11"></span>
-          <span style="--i: 12"></span>
-          <span style="--i: 13"></span>
-          <span style="--i: 14"></span>
-          <span style="--i: 15"></span>
-          <span style="--i: 16"></span>
-          <span style="--i: 17"></span>
-          <span style="--i: 18"></span>
-          <span style="--i: 19"></span>
-          <span style="--i: 20"></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
         </div>
         <div class="loader-effect--2">
           <span></span>
@@ -87,13 +87,23 @@ section.loader {
     height: 6rem;
     animation: loader1color 10s linear infinite;
 
+    $elements: 20;
+    @for $i from 0 to $elements {
+      span:nth-child(#{$i + 1}) {
+        transform: rotate(calc(18deg * #{$i}));
+
+        &::before {
+          animation-delay: calc(0.1s * #{$i});
+        }
+      }
+    }
+
     span {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      transform: rotate(calc(18deg * var(--i)));
 
       &::before {
         content: '';
@@ -108,7 +118,6 @@ section.loader {
         box-shadow: 0 0 1rem #00ff0a, 0 0 2rem #00ff0a, 0 0 4rem #00ff0a, 0 0 6rem #00ff0a,
           0 0 8rem #00ff0a, 0 0 10rem #00ff0a;
         animation: loader1ring 2s linear infinite;
-        animation-delay: calc(0.1s * var(--i));
       }
     }
   }

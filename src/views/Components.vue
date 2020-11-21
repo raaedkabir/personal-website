@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative; width: 100%; height: 100%">
+  <div class="wrapper">
     <teleport to="body">
       <svg
         class="background"
@@ -11,7 +11,7 @@
         <polygon fill="#fcfafa" points="0 705.5 979.6 705.5 0 23.5 0 705.5" />
       </svg>
     </teleport>
-    <div style="position: relative; padding-bottom: 300px;">
+    <div class="components">
       <my-buttons />
 
       <my-images />
@@ -22,10 +22,10 @@
 
       <my-loaders />
 
-      <my-footer style="margin-bottom: 2rem" />
+      <my-footer class="wavy-footer" />
 
       <!-- footer styles to overlap the wavy footer above -->
-      <the-footer style="position: absolute; bottom: 0; width: 100%; z-index: 1000" />
+      <the-footer class="footer" />
     </div>
   </div>
 </template>
@@ -55,6 +55,28 @@ export default class Home extends Vue {}
 </script>
 
 <style lang="scss" scoped>
+.wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  .components {
+    position: relative;
+    padding-bottom: 300px;
+  }
+
+  .wavy-footer {
+    margin-bottom: 2rem;
+  }
+
+  .footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+  }
+}
+
 .background {
   position: fixed;
   top: 0;
