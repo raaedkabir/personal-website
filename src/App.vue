@@ -36,9 +36,9 @@ export default class Home extends Vue {
 
 @import '@/assets/scss/vendors/_normalize.scss';
 
-@import '@/assets/scss/base/animations';
-@import '@/assets/scss/base/reset';
-@import '@/assets/scss/base/typography';
+@import '@/assets/scss/base/_animations';
+@import '@/assets/scss/base/_reset';
+@import '@/assets/scss/base/_typography';
 
 // container
 .container {
