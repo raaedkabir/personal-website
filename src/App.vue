@@ -51,31 +51,4 @@ export default class Home extends Vue {
     max-width: 1140px;
   }
 }
-
-.btn--nav {
-  display: inline-block;
-  padding: 1rem;
-  margin: 0.5rem;
-  width: 100%;
-  border-radius: 5px;
-  transition: all 0.2s;
-
-  &:hover {
-    color: var(--clr-secondary);
-    background: #fff;
-  }
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
 </style>

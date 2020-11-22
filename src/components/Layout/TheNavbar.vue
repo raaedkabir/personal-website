@@ -10,7 +10,9 @@
   <nav class="navbar" :class="{ active: displayNav }">
     <particles-js />
     <ul>
-      <li><router-link class="btn--nav" to="/">Home</router-link></li>
+      <li>
+        <router-link class="btn--nav" to="/" @click.prevent="toggleNav">Home</router-link>
+      </li>
       <li><a class="btn--nav" href="#">About Me</a></li>
       <li><a class="btn--nav" href="#">My Works</a></li>
       <li><a class="btn--nav" href="#">Portfolio</a></li>
@@ -75,6 +77,20 @@ export default class Home extends Vue {
     @include respond(phone) {
       transform: translateX(calc(-1 * var(--navbar-size-small)));
     }
+  }
+}
+
+.btn--nav {
+  display: inline-block;
+  padding: 1rem;
+  margin: 0.5rem;
+  width: 100%;
+  border-radius: 5px;
+  transition: all 0.2s;
+
+  &:hover {
+    color: var(--clr-secondary);
+    background: #fff;
   }
 }
 
