@@ -1,5 +1,16 @@
+h1 {
+  line-height: 1;
+  @include interpolate((font-size), 600px, 1800px, 40px, 60px);
+}
+
+h2 {
+  line-height: 1;
+  @include interpolate((font-size), 600px, 1800px, 30px, 45px);
+  @include interpolate((padding-top, padding-bottom), 600px, 1800px, 5px, 40px);
+}
+
 .heading__primary {
-  font-size: 5rem;
+  // font-size: 5rem;
   font-weight: 400;
   text-align: center;
 
@@ -9,8 +20,8 @@
 }
 
 .heading__secondary {
-  padding: 0.5em;
-  font-size: 3.8rem;
+  // padding: 0.5em;
+  // font-size: 3.8rem;
   font-weight: 100;
   text-align: center;
 }
@@ -22,37 +33,4 @@
   & span {
     color: var(--clr-primary);
   }
-}
-
-@mixin interpolate($properties, $min-screen, $max-screen, $min-value, $max-value) {
-  & {
-    @each $property in $properties {
-      #{$property}: $min-value;
-    }
-
-    @media screen and (min-width: $min-screen) {
-      @each $property in $properties {
-        #{$property}: calc-interpolation($min-screen, $min-value, $max-screen, $max-value);
-      }
-    }
-
-    @media screen and (min-width: $max-screen) {
-      @each $property in $properties {
-        #{$property}: $max-value;
-      }
-    }
-  }
-}
-
-// requires the calc-interpolation function which can also be used independently
-@function calc-interpolation($min-screen, $min-value, $max-screen, $max-value) {
-  $a: ($max-value - $min-value) / ($max-screen - $min-screen);
-  $b: $min-value - $a * $min-screen;
-
-  $sign: '+';
-  @if ($b < 0) {
-    $sign: '-';
-    $b: abs($b);
-  }
-  @return calc(#{$a * 100}vw #{$sign} #{$b});
 }
