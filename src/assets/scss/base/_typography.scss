@@ -1,0 +1,25 @@
+.heading__primary {
+  font-size: 5rem;
+  font-weight: 400;
+  text-align: center;
+
+  span {
+    color: var(--clr-primary);
+  }
+}
+
+.heading__secondary {
+  padding: 0.5em;
+  font-size: 3.8rem;
+  font-weight: 100;
+  text-align: center;
+}
+
+.heading__section {
+  font-size: 3.8rem;
+  font-weight: 400;
+
+  & span {
+    color: var(--clr-primary);
+  }
+}
