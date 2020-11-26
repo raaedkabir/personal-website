@@ -5,7 +5,7 @@
     <div class="right-bar" ref="rightBar"></div>
     <div class="content" ref="content">
       <auto-typer />
-      <h2>
+      <h2 class="py-10">
         My name is <span>{{ firstName }}</span
         >.
       </h2>
@@ -139,10 +139,14 @@ export default class Home extends Vue {
     position: absolute;
     top: 35%;
     width: 40%;
-    background: rgba($color: #ccc, $alpha: 0.25);
+    background: var(--clr-mask);
     padding: 2rem;
     border-radius: 5px;
     white-space: nowrap;
+
+    @include respond(tab-port) {
+      width: 100%;
+    }
 
     h1,
     h2 {

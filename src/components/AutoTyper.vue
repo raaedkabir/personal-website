@@ -1,5 +1,5 @@
 <template>
-  <h1 ref="text">&nbsp;</h1>
+  <h2 ref="text" class="no-padding">&nbsp;</h2>
 </template>
 
 <script lang="ts">

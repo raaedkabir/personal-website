@@ -1,3 +1,11 @@
+.no-padding {
+  padding: 0 !important;
+}
+
+.py-10 {
+  padding: 1rem 0;
+}
+
 @mixin clearfix {
   &::after {
     content: '';

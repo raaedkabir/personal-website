@@ -13,7 +13,8 @@
     <home-works />
     <section class="home--contact">
       <p>Have an awesome project and need a developer?</p>
-      <p>Hit me up and <a href="contact.html">let's chat</a>!</p>
+      <p>Hit me up and <a>let's chat</a>!</p>
+      <contact />
     </section>
     <the-footer />
   </main>
@@ -23,12 +24,14 @@
 import { Options, Vue } from 'vue-class-component';
 import HomeHero from '@/components/Home/Hero.vue';
 import HomeWorks from '@/components/Home/Works.vue';
+import Contact from '@/components/Contact.vue';
 import TheFooter from '@/components/Layout/TheFooter.vue';
 
 @Options({
   components: {
     HomeHero,
     HomeWorks,
+    Contact,
     TheFooter
   }
 })
@@ -78,7 +81,7 @@ export default class Home extends Vue {}
     margin-bottom: 2rem;
   }
 
-  p:last-child {
+  p:first-child + p {
     font-size: 2rem;
     font-weight: 300;
   }

@@ -120,6 +120,7 @@ export default class Home extends Vue {}
 
   & .wrapper {
     display: grid;
+    overflow: hidden;
     width: 100%;
     gap: 2rem;
     grid-template-columns: repeat(4, 1fr);
