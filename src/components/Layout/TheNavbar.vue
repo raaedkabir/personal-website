@@ -10,8 +10,8 @@
   <nav class="navbar" :class="{ active: displayNav }">
     <particles-js />
     <ul>
-      <li>
-        <router-link class="btn--nav" to="/" @click.prevent="toggleNav">Home</router-link>
+      <li @click.prevent="toggleNav">
+        <router-link class="btn--nav" to="/">Home</router-link>
       </li>
       <li><a class="btn--nav" href="#">About Me</a></li>
       <li><a class="btn--nav" href="#">My Works</a></li>

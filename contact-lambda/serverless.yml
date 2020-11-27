@@ -1,0 +1,26 @@
+service: contact-lambda
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  apiGateway:
+    shouldStartNameWithService: true
+  profile: default
+  region: ap-southeast-1
+  stage: dev
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 'ses:SendEmail'
+      Resource: ['*']
+
+functions:
+  contact:
+    handler: handler.contact
+    events:
+      - http:
+          method: POST
+          path: contact
+          cors: true
