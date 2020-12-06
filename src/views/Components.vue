@@ -51,7 +51,34 @@ import TheFooter from '@/components/Layout/TheFooter.vue';
     TheFooter
   }
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  // Google Structured Data
+  created() {
+    const ckeditor = document.createElement('script');
+    ckeditor.setAttribute('type', 'application/ld+json');
+    ckeditor.innerHTML = `
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Raaed M. Kabir",
+          "item": "https://www.raaedkabir.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Component Library",
+          "item": "https://www.raaedkabir.com/components"
+        }
+      ]
+    }
+    `;
+    document.head.appendChild(ckeditor);
+  }
+}
 </script>
 
 <style lang="scss" scoped>
