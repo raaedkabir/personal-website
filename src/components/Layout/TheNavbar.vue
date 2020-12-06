@@ -1,7 +1,7 @@
 <template>
   <header class="header page-content" :class="{ active: displayNav }">
     <router-link to="/" class="header__logo">
-      <img src="@/assets/images/logo.png" alt="logo" ref="logo" />
+      <img src="@/assets/images/logo.svg" alt="logo" ref="logo" />
     </router-link>
     <div class="header__toggle-nav" @click="toggleNav" ref="toggleNav">
       <span class="header__toggle-nav--icon">&nbsp;</span>
