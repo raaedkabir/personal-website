@@ -145,7 +145,7 @@ export default class Home extends Vue {
     white-space: nowrap;
 
     @include respond(tab-port) {
-      width: 100%;
+      width: 90%;
     }
 
     h1,

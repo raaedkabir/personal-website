@@ -3,7 +3,13 @@
     <router-link to="/" class="header__logo">
       <img src="@/assets/images/logo.svg" alt="logo" ref="logo" />
     </router-link>
-    <div class="header__toggle-nav" @click="toggleNav" ref="toggleNav">
+    <div
+      class="header__toggle-nav"
+      @click="toggleNav"
+      @keydown.enter="toggleNav"
+      ref="toggleNav"
+      tabindex="0"
+    >
       <span class="header__toggle-nav--icon">&nbsp;</span>
     </div>
   </header>
@@ -30,6 +36,12 @@ import { TweenMax, Expo } from 'gsap';
   emits: ['togglenav'],
   components: {
     ParticlesJs
+  },
+  watch: {
+    focus: {
+      handler: 'checkFocus',
+      immediate: true
+    }
   }
 })
 export default class Home extends Vue {
@@ -39,13 +51,38 @@ export default class Home extends Vue {
   };
 
   displayNav = false;
+  focus: EventTarget | null = null;
 
   toggleNav() {
     this.displayNav = !this.displayNav;
     this.$emit('togglenav', this.displayNav);
   }
 
+  checkFocus(e: Element | null) {
+    const navLinks = [...document.querySelectorAll('.btn--nav')];
+    // check if active
+    if (!e) {
+      this.displayNav = false;
+      this.$emit('togglenav', this.displayNav);
+    } else if (navLinks.indexOf(e) !== -1 && e !== null) {
+      this.displayNav = true;
+      this.$emit('togglenav', this.displayNav);
+    } else {
+      this.displayNav = false;
+      this.$emit('togglenav', this.displayNav);
+    }
+  }
+
   mounted() {
+    document.addEventListener(
+      'focusin',
+      () => {
+        this.checkFocus(document.activeElement);
+      },
+      true
+    );
+
+    // animate in
     TweenMax.from(this.$refs.logo, 2, {
       delay: 1.5,
       x: -20,
@@ -156,11 +193,13 @@ export default class Home extends Vue {
       }
     }
 
-    &:hover &--icon::before {
+    &:hover &--icon::before,
+    &:focus &--icon::before {
       top: -1.2rem;
     }
 
-    &:hover &--icon::after {
+    &:hover &--icon::after,
+    &:focus &--icon::after {
       top: 1.2rem;
     }
 
