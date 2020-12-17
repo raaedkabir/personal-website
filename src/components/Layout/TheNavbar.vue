@@ -3,13 +3,7 @@
     <router-link to="/" class="header__logo">
       <img src="@/assets/images/logo.svg" alt="logo" ref="logo" />
     </router-link>
-    <div
-      class="header__toggle-nav"
-      @click="toggleNav"
-      @keydown.enter="toggleNav"
-      ref="toggleNav"
-      tabindex="0"
-    >
+    <div class="header__toggle-nav" @click="toggleNav" @keydown.enter="toggleNav" ref="toggleNav" tabindex="0">
       <span class="header__toggle-nav--icon">&nbsp;</span>
     </div>
   </header>
@@ -22,7 +16,14 @@
       <li><a class="btn--nav" href="#">About Me</a></li>
       <li><a class="btn--nav" href="#">My Works</a></li>
       <li><a class="btn--nav" href="#">Portfolio</a></li>
-      <li><a class="btn--nav" href="#">Contact</a></li>
+      <li
+        @click.prevent="
+          scroll();
+          toggleNav();
+        "
+      >
+        <router-link class="btn--nav" to="/">Contact</router-link>
+      </li>
     </ul>
   </nav>
 </template>
@@ -56,6 +57,15 @@ export default class Home extends Vue {
   toggleNav() {
     this.displayNav = !this.displayNav;
     this.$emit('togglenav', this.displayNav);
+  }
+
+  scroll() {
+    const el = document.getElementById('contact');
+
+    // scroll after one second
+    setTimeout(() => {
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }, 500);
   }
 
   checkFocus(e: Element | null) {
@@ -106,7 +116,7 @@ export default class Home extends Vue {
 
 // putting the whole page in a div so it can translate with the nav
 .page-content {
-  transition: all 0.5s;
+  transition: all 0.5s ease;
 
   &.active {
     transform: translateX(calc(-1 * var(--navbar-size)));
@@ -223,13 +233,13 @@ export default class Home extends Vue {
   position: fixed;
   top: 0;
   right: 0;
-  transform: translateX(100%);
+  transform: translateX(var(--navbar-size));
   width: var(--navbar-size);
   height: 100vh;
   background-image: linear-gradient(45deg, var(--clr-secondary), var(--clr-secondary-2));
   display: grid;
   place-items: center;
-  transition: all 0.5s;
+  transition: all 0.5s ease;
   z-index: -1;
 
   @include respond(phone) {

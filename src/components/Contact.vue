@@ -1,6 +1,6 @@
 <template>
-  <div class="container" style="z-index: 100000000000000000">
-    <form @submit.prevent="submit" class="form">
+  <div class="container">
+    <form @submit.prevent="submit" class="form" id="contact">
       <div class="form__group firstName">
         <input
           v-model.trim="firstName"
@@ -13,34 +13,15 @@
         <label for="firstName" class="form__label">First Name</label>
       </div>
       <div class="form__group lastName">
-        <input
-          v-model.trim="lastName"
-          type="text"
-          class="form__input"
-          placeholder="Last Name"
-          id="lastName"
-        />
+        <input v-model.trim="lastName" type="text" class="form__input" placeholder="Last Name" id="lastName" />
         <label for="lastName" class="form__label">Last Name</label>
       </div>
       <div class="form__group email">
-        <input
-          v-model.trim="email"
-          type="email"
-          class="form__input"
-          placeholder="Email"
-          id="email"
-          required
-        />
+        <input v-model.trim="email" type="email" class="form__input" placeholder="Email" id="email" required />
         <label for="email" class="form__label">Email</label>
       </div>
       <div class="form__group subject">
-        <input
-          v-model.trim="subject"
-          type="text"
-          class="form__input"
-          placeholder="Message Subject"
-          id="subject"
-        />
+        <input v-model.trim="subject" type="text" class="form__input" placeholder="Message Subject" id="subject" />
         <label for="subject" class="form__label">Message Subject</label>
       </div>
       <div class="form__group message">
