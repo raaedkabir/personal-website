@@ -243,6 +243,7 @@ export default class Home extends Vue {
   z-index: -1;
 
   @include respond(phone) {
+    transform: translateX(var(--navbar-size-small));
     width: var(--navbar-size-small);
   }
 
