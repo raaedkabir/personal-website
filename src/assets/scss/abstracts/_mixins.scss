@@ -6,6 +6,10 @@
   padding: 1rem 0;
 }
 
+.pt-120 {
+  padding-top: 12rem;
+}
+
 @mixin clearfix {
   &::after {
     content: '';

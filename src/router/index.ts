@@ -15,6 +15,17 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/Components.vue')
   },
   {
+    path: '/works',
+    meta: { title: 'My Works' },
+    name: 'Works',
+    component: () => import('../views/Works.vue')
+  },
+  {
+    path: '/works/genarative_art',
+    meta: { title: 'Genarative Art' },
+    component: () => import('../components/Project/GenerativeArt.vue')
+  },
+  {
     path: '/:notFound(.*)',
     meta: { title: "Oops! Nothing's here :(" },
     component: () => import('../views/404.vue')
