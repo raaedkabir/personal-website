@@ -33,11 +33,7 @@
         </div>
         <div class="home__works--container five">
           <a href="/project_generator_site/index.html">
-            <img
-              src="@/assets/images/works/project_generator_site.jpg"
-              alt=""
-              class="home__works--image"
-            />
+            <img src="@/assets/images/works/project_generator_site.jpg" alt="" class="home__works--image" />
             <p class="title">HTML & CSS Website</p>
             <!-- <p class="details">
               Made in HTML & CSS.
@@ -46,11 +42,7 @@
         </div>
         <div class="home__works--container six">
           <router-link to="/components">
-            <img
-              src="@/assets/images/works/component_library.png"
-              alt=""
-              class="home__works--image"
-            />
+            <img src="@/assets/images/works/component_library.png" alt="" class="home__works--image" />
             <p class="title">Pure CSS Components</p>
           </router-link>
         </div>

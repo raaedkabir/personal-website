@@ -26,8 +26,7 @@ export default class Home extends Vue {
     // chekc if text isn't finished yet
     if (i < text.length) {
       // add next character to h1
-      this.$refs.text.innerHTML =
-        text.substring(0, i + 1) + '<span class="auto-type--cursor" aria-hidden="true" />';
+      this.$refs.text.innerHTML = text.substring(0, i + 1) + '<span class="auto-type--cursor" aria-hidden="true" />';
 
       // wait for a while and call this function again for next character
       setTimeout(() => {

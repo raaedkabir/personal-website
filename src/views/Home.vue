@@ -4,8 +4,8 @@
     <section class="home--about">
       <div class="container">
         <p>
-          As a <span>web developer</span> based in <span>Toronto</span> I like to create engaging
-          online experiences for users.
+          As a <span>web developer</span> based in <span>Toronto</span> I like to create engaging online experiences for
+          users.
         </p>
         <a href="#">Learn More About Me</a>
       </div>

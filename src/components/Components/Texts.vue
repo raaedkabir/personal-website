@@ -12,9 +12,7 @@
           <li>E</li>
         </ul>
         <p class="text-effect--2">Text</p>
-        <p class="text-effect--3">
-          <span aria-hidden="true">Glitch</span>Glitch<span aria-hidden="true">Glitch</span>
-        </p>
+        <p class="text-effect--3"><span aria-hidden="true">Glitch</span>Glitch<span aria-hidden="true">Glitch</span></p>
         <div class="text-effect--4">
           <p>Shining</p>
         </div>
@@ -116,8 +114,7 @@ section.text {
     font-weight: 700;
     text-transform: uppercase;
 
-    text-shadow: 0.05em 0 0 rgba($color: #f00, $alpha: 0.75),
-      -0.025em -0.05em 0 rgba($color: #0f0, $alpha: 0.75),
+    text-shadow: 0.05em 0 0 rgba($color: #f00, $alpha: 0.75), -0.025em -0.05em 0 rgba($color: #0f0, $alpha: 0.75),
       0.025em 0.05em 0 rgba($color: #00f, $alpha: 0.75);
 
     animation: glitchText 750ms infinite;
@@ -180,36 +177,31 @@ section.text {
 
 @keyframes glitchText {
   0% {
-    text-shadow: 0.05em 0 0 rgba($color: #f00, $alpha: 0.75),
-      -0.025em -0.05em 0 rgba($color: #0f0, $alpha: 0.75),
+    text-shadow: 0.05em 0 0 rgba($color: #f00, $alpha: 0.75), -0.025em -0.05em 0 rgba($color: #0f0, $alpha: 0.75),
       0.025em 0.05em 0 rgba($color: #00f, $alpha: 0.75);
   }
   14% {
-    text-shadow: 0.05em 0 0 rgba($color: #f00, $alpha: 0.75),
-      -0.025em -0.05em 0 rgba($color: #0f0, $alpha: 0.75),
+    text-shadow: 0.05em 0 0 rgba($color: #f00, $alpha: 0.75), -0.025em -0.05em 0 rgba($color: #0f0, $alpha: 0.75),
       0.025em 0.05em 0 rgba($color: #00f, $alpha: 0.75);
   }
   15% {
-    text-shadow: -0.05em -0.025em 0 rgba($color: #f00, $alpha: 0.75),
-      0.025em 0.025em 0 rgba($color: #0f0, $alpha: 0.75),
+    text-shadow: -0.05em -0.025em 0 rgba($color: #f00, $alpha: 0.75), 0.025em 0.025em 0 rgba($color: #0f0, $alpha: 0.75),
       -0.05em -0.05em 0 rgba($color: #00f, $alpha: 0.75);
   }
   49% {
-    text-shadow: -0.05em -0.025em 0 rgba($color: #f00, $alpha: 0.75),
-      0.025em 0.025em 0 rgba($color: #0f0, $alpha: 0.75),
+    text-shadow: -0.05em -0.025em 0 rgba($color: #f00, $alpha: 0.75), 0.025em 0.025em 0 rgba($color: #0f0, $alpha: 0.75),
       -0.05em -0.05em 0 rgba($color: #00f, $alpha: 0.75);
   }
   50% {
-    text-shadow: 0.025em 0.05em 0 rgba($color: #f00, $alpha: 0.75),
-      0.05em 0 0 rgba($color: #0f0, $alpha: 0.75), 0 -0.05em 0 rgba($color: #00f, $alpha: 0.75);
+    text-shadow: 0.025em 0.05em 0 rgba($color: #f00, $alpha: 0.75), 0.05em 0 0 rgba($color: #0f0, $alpha: 0.75),
+      0 -0.05em 0 rgba($color: #00f, $alpha: 0.75);
   }
   99% {
-    text-shadow: 0.025em 0.05em 0 rgba($color: #f00, $alpha: 0.75),
-      0.05em 0 0 rgba($color: #0f0, $alpha: 0.75), 0 -0.05em 0 rgba($color: #00f, $alpha: 0.75);
+    text-shadow: 0.025em 0.05em 0 rgba($color: #f00, $alpha: 0.75), 0.05em 0 0 rgba($color: #0f0, $alpha: 0.75),
+      0 -0.05em 0 rgba($color: #00f, $alpha: 0.75);
   }
   100% {
-    text-shadow: -0.025em 0 0 rgba($color: #f00, $alpha: 0.75),
-      -0.025em -0.025em 0 rgba($color: #0f0, $alpha: 0.75),
+    text-shadow: -0.025em 0 0 rgba($color: #f00, $alpha: 0.75), -0.025em -0.025em 0 rgba($color: #0f0, $alpha: 0.75),
       -0.025em -0.05em 0 rgba($color: #00f, $alpha: 0.75);
   }
 }

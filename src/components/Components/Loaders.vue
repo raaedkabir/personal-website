@@ -115,8 +115,8 @@ section.loader {
         height: 0.6rem;
         border-radius: 50%;
         background: #00ff0a;
-        box-shadow: 0 0 1rem #00ff0a, 0 0 2rem #00ff0a, 0 0 4rem #00ff0a, 0 0 6rem #00ff0a,
-          0 0 8rem #00ff0a, 0 0 10rem #00ff0a;
+        box-shadow: 0 0 1rem #00ff0a, 0 0 2rem #00ff0a, 0 0 4rem #00ff0a, 0 0 6rem #00ff0a, 0 0 8rem #00ff0a,
+          0 0 10rem #00ff0a;
         animation: loader1ring 2s linear infinite;
       }
     }

@@ -78,7 +78,6 @@ export default class Home extends Vue {}
 
 section.buttons {
   background: #2ec4b6;
-  padding-top: 12rem;
   padding-bottom: 3rem;
   position: relative;
 

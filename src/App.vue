@@ -51,4 +51,9 @@ export default class Home extends Vue {
     max-width: 1140px;
   }
 }
+
+main {
+  min-height: 100vh;
+  background: var(--clr-dark);
+}
 </style>

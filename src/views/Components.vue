@@ -1,18 +1,13 @@
 <template>
   <div class="wrapper">
     <teleport to="body">
-      <svg
-        class="background"
-        preserveAspectRatio="none"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 1009.8 705.5"
-      >
+      <svg class="background" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1009.8 705.5">
         <polygon points="1009.8 0 504.1 704.2 1009.8 704.2 1009.8 0" />
         <polygon fill="#fcfafa" points="0 705.5 979.6 705.5 0 23.5 0 705.5" />
       </svg>
     </teleport>
     <div class="components">
-      <my-buttons />
+      <my-buttons class="pt-120" />
 
       <my-images />
 

@@ -2,10 +2,7 @@
   <div class="error404">
     <div class="center">
       <h1 class="heading__secondary">Error 404</h1>
-      <p>
-        You've wandered off the path stranger.<br />The button will help guide your way. Don't
-        resist the button.
-      </p>
+      <p>You've wandered off the path stranger.<br />The button will help guide your way. Don't resist the button.</p>
       <router-link to="/" class="btn">
         Go to Home Page
       </router-link>
