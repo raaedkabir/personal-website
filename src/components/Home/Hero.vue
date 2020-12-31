@@ -172,7 +172,6 @@ export default class Home extends Vue {
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: -2;
     background-image: url('../../assets/images/hero.jpg');
     filter: brightness(80%) saturate(130%) sepia(10%) grayscale(40%);
     background-repeat: no-repeat;
