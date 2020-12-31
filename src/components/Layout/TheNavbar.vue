@@ -14,7 +14,9 @@
         <router-link class="btn--nav" to="/">Home</router-link>
       </li>
       <li><a class="btn--nav" href="#">About Me</a></li>
-      <li><a class="btn--nav" href="#">My Works</a></li>
+      <li @click.prevent="toggleNav">
+        <router-link class="btn--nav" to="/works">My Works</router-link>
+      </li>
       <li><a class="btn--nav" href="#">Portfolio</a></li>
       <li
         @click.prevent="

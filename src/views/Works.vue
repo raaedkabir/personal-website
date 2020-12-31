@@ -1,5 +1,5 @@
 <template>
-  <main class="works">
+  <main>
     <section>
       <div class="container pt-120">
         <h1 class="heading__primary">My Works <span>_</span></h1>
