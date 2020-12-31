@@ -55,6 +55,7 @@ export default class Home extends Vue {
   mounted() {
     TweenMax.to(this.$refs.bg, 5, {
       opacity: 0,
+      zIndex: -1,
       ease: Expo.easeInOut
     });
 
@@ -114,7 +115,7 @@ export default class Home extends Vue {
     height: 100%;
     width: 100%;
     background: #fff;
-    z-index: -1;
+    // z-index: -1;
   }
 
   .left-bar {
