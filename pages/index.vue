@@ -1,0 +1,34 @@
+<template>
+  <main>
+    <home-hero />
+    <section class="home--about">
+      <div class="container">
+        <p>
+          As a <span>web developer</span> based in <span>Toronto</span> I like to create engaging online experiences for
+          users.
+        </p>
+        <nuxt-link to="/about" class="btn btn--link">Learn More About Me</nuxt-link>
+      </div>
+    </section>
+    <home-works />
+    <section class="home--contact">
+      <p>Have an awesome project and need a developer?</p>
+      <p>Hit me up and <a class="link">let's chat</a>!</p>
+      <Contact />
+    </section>
+  </main>
+</template>
+
+<script>
+import HomeHero from '@/components/Pages/Home/Hero.vue';
+import HomeWorks from '@/components/Pages/Home/Works.vue';
+import Contact from '@/components/Pages/Home/Contact.vue';
+
+export default {
+  components: {
+    HomeHero,
+    HomeWorks,
+    Contact,
+  },
+};
+</script>

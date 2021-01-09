@@ -1,45 +1,36 @@
 {
-  "name": "v3",
-  "version": "0.1.0",
+  "name": "portfolio-site",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "deploy": "aws s3 cp dist/ s3://www.raaedkabir.com/ --recursive",
-    "lint": "vue-cli-service lint"
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "lint": "npm run lint:js"
   },
   "dependencies": {
-    "axios": "^0.21.0",
+    "@nuxtjs/pwa": "^3.0.2",
+    "axios": "^0.21.1",
     "canvas-sketch-util": "^1.10.0",
     "core-js": "^3.6.5",
     "gsap": "^3.5.1",
     "lodash": "^4.17.20",
     "nice-color-palettes": "^3.0.0",
-    "p5": "^1.2.0",
-    "particles.js": "^2.0.0",
-    "vue": "^3.0.0",
-    "vue-class-component": "^8.0.0-0",
-    "vue-router": "^4.0.0-0",
-    "vuex": "^4.0.0-0"
+    "nuxt": "^2.14.6",
+    "particles.js": "^2.0.0"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^2.33.0",
-    "@typescript-eslint/parser": "^2.33.0",
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-plugin-router": "~4.5.0",
-    "@vue/cli-plugin-typescript": "~4.5.0",
-    "@vue/cli-plugin-vuex": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "@vue/compiler-sfc": "^3.0.0",
-    "@vue/eslint-config-prettier": "^6.0.0",
-    "@vue/eslint-config-typescript": "^5.0.2",
-    "eslint": "^6.7.2",
-    "eslint-plugin-prettier": "^3.1.3",
-    "eslint-plugin-vue": "^7.0.0-0",
-    "node-sass": "^4.12.0",
-    "prettier": "^1.19.1",
-    "sass-loader": "^8.0.2",
-    "typescript": "~3.9.3"
+    "@nuxtjs/eslint-config": "^3.1.0",
+    "@nuxtjs/eslint-module": "^2.0.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.10.0",
+    "eslint-config-prettier": "^6.12.0",
+    "eslint-plugin-nuxt": "^1.0.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "node-sass": "^5.0.0",
+    "prettier": "^2.1.2",
+    "sass-loader": "^10.1.0"
   }
 }

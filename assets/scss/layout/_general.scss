@@ -1,0 +1,18 @@
+.container {
+  margin: 0 auto;
+  max-width: 960px;
+}
+
+main {
+  min-height: calc(100vh - 50px);
+}
+
+footer {
+  height: 50px;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  color: #fff;
+}

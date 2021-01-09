@@ -15,7 +15,7 @@ cache:
     - node_modules
 before_deploy:
   - npm i -g travis-ci-cloudfront-invalidation
-  - npm run build
+  - npm run generate
 deploy:
   provider: s3
   access_key_id: $AWS_ACCESS_KEY_ID

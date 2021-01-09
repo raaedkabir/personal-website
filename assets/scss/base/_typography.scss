@@ -1,0 +1,38 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1;
+}
+
+h1 {
+  @include interpolate((font-size), 600px, 1800px, 40px, 60px);
+}
+
+h2 {
+  @include interpolate((font-size), 600px, 1800px, 30px, 45px);
+  @include interpolate((padding-top, padding-bottom), 600px, 1800px, 5px, 40px);
+}
+
+.heading__primary {
+  font-weight: 400;
+
+  span {
+    color: var(--clr-primary);
+  }
+}
+
+.heading__secondary {
+  font-weight: 100;
+}
+
+.heading__section {
+  font-size: 3.8rem;
+  font-weight: 400;
+
+  & span {
+    color: var(--clr-primary);
+  }
+}

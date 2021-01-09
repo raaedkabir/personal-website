@@ -1,0 +1,60 @@
+:root {
+  --clr-dark: #1e1e20;
+  --clr-grey: #c5c6c7;
+  --clr-mask: rgba(30, 30, 32, 0.8);
+
+  --clr-text: #fff;
+  --clr-text-dark: #000;
+
+  --clr-primary: #66fcf1;
+  --clr-primary-1: #45a29e;
+  --clr-primary-2: #1f2833;
+  --clr-secondary: #59b1fe;
+  --clr-secondary-2: #50c7e6;
+
+  --navbar-size: 350px;
+  --navbar-size-small: 300px;
+}
+
+::selection {
+  background-color: #c3cfe2;
+}
+
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+// setting 1rem to 10px
+html {
+  font-size: 62.5%;
+
+  @include respond(tab-land) {
+    font-size: 56.25%; // 1rem = 9px
+  }
+
+  @include respond(tab-port) {
+    font-size: 50%; // 1rem = 8px
+  }
+
+  @include respond(big-desktop) {
+    font-size: 75%; // 1rem = 12px
+  }
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 1.6rem;
+  line-height: 1.6;
+  color: var(--clr-text);
+  background: var(--clr-dark);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
