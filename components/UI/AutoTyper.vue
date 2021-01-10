@@ -23,10 +23,13 @@ export default {
     // type one text in the typwriter
     // keeps calling itself until the text is finished
     typeWriter(text, i, fnCallback) {
-      // chekc if text isn't finished yet
+      // check if text isn't finished yet
       if (i < text.length) {
-        // add next character to h1
-        this.$refs.text.innerHTML = text.substring(0, i + 1) + '<span class="auto-type--cursor" aria-hidden="true" />';
+        try {
+          // add next character
+          this.$refs.text.innerHTML =
+            text.substring(0, i + 1) + '<span class="auto-type--cursor" aria-hidden="true" />';
+        } catch {}
 
         // wait for a while and call this function again for next character
         setTimeout(() => {
