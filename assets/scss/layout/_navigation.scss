@@ -1,23 +1,19 @@
 .header {
-  z-index: 10;
   position: absolute;
-  top: 0;
-  left: 0;
   display: flex;
   justify-content: space-between;
-  width: 100%;
   padding: 4rem 10rem;
+  left: 0;
+  top: 0;
+  width: 100%;
+  background: transparent;
+  z-index: 10;
 
   @include respond(tab-port) {
     padding: 2rem 5rem;
   }
 
   &__logo {
-    font-weight: 700;
-    color: #fff;
-    font-size: 2em;
-    text-transform: uppercase;
-    letter-spacing: 2px;
     width: 5rem;
     height: 5rem;
     filter: contrast(200%) saturate(200%) sepia(100%) invert(100%);
@@ -28,6 +24,10 @@
     height: 5rem;
     background: transparent;
     cursor: pointer;
+
+    &:focus {
+      outline: none;
+    }
 
     &--icon {
       position: relative;
@@ -69,25 +69,25 @@
     &:focus &--icon::after {
       top: 1.2rem;
     }
-
-    .page-content.active &--icon {
-      background: transparent;
-
-      &::before {
-        top: 0;
-        transform: rotate(45deg);
-      }
-
-      &::after {
-        top: 0;
-        transform: rotate(-45deg);
-      }
-    }
   }
+}
+
+.header.scrolling {
+  position: fixed;
+  top: 0;
+  margin-top: -200px;
+  padding: 2rem 10rem;
+  background: #333;
+}
+
+.header.scrolling.scrolled {
+  margin-top: 0;
+  transition: all 0.2s;
 }
 
 .navbar {
   position: fixed;
+  visibility: hidden;
   top: 0;
   right: 0;
   transform: translateX(var(--navbar-size));
@@ -106,6 +106,7 @@
 
   &.active {
     transform: translateX(0);
+    visibility: visible;
   }
 
   ul {

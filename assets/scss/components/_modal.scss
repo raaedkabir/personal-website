@@ -1,0 +1,25 @@
+/////////////////
+// Modal Stuff //
+/////////////////
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.mask {
+  opacity: 0;
+  visibility: hidden;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  transition: all 0.2s ease;
+  z-index: 99;
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+    background: var(--clr-mask);
+  }
+}

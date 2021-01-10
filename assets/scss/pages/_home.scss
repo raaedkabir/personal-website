@@ -115,11 +115,13 @@
           margin: 0 0 0 1rem;
         }
 
-        &:hover {
+        &:hover,
+        &:focus {
           background: #fff;
         }
 
-        &:hover img {
+        &:hover img,
+        &:focus img {
           filter: invert(0);
         }
 

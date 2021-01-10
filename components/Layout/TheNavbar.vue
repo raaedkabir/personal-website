@@ -1,14 +1,15 @@
 <template>
   <div>
-    <header class="header page-content" :class="{ active: displayNav }">
+    <header ref="header" class="header">
       <nuxt-link to="/" class="header__logo">
         <img ref="logo" src="@/assets/images/logo.svg" alt="logo" />
       </nuxt-link>
       <div ref="toggleNav" class="header__toggle-nav" tabindex="0" @click="toggleNav" @keydown.enter="toggleNav">
-        <span class="header__toggle-nav--icon">&nbsp;</span>
+        <span class="header__toggle-nav--icon" />
       </div>
     </header>
-    <nav class="navbar" :class="{ active: displayNav }">
+    <div class="mask" :class="{ active: displayNav }" />
+    <nav ref="navbar" class="navbar" :class="{ active: displayNav }">
       <ul>
         <li @click.prevent="toggleNav">
           <nuxt-link class="btn--nav" to="/">Home</nuxt-link>
@@ -33,6 +34,7 @@
 
 <script>
 import { mapMutations } from 'vuex';
+// import gsap from 'gsap';
 
 import ParticlesJS from '@/components/UI/ParticlesJS.vue';
 
@@ -41,14 +43,91 @@ export default {
     ParticlesJS,
   },
 
+  data() {
+    return {
+      previouslyFocused: null,
+      firstItem: null,
+      lastItem: null,
+    };
+  },
+
   computed: {
     displayNav() {
       return this.$store.state.displayNav;
     },
   },
 
+  watch: {
+    displayNav: {
+      handler: 'scrollBody',
+      // immediate: true,
+    },
+  },
+
+  mounted() {
+    // chane style on scroll
+    window.addEventListener('scroll', () => {
+      const scroll = window.scrollY;
+
+      if (scroll > 200) {
+        this.$refs.header.classList.add('scrolling');
+      } else {
+        this.$refs.header.classList.remove('scrolling');
+      }
+
+      if (scroll > 350) {
+        this.$refs.header.classList.add('scrolled');
+      } else {
+        this.$refs.header.classList.remove('scrolled');
+      }
+    });
+
+    // close nav when clicked outside
+    document.addEventListener('click', this.close);
+
+    // close nav when Escape key is pressed
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.displayNav) this.closeNav();
+    });
+
+    // tabtrap within navbar
+    this.$refs.navbar.addEventListener('keydown', this.tabTrap);
+
+    // get all focusable elements
+    const focusableElements = [
+      ...this.$refs.navbar.querySelectorAll(
+        'a[href], area[href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable], audio[controls], video[controls], summary, [tabindex^="0"], [tabindex^="1"], [tabindex^="2"], [tabindex^="3"], [tabindex^="4"], [tabindex^="5"], [tabindex^="6"], [tabindex^="7"], [tabindex^="8"], [tabindex^="9"]'
+      ),
+    ];
+    this.firstItem = focusableElements[0];
+    this.lastItem = focusableElements[focusableElements.length - 1];
+  },
+
+  beforeDestroy() {
+    document.removeEventListener('click', this.close);
+    document.removeEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.displayNav) this.closeNav();
+    });
+    this.$refs.navbar.removeEventListener('keydown', this.tabTrap);
+    window.removeEventListener('scroll', () => {
+      const scroll = window.scrollY;
+
+      if (scroll > 200) {
+        this.$refs.header.classList.add('scrolling');
+      } else {
+        this.$refs.header.classList.remove('scrolling');
+      }
+
+      if (scroll > 350) {
+        this.$refs.header.classList.add('scrolled');
+      } else {
+        this.$refs.header.classList.remove('scrolled');
+      }
+    });
+  },
+
   methods: {
-    ...mapMutations(['toggleNav']),
+    ...mapMutations(['toggleNav', 'closeNav']),
 
     scroll(selector) {
       this.toggleNav();
@@ -57,7 +136,49 @@ export default {
       setTimeout(() => {
         const el = document.querySelector(selector);
         if (el) el.scrollIntoView({ behavior: 'smooth' });
-      }, 500);
+      }, 800);
+    },
+
+    close(e) {
+      if (!this.$refs.navbar.contains(e.target) && !this.$refs.toggleNav.contains(e.target)) {
+        this.closeNav();
+      }
+    },
+
+    scrollBody() {
+      if (this.displayNav) {
+        // stop scroll in body
+        document.body.classList.add('modal-open');
+
+        // capture previously focused element and set focus to navbar
+        this.previouslyFocused = document.activeElement;
+        setTimeout(() => {
+          this.firstItem.focus();
+        }, 500);
+      } else {
+        document.body.classList.remove('modal-open');
+        setTimeout(() => {
+          this.previouslyFocused.focus();
+        }, 500);
+      }
+    },
+
+    tabTrap(e) {
+      if (e.key === 'Tab') {
+        if (e.shiftKey) {
+          // move backward with Shift
+          if (document.activeElement === this.firstItem) {
+            e.preventDefault();
+            this.lastItem.focus();
+          }
+        } else if (!e.shiftKey) {
+          // move forwards
+          if (document.activeElement === this.lastItem) {
+            e.preventDefault();
+            this.firstItem.focus();
+          }
+        }
+      }
     },
   },
 
