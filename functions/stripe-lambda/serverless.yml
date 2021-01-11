@@ -1,0 +1,26 @@
+service: stripe-lambda
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  apiGateway:
+    shouldStartNameWithService: true
+  profile: default
+  region: ap-southeast-1
+  stage: dev
+  environment:
+    STRIPE_SECRET_KEY: ${file(./config.js):STRIPE_SECRET_KEY}
+
+plugins:
+  - serverless-offline
+
+functions:
+  stripe:
+    handler: handler.stripe
+    events:
+      - http:
+          method: POST
+          path: stripe
+          cors: true
