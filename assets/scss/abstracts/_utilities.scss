@@ -10,6 +10,30 @@
   padding: 12rem 0;
 }
 
+.mt-2 {
+  margin-top: 2rem;
+}
+
+.mt-3 {
+  margin-top: 3rem;
+}
+
 .text-center {
   text-align: center;
+}
+
+.d-flex {
+  display: flex;
+
+  &.justify-around {
+    justify-content: space-around;
+  }
+
+  &.justify-between {
+    justify-content: space-between;
+  }
+
+  &.justify-center {
+    justify-content: center;
+  }
 }

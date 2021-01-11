@@ -1,4 +1,26 @@
-.link {
+<template>
+  <a :href="href" :title="title">
+    <slot />
+  </a>
+</template>
+
+<script>
+export default {
+  props: {
+    href: {
+      type: String,
+      default: '',
+    },
+    title: {
+      type: String,
+      default: '',
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+a {
   position: relative;
   text-decoration: none;
   color: inherit;
@@ -19,3 +41,4 @@
     border-bottom: 3px #47ffff solid;
   }
 }
+</style>

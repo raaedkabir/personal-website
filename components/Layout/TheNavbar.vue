@@ -4,27 +4,27 @@
       <nuxt-link to="/" class="header__logo">
         <img ref="logo" src="@/assets/images/logo.svg" alt="logo" />
       </nuxt-link>
-      <div ref="toggleNav" class="header__toggle-nav" tabindex="0" @click="toggleNav" @keydown.enter="toggleNav">
+      <div ref="toggleNav" class="header__toggle-nav" tabindex="0" @click="toggle" @keydown.enter="toggle">
         <span class="header__toggle-nav--icon" />
       </div>
     </header>
     <div class="mask" :class="{ active: displayNav }" />
     <nav ref="navbar" class="navbar" :class="{ active: displayNav }">
       <ul>
-        <li @click.prevent="toggleNav">
-          <nuxt-link class="btn--nav" to="/">Home</nuxt-link>
+        <li @click.prevent="closeNav">
+          <AppButton link to="/" nav>Home</AppButton>
         </li>
-        <li @click.prevent="toggleNav">
-          <nuxt-link class="btn--nav" to="/about">About Me</nuxt-link>
+        <li @click.prevent="closeNav">
+          <AppButton link to="/about" nav>About Me</AppButton>
         </li>
-        <li @click.prevent="toggleNav">
-          <nuxt-link class="btn--nav" to="/works">My Works</nuxt-link>
+        <li @click.prevent="closeNav">
+          <AppButton link to="/works" nav>My Works</AppButton>
         </li>
-        <li @click.prevent="toggleNav">
-          <nuxt-link class="btn--nav" to="/resume">Resume</nuxt-link>
+        <li @click.prevent="closeNav">
+          <AppButton link to="/resume" nav>Resume</AppButton>
         </li>
         <li @click.prevent="scroll('.home--contact')">
-          <nuxt-link class="btn--nav" to="/">Contact</nuxt-link>
+          <AppButton link to="/" nav>Contact</AppButton>
         </li>
       </ul>
       <ParticlesJS />
@@ -37,10 +37,12 @@ import { mapMutations } from 'vuex';
 // import gsap from 'gsap';
 
 import ParticlesJS from '@/components/UI/ParticlesJS.vue';
+import AppButton from '../AppButton.vue';
 
 export default {
   components: {
     ParticlesJS,
+    AppButton,
   },
 
   data() {
@@ -48,6 +50,7 @@ export default {
       previouslyFocused: null,
       firstItem: null,
       lastItem: null,
+      event: null,
     };
   },
 
@@ -59,7 +62,25 @@ export default {
 
   watch: {
     displayNav: {
-      handler: 'scrollBody',
+      handler() {
+        if (this.displayNav) {
+          // stop scroll in body
+          document.body.classList.add('modal-open');
+
+          // capture previously focused element and set focus to navbar
+          this.previouslyFocused = document.activeElement;
+          setTimeout(() => {
+            if (this.event instanceof KeyboardEvent) {
+              this.firstItem.focus();
+            }
+          }, 500);
+        } else {
+          document.body.classList.remove('modal-open');
+          setTimeout(() => {
+            this.previouslyFocused.focus();
+          }, 500);
+        }
+      },
       // immediate: true,
     },
   },
@@ -103,32 +124,13 @@ export default {
     this.lastItem = focusableElements[focusableElements.length - 1];
   },
 
-  beforeDestroy() {
-    document.removeEventListener('click', this.close);
-    document.removeEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && this.displayNav) this.closeNav();
-    });
-    this.$refs.navbar.removeEventListener('keydown', this.tabTrap);
-    window.removeEventListener('scroll', () => {
-      const scroll = window.scrollY;
-
-      if (scroll > 200) {
-        this.$refs.header.classList.add('scrolling');
-      } else {
-        this.$refs.header.classList.remove('scrolling');
-      }
-
-      if (scroll > 350) {
-        this.$refs.header.classList.add('scrolled');
-      } else {
-        this.$refs.header.classList.remove('scrolled');
-      }
-    });
-  },
-
   methods: {
     ...mapMutations(['toggleNav', 'closeNav']),
 
+    toggle(e) {
+      this.event = e;
+      this.toggleNav();
+    },
     scroll(selector) {
       this.toggleNav();
 
@@ -142,24 +144,6 @@ export default {
     close(e) {
       if (!this.$refs.navbar.contains(e.target) && !this.$refs.toggleNav.contains(e.target)) {
         this.closeNav();
-      }
-    },
-
-    scrollBody() {
-      if (this.displayNav) {
-        // stop scroll in body
-        document.body.classList.add('modal-open');
-
-        // capture previously focused element and set focus to navbar
-        this.previouslyFocused = document.activeElement;
-        setTimeout(() => {
-          this.firstItem.focus();
-        }, 500);
-      } else {
-        document.body.classList.remove('modal-open');
-        setTimeout(() => {
-          this.previouslyFocused.focus();
-        }, 500);
       }
     },
 

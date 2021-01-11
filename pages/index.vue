@@ -7,7 +7,7 @@
           As a <span>web developer</span> based in <span>Toronto</span> I like to create engaging online experiences for
           users.
         </p>
-        <nuxt-link to="/about" class="btn btn--link">Learn More About Me</nuxt-link>
+        <AppButton link to="/about" style="margin-top: 2rem">Learn More About Me</AppButton>
       </div>
     </section>
     <home-works />
@@ -23,12 +23,14 @@
 import HomeHero from '@/components/Pages/Home/Hero.vue';
 import HomeWorks from '@/components/Pages/Home/Works.vue';
 import Contact from '@/components/Pages/Home/Contact.vue';
+import AppButton from '@/components/AppButton.vue';
 
 export default {
   components: {
     HomeHero,
     HomeWorks,
     Contact,
+    AppButton,
   },
 };
 </script>
