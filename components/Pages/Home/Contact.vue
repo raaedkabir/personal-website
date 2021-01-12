@@ -1,40 +1,44 @@
 <template>
   <div class="container">
     <form id="contact" class="form" @submit.prevent="submit">
-      <div class="form__group firstName">
-        <input
-          id="firstName"
-          v-model.trim="firstName"
-          type="text"
-          class="form__input"
-          placeholder="First Name"
-          required
-        />
-        <label for="firstName" class="form__label">First Name</label>
-      </div>
-      <div class="form__group lastName">
-        <input id="lastName" v-model.trim="lastName" type="text" class="form__input" placeholder="Last Name" />
-        <label for="lastName" class="form__label">Last Name</label>
-      </div>
-      <div class="form__group email">
-        <input id="email" v-model.trim="email" type="email" class="form__input" placeholder="Email" required />
-        <label for="email" class="form__label">Email</label>
-      </div>
-      <div class="form__group subject">
-        <input id="subject" v-model.trim="subject" type="text" class="form__input" placeholder="Message Subject" />
-        <label for="subject" class="form__label">Message Subject</label>
-      </div>
-      <div class="form__group message">
-        <textarea
-          id="message"
-          v-model.trim="message"
-          rows="3"
-          class="form__input"
-          placeholder="Drop your message here..."
-          required
-        />
-        <label for="message" class="form__label">Drop your message here...</label>
-      </div>
+      <AppInput
+        id="firstName"
+        v-model.trim="firstName"
+        class="firstName"
+        label="First Name"
+        type="text"
+        placeholder="First Name"
+        required
+      />
+      <AppInput
+        id="lastName"
+        v-model.trim="lastName"
+        class="lastName"
+        label="Last Name"
+        type="text"
+        placeholder="Last Name"
+      />
+      <AppInput id="email" v-model.trim="email" class="email" label="Email" type="email" placeholder="Email" required />
+      <AppInput
+        id="subject"
+        v-model.trim="subject"
+        class="subject"
+        label="Message Subject"
+        type="text"
+        placeholder="Message Subject"
+        required
+      />
+      <AppInput
+        id="message"
+        v-model.trim="message"
+        text-area
+        class="message"
+        rows="3"
+        label="Drop your message here..."
+        type="text"
+        placeholder="Drop your message here..."
+        required
+      />
       <button v-if="!loading && !success" class="form__button send">Send</button>
       <button v-else-if="loading && !success" class="form__button send" @click.prevent="">
         <div class="loader"></div>
@@ -137,60 +141,6 @@ export default {
     .#{$area} {
       grid-area: $area;
     }
-  }
-
-  &__group {
-    position: relative;
-  }
-
-  &__input {
-    font-family: inherit;
-    color: black;
-    padding: 1.5rem 2rem;
-    background: rgba(white, 0.8);
-    border: none;
-    border-bottom: solid 3px transparent;
-    width: 100%;
-    display: block;
-    transition: all 0.2s;
-
-    &:focus {
-      outline: none;
-      border-bottom: solid 3px var(--clr-primary);
-      box-shadow: 0 0.5rem 0.5rem rgba(black, 0.6);
-
-      &:invalid {
-        border-bottom: solid 3px red;
-      }
-    }
-
-    &:hover {
-      background: rgba(#eee, 0.8);
-    }
-
-    &::placeholder {
-      color: #999;
-    }
-  }
-
-  &__label {
-    position: absolute;
-    font-weight: 700;
-    margin-left: 2rem;
-    margin-bottom: 0.7rem;
-    display: block;
-    transform: translateY(-100%);
-    top: 0;
-    transition: all 0.2s;
-    color: var(--clr-primary);
-  }
-
-  &__input:placeholder-shown + &__label {
-    top: 0;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(50%);
-    color: #999;
   }
 
   &__button {
