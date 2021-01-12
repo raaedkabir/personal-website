@@ -5,23 +5,19 @@
         <div class="d-flex justify-between mt-3">
           <div class="item">
             <img src="@/assets/images/coffee/beans.svg" alt="coffee beans" />
-            <AppButton flat :class="{ selected: amount === 100 }" @click.native.prevent="amount = 100">$ 1</AppButton>
+            <AppButton flat :class="{ selected: amount === 100 }" @click="amount = 100">$ 1</AppButton>
           </div>
           <div class="item">
             <img src="@/assets/images/coffee/paper-cup.svg" alt="coffee cup" />
-            <AppButton flat :class="{ selected: amount === 500 }" @click.native.prevent="amount = 500">$ 5</AppButton>
+            <AppButton flat :class="{ selected: amount === 500 }" @click="amount = 500">$ 5</AppButton>
           </div>
           <div class="item">
             <img src="@/assets/images/coffee/machine.svg" alt="coffee machine" />
-            <AppButton flat :class="{ selected: amount === 2000 }" @click.native.prevent="amount = 2000"
-              >$ 20</AppButton
-            >
+            <AppButton flat :class="{ selected: amount === 2000 }" @click="amount = 2000">$ 20</AppButton>
           </div>
           <div class="item">
             <img src="@/assets/images/coffee/shop.svg" alt="coffee shop" />
-            <AppButton flat :class="{ selected: amount === 5000 }" @click.native.prevent="amount = 5000"
-              >$ 50</AppButton
-            >
+            <AppButton flat :class="{ selected: amount === 5000 }" @click="amount = 5000">$ 50</AppButton>
           </div>
         </div>
         <div class="d-flex justify-center">

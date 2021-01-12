@@ -11,19 +11,19 @@
     <div class="mask" :class="{ active: displayNav }" />
     <nav ref="navbar" class="navbar" :class="{ active: displayNav }">
       <ul>
-        <li @click.prevent="closeNav">
+        <li @click="closeNav">
           <AppButton link to="/" nav>Home</AppButton>
         </li>
-        <li @click.prevent="closeNav">
+        <li @click="closeNav">
           <AppButton link to="/about" nav>About Me</AppButton>
         </li>
-        <li @click.prevent="closeNav">
+        <li @click="closeNav">
           <AppButton link to="/works" nav>My Works</AppButton>
         </li>
-        <li @click.prevent="closeNav">
+        <li @click="closeNav">
           <AppButton link to="/resume" nav>Resume</AppButton>
         </li>
-        <li @click.prevent="scroll('.home--contact')">
+        <li @click="scroll('.home--contact')">
           <AppButton link to="/" nav>Contact</AppButton>
         </li>
       </ul>

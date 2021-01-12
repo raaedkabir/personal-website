@@ -15,7 +15,7 @@
         </section>
         <div class="actions">
           <slot name="actions">
-            <AppButton @click.native.prevent="$emit('close')">Close</AppButton>
+            <AppButton @click="$emit('close')">Close</AppButton>
           </slot>
         </div>
       </div>

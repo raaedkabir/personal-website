@@ -2,7 +2,7 @@
   <nuxt-link v-if="link" :to="to" :class="{ nav: nav, flat: flat }">
     <slot />
   </nuxt-link>
-  <button v-else :class="{ flat: flat }">
+  <button v-else :class="{ flat: flat }" v-on="listeners">
     <slot />
   </button>
 </template>
@@ -25,6 +25,14 @@ export default {
     flat: {
       type: Boolean,
       required: false,
+    },
+  },
+
+  computed: {
+    listeners() {
+      return {
+        ...this.$listeners,
+      };
     },
   },
 
