@@ -34,7 +34,7 @@
       </template>
     </AppModal>
     <section>
-      <div class="container pt-12">
+      <div class="container pt-12 pb-6">
         <h1 class="heading__primary">About Me <span>_</span></h1>
 
         <div class="content">
