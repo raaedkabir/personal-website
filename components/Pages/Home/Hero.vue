@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import AutoTyper from '@/components/UI/AutoTyper.vue';
+import AutoTyper from '@/components/AutoTyper.vue';
 import { TweenMax, Expo, Power4 } from 'gsap';
 
 export default {

@@ -65,19 +65,7 @@
 </template>
 
 <script>
-import AppCard from '@/components/AppCard.vue';
-import AppModal from '@/components/AppModal.vue';
-import AppButton from '@/components/AppButton.vue';
-import AppLink from '../components/AppLink.vue';
-
 export default {
-  components: {
-    AppCard,
-    AppButton,
-    AppModal,
-    AppLink,
-  },
-
   data() {
     return {
       showDialog: false,

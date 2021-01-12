@@ -30,15 +30,7 @@
 </template>
 
 <script>
-import AppButton from '../../components/AppButton.vue';
-import AppWorkPreview from '../../components/AppWorkPreview.vue';
-
 export default {
-  components: {
-    AppButton,
-    AppWorkPreview,
-  },
-
   head() {
     return {
       title: 'My Works',

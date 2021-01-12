@@ -36,13 +36,11 @@
 import { mapMutations } from 'vuex';
 // import gsap from 'gsap';
 
-import ParticlesJS from '@/components/UI/ParticlesJS.vue';
-import AppButton from '../AppButton.vue';
+import ParticlesJS from '@/components/ParticlesJS.vue';
 
 export default {
   components: {
     ParticlesJS,
-    AppButton,
   },
 
   data() {

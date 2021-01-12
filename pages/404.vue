@@ -9,11 +9,7 @@
 </template>
 
 <script>
-import AppButton from '../components/AppButton.vue';
-
 export default {
-  components: { AppButton },
-
   head() {
     return {
       title: 'Error 404',

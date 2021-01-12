@@ -23,14 +23,12 @@
 import HomeHero from '@/components/Pages/Home/Hero.vue';
 import HomeWorks from '@/components/Pages/Home/Works.vue';
 import Contact from '@/components/Pages/Home/Contact.vue';
-import AppButton from '@/components/AppButton.vue';
 
 export default {
   components: {
     HomeHero,
     HomeWorks,
     Contact,
-    AppButton,
   },
 
   head: {

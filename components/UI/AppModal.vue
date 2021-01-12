@@ -24,13 +24,7 @@
 </template>
 
 <script>
-import AppButton from '@/components/AppButton.vue';
-
 export default {
-  components: {
-    AppButton,
-  },
-
   props: {
     title: {
       type: String,
