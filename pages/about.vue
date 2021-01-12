@@ -102,6 +102,7 @@ export default {
 
   head() {
     return {
+      title: 'About Me',
       script: [{ src: 'https://js.stripe.com/v3/' }],
     };
   },

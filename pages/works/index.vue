@@ -7,3 +7,13 @@
     </section>
   </main>
 </template>
+
+<script>
+export default {
+  head() {
+    return {
+      title: 'My Works',
+    };
+  },
+};
+</script>

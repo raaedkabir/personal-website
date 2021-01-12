@@ -37,6 +37,12 @@ export default {
     MyLoaders,
     MyFooter,
   },
+
+  head() {
+    return {
+      title: 'CSS Only Components',
+    };
+  },
 };
 </script>
 

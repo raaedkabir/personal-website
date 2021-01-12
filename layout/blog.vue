@@ -41,6 +41,12 @@ export default {
       required: true,
     },
   },
+
+  head() {
+    return {
+      title: this.title,
+    };
+  },
 };
 </script>
 

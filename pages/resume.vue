@@ -55,6 +55,16 @@
   </main>
 </template>
 
+<script>
+export default {
+  head() {
+    return {
+      title: 'Resume',
+    };
+  },
+};
+</script>
+
 <style lang="scss" scoped>
 .category {
   margin-top: 4rem;

@@ -32,5 +32,9 @@ export default {
     Contact,
     AppButton,
   },
+
+  head: {
+    title: 'Welcome!',
+  },
 };
 </script>
