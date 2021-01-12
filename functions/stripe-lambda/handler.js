@@ -1,8 +1,4 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'Content-Type',
-};
 
 module.exports.stripe = async (event) => {
   const data = JSON.parse(event.body);
@@ -16,17 +12,23 @@ module.exports.stripe = async (event) => {
 
     return {
       statusCode: 200,
-      headers,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         clientSecret: paymentIntent.client_secret,
       }),
     };
   } catch (err) {
-    console.log(err);
+    console.log(err); // eslint-disable-line
 
     return {
       statusCode: 400,
-      headers,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         status: err,
       }),

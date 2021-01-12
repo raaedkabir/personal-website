@@ -1,0 +1,18 @@
+{
+  "name": "stripe-lambda",
+  "version": "1.0.0",
+  "description": "Stripe integration using AWS Lambda.",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "stripe": "^8.130.0"
+  },
+  "devDependencies": {
+    "serverless-offline": "^6.8.0"
+  }
+}

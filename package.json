@@ -19,8 +19,7 @@
     "lodash": "^4.17.20",
     "nice-color-palettes": "^3.0.0",
     "nuxt": "^2.14.6",
-    "particles.js": "^2.0.0",
-    "stripe": "^8.130.0"
+    "particles.js": "^2.0.0"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^3.1.0",
@@ -32,7 +31,6 @@
     "eslint-plugin-prettier": "^3.1.4",
     "node-sass": "^5.0.0",
     "prettier": "^2.1.2",
-    "sass-loader": "^10.1.0",
-    "serverless-offline": "^6.8.0"
+    "sass-loader": "^10.1.0"
   }
 }
