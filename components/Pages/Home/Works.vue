@@ -41,7 +41,7 @@
             </p> -->
         </div>
         <div class="home__works--container six">
-          <router-link to="/components">
+          <router-link to="/works/components">
             <img src="@/assets/images/works/component_library.png" alt="" class="home__works--image" />
             <p class="title">Pure CSS Components</p>
           </router-link>
