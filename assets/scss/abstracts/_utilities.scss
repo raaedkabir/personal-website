@@ -1,21 +1,65 @@
-.pt-12 {
-  padding-top: 12rem;
-}
+@for $i from 1 through 12 {
+  ///// margin /////
+  .mt-#{$i} {
+    margin-top: #{$i}rem;
+  }
 
-.pb-6 {
-  padding-bottom: 6rem;
-}
+  .mr-#{$i} {
+    margin-right: #{$i}rem;
+  }
 
-.py-12 {
-  padding: 12rem 0;
-}
+  .mb-#{$i} {
+    margin-bottom: #{$i}rem;
+  }
 
-.mt-2 {
-  margin-top: 2rem;
-}
+  .ml-#{$i} {
+    margin-left: #{$i}rem;
+  }
 
-.mt-3 {
-  margin-top: 3rem;
+  .mx-#{$i} {
+    margin-right: #{$i}rem;
+    margin-left: #{$i}rem;
+  }
+
+  .my-#{$i} {
+    margin-top: #{$i}rem;
+    margin-bottom: #{$i}rem;
+  }
+
+  .ma-#{$i} {
+    margin: #{$i}rem;
+  }
+
+  ///// padding /////
+  .pt-#{$i} {
+    padding-top: #{$i}rem;
+  }
+
+  .pr-#{$i} {
+    padding-right: #{$i}rem;
+  }
+
+  .pb-#{$i} {
+    padding-bottom: #{$i}rem;
+  }
+
+  .pl-#{$i} {
+    padding-left: #{$i}rem;
+  }
+
+  .px-#{$i} {
+    padding-right: #{$i}rem;
+    padding-left: #{$i}rem;
+  }
+
+  .py-#{$i} {
+    padding-top: #{$i}rem;
+    padding-bottom: #{$i}rem;
+  }
+
+  .pa-#{$i} {
+    padding: #{$i}rem;
+  }
 }
 
 .text-center {
