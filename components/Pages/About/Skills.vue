@@ -29,13 +29,21 @@ export default {};
 
     &:nth-child(odd) {
       padding-right: 2rem;
+
+      @include respond(phone) {
+        padding-right: 0;
+      }
     }
 
     &:nth-child(even) {
       padding-left: 2rem;
+
+      @include respond(phone) {
+        padding-left: 0;
+      }
     }
 
-    @media only screen and (max-width: 700px) {
+    @include respond(phone) {
       flex: 0 100%;
       max-width: 100%;
       padding: 0 0 4rem;

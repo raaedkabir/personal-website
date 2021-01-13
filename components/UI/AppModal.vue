@@ -50,6 +50,10 @@ export default {
   transform: translate(-50%, -50%);
   border-radius: 5px;
   z-index: 100;
+
+  @include respond(tab-port) {
+    width: 80vw;
+  }
 }
 
 .actions {

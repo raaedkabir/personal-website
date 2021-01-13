@@ -289,10 +289,4 @@ button:disabled {
     transform: rotate(360deg);
   }
 }
-
-@media only screen and (max-width: 600px) {
-  form {
-    width: 80vw;
-  }
-}
 </style>

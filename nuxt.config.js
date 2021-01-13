@@ -2,6 +2,10 @@ export default {
   // Target (https://go.nuxtjs.dev/config-target)
   target: 'static',
 
+  generate: {
+    fallback: '404.html',
+  },
+
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     titleTemplate: (titleChunk) => {
@@ -47,7 +51,13 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
+    // https://www.npmjs.com/package/@nuxtjs/style-resources
+    '@nuxtjs/style-resources',
   ],
+
+  styleResources: {
+    scss: ['~/assets/scss/abstracts/_mixins.scss'],
+  },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {},

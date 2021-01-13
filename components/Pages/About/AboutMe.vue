@@ -21,7 +21,7 @@
           </div>
         </div>
         <div class="d-flex justify-center">
-          <AppCard v-if="showStripe" :amount="amount" style="margin: 3rem 0 0" />
+          <AppStripe v-if="showStripe" :amount="amount" style="margin: 3rem 0 0" />
         </div>
         <div class="attribution">
           Icons made by <AppLink href="https://www.flaticon.com/authors/srip" title="srip">srip</AppLink> from

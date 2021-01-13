@@ -1,6 +1,12 @@
 .container {
-  margin: 0 auto;
+  margin-right: auto;
+  margin-left: auto;
   max-width: 960px;
+
+  @include respond(tab-land) {
+    padding-right: 2rem;
+    padding-left: 2rem;
+  }
 }
 
 main {
