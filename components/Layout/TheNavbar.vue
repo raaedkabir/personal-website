@@ -85,21 +85,7 @@ export default {
 
   mounted() {
     // chane style on scroll
-    window.addEventListener('scroll', () => {
-      const scroll = window.scrollY;
-
-      if (scroll > 200) {
-        this.$refs.header.classList.add('scrolling');
-      } else {
-        this.$refs.header.classList.remove('scrolling');
-      }
-
-      if (scroll > 350) {
-        this.$refs.header.classList.add('scrolled');
-      } else {
-        this.$refs.header.classList.remove('scrolled');
-      }
-    });
+    window.addEventListener('scroll', this.onScroll);
 
     // close nav when clicked outside
     document.addEventListener('click', this.close);
@@ -120,6 +106,17 @@ export default {
     ];
     this.firstItem = focusableElements[0];
     this.lastItem = focusableElements[focusableElements.length - 1];
+  },
+
+  beforeDestroy() {
+    // chane style on scroll
+    window.removeEventListener('scroll', this.onScroll);
+
+    // close nav when clicked outside
+    document.removeEventListener('click', this.close);
+
+    // tabtrap within navbar
+    this.$refs.navbar.removeEventListener('keydown', this.tabTrap);
   },
 
   methods: {
@@ -160,6 +157,26 @@ export default {
             this.firstItem.focus();
           }
         }
+      }
+    },
+
+    onScroll() {
+      const scroll = window.scrollY;
+
+      const scrolling = this.$refs.header.classList.contains('scrolling');
+      const scrolled = this.$refs.header.classList.contains('scrolled');
+      console.log(scrolling);
+
+      if (scroll > 200 && !scrolling) {
+        this.$refs.header.classList.add('scrolling');
+      } else if (!(scroll > 200) && scrolling) {
+        this.$refs.header.classList.remove('scrolling');
+      }
+
+      if (scroll > 350 && !scrolled) {
+        this.$refs.header.classList.add('scrolled');
+      } else if (!(scroll > 350) && scrolled) {
+        this.$refs.header.classList.remove('scrolled');
       }
     },
   },
