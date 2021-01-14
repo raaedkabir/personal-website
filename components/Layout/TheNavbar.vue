@@ -165,7 +165,6 @@ export default {
 
       const scrolling = this.$refs.header.classList.contains('scrolling');
       const scrolled = this.$refs.header.classList.contains('scrolled');
-      console.log(scrolling);
 
       if (scroll > 200 && !scrolling) {
         this.$refs.header.classList.add('scrolling');
