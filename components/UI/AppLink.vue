@@ -1,21 +1,12 @@
 <template>
-  <a :href="href" :title="title">
+  <a v-bind="$attrs">
     <slot />
   </a>
 </template>
 
 <script>
 export default {
-  props: {
-    href: {
-      type: String,
-      default: '',
-    },
-    title: {
-      type: String,
-      default: '',
-    },
-  },
+  inheritAttrs: false,
 };
 </script>
 
