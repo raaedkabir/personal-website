@@ -69,20 +69,19 @@ export default {
   text-align: center;
 
   .credit {
-    margin-top: -3rem;
+    margin-top: -1.5rem;
   }
 
   * {
-    padding-top: 2rem;
+    margin-top: 2rem;
   }
 
   h2 {
-    padding-top: 4rem;
+    margin-top: 4rem;
   }
 
   h2 + p {
-    padding-top: 0;
-    margin-top: -3rem;
+    margin-top: -1.5rem;
   }
 
   img {
