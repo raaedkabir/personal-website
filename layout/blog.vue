@@ -69,7 +69,7 @@ export default {
   text-align: center;
 
   .credit {
-    margin-top: -4rem;
+    margin-top: -3rem;
   }
 
   * {

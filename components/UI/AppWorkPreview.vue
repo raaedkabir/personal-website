@@ -1,10 +1,10 @@
 <template>
   <nuxt-link v-if="!outside" :to="to">
-    <img class="bg" :src="require('@/assets/images/works' + imgSrc)" :alt="imgAlt" />
+    <img class="bg" :src="require('@/assets/images' + imgSrc)" :alt="imgAlt" />
     <slot />
   </nuxt-link>
   <a v-else :href="to" target="_blank" rel="noopener noreferrer">
-    <img class="bg" :src="require('@/assets/images/works' + imgSrc)" :alt="imgAlt" />
+    <img class="bg" :src="require('@/assets/images' + imgSrc)" :alt="imgAlt" />
     <slot />
   </a>
 </template>

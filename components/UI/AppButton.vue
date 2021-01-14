@@ -55,6 +55,7 @@ a,
 button {
   display: inline-block;
   padding: 1rem 2.5rem;
+  font-family: 'Roboto', sans-serif;
   font-weight: 600;
   font-size: 1.4rem;
   text-decoration: none;
