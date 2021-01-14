@@ -5,11 +5,7 @@
         <h1 class="heading__primary text-center">My Works <span>_</span></h1>
 
         <div class="projects-container">
-          <AppWorkPreview
-            to="/blog/generative-art"
-            img-src="/generativeArt/heading.png"
-            img-alt="computer generated art"
-          >
+          <AppWorkPreview to="/blog/generative-art" img-src="/blog/heading.png" img-alt="computer generated art">
             <h2 class="heading__secondary">Generative Art with HTML5 Canvas</h2>
             <AppButton>write-up</AppButton>
           </AppWorkPreview>
