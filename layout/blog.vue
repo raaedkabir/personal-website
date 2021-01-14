@@ -6,11 +6,9 @@
         <p class="date">{{ date }}</p>
         <h1 class="title heading__secondary text-center">{{ title }}</h1>
       </div>
-      <img :src="require('@/assets/images/works' + img)" alt="cover image" />
+      <img :src="require('@/assets/images/blog' + img)" alt="cover image" />
       <div class="write-up">
-        <div class="write-up__container">
-          <slot name="content" />
-        </div>
+        <slot name="content" />
       </div>
     </main>
     <TheFooter />
@@ -66,20 +64,35 @@ export default {
 }
 
 .write-up {
-  padding-top: 4rem;
   padding-bottom: 8rem;
   font-size: 1.8rem;
   text-align: center;
-  display: flex;
-  justify-content: center;
 
-  // &__container {
-  //   width: 85%;
-  // }
-}
+  .credit {
+    margin-top: -4rem;
+  }
 
-canvas {
-  max-width: 60%;
-  margin: 3rem 0;
+  * {
+    padding-top: 2rem;
+  }
+
+  h2 {
+    padding-top: 4rem;
+  }
+
+  h2 + p {
+    padding-top: 0;
+    margin-top: -3rem;
+  }
+
+  img {
+    max-width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  canvas {
+    max-width: 60%;
+  }
 }
 </style>
