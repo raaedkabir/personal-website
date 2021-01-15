@@ -19,7 +19,7 @@
             img-src="/blog/generativeArt/heading.png"
             img-alt="computer generated art"
           >
-            <h2 class="heading__secondary">Generative Art with HTML5 Canvas</h2>
+            <h2 class="heading__secondary">Generative Art</h2>
             <AppButton>write-up</AppButton>
           </AppWorkPreview>
 

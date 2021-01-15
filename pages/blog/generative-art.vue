@@ -1,5 +1,5 @@
 <template>
-  <Layout img="/generativeArt/heading.png" title="Generative Art with HTML5 Canvas" date="December 2020">
+  <Layout img="/generativeArt/heading.png" title="Generative Art" date="December 2020">
     <div slot="content">
       <blockquote>
         <p>Pssst. Refresh to page to re-generate the images below.</p>
@@ -40,6 +40,14 @@
         as possible (within reason of course). From randomly showing circles to random sizes to random colors the end
         product looks quite nice.
       </p>
+      <p>
+        While HTML5 Canvas is very performant, one con is that it is a single element so using it for web interactivity
+        is difficult. An alternative is SVGs where each shape is its own element. Using
+        <AppLink href="https://d3js.org/" target="_blank" rel="noopener noreferrer">D3.js</AppLink> we can make what we
+        have above but with SVGs. We can also make it interactive by giving it a hover effect. Give it a try!
+      </p>
+      <svg ref="svg" />
+      <AppButton class="center" @click="drawSVG">Click Me!</AppButton>
     </div>
   </Layout>
 </template>
@@ -48,6 +56,7 @@
 import random from 'canvas-sketch-util/random';
 import palettes from 'nice-color-palettes';
 import _ from 'lodash';
+import * as d3 from 'd3';
 
 import Layout from '~/layout/blog.vue';
 
@@ -64,6 +73,7 @@ export default {
     this.randomDisplay();
     this.randomSizes();
     this.randomColor();
+    this.drawSVG();
   },
 
   methods: {
@@ -315,6 +325,74 @@ export default {
             ctx.fill();
           });
         }
+      }
+    },
+
+    drawSVG() {
+      const size = 2048;
+      const margin = 50;
+      const palette = _.chain(palettes).sample().shuffle().value();
+
+      const createGrid = () => {
+        const points = [];
+        const count = 50;
+        for (let x = 0; x < count; x++) {
+          for (let y = 0; y < count; y++) {
+            const u = count <= 1 ? 0.5 : x / (count - 1);
+            const v = count <= 1 ? 0.5 : y / (count - 1);
+
+            points.push({ x: u, y: v });
+          }
+        }
+
+        const pointsRandom = _.filter(points, () => Math.random() > 0.5);
+        const pointsClean = _.map(pointsRandom, (d) => {
+          return {
+            x: this.lerp(margin, size - margin, d.x),
+            y: this.lerp(margin, size - margin, d.y),
+            r: d3.max([0, d3.randomNormal()() * 40]),
+            color: _.sample(palette),
+          };
+        });
+
+        return pointsClean;
+      };
+      const points = createGrid();
+
+      //  define transition
+      const t = d3.transition().duration(750);
+
+      d3.select(this.$refs.svg)
+        .attr('width', '100%')
+        .attr('height', '100%')
+        .attr('viewBox', [0, 0, size, size])
+        .attr('preserveAspectRatio', 'xMidYMid meet')
+        .selectAll('circle')
+        .data(points)
+        .join(
+          (enter) => {
+            return enter
+              .append('circle')
+              .attr('cx', (d) => d.x)
+              .attr('cy', (d) => d.y)
+              .attr('r', (d) => 0);
+          },
+          (update) => update,
+          (exit) => {
+            exit.transition(t).attr('r', (d) => 0);
+          }
+        )
+        .transition(t)
+        .attr('r', (d) => d.r)
+        .attr('fill', (d) => d.color);
+
+      //  set hover logic
+      const el = document.querySelectorAll('circle');
+
+      for (let i = 0; i < el.length; i++) {
+        el[i].addEventListener('mouseover', function () {
+          this.setAttribute('style', 'fill:' + palette[Math.floor(Math.random() * palette.length)]);
+        });
       }
     },
   },
