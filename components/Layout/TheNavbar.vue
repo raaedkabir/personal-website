@@ -62,9 +62,6 @@ export default {
     displayNav: {
       handler() {
         if (this.displayNav) {
-          // stop scroll in body
-          document.body.classList.add('modal-open');
-
           // capture previously focused element and set focus to navbar
           this.previouslyFocused = document.activeElement;
           setTimeout(() => {
@@ -73,7 +70,6 @@ export default {
             }
           }, 500);
         } else {
-          document.body.classList.remove('modal-open');
           setTimeout(() => {
             this.previouslyFocused.focus();
           }, 500);
