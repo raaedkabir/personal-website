@@ -88,7 +88,11 @@
         The only big decision is, which font should I use? Ideally I'd like 2: 1 for the headers and 1 for the body.
         Only 1 font is too plain and 3 can get too chaotic. Serif and Display fonts are good for headers. Sans-Serif
         font is good for paragraph/body text, it is also used on headers to give a more clean and professional feel like
-        with Tech Sites.
+        with Tech Sites. One tidbit to know is that since October 2020
+        <AppLink href="https://wicki.io/posts/2020-11-goodbye-google-fonts/"
+          >Chrome no longer chaches Google Fonts</AppLink
+        >
+        between sites anymore.
       </p>
       <img src="~assets/images/blog/development-process/types-of-fonts.png" alt="types of fonts" />
 
@@ -197,6 +201,12 @@ export default {
     twitterScript.setAttribute('charset', 'utf-8');
     twitterScript.setAttribute('async', '');
     document.head.appendChild(twitterScript);
+  },
+
+  head() {
+    return {
+      title: this.title,
+    };
   },
 };
 </script>

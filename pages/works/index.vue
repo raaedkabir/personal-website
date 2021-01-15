@@ -53,7 +53,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   width: 95%;
-  margin: 5rem auto 5rem;
+  margin: 2rem auto 5rem;
 
   button {
     margin-left: 5%;
@@ -62,6 +62,17 @@ export default {
 
   > * {
     flex: 0 50%;
+    padding-top: 3rem;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: var(--clr-dark-2);
+      transform: scale(1.02);
+
+      > h2 {
+        color: var(--clr-primary);
+      }
+    }
 
     @include respond(phone) {
       flex: 0 100%;

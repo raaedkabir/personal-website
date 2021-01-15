@@ -66,10 +66,31 @@ export default {
 .write-up {
   padding-bottom: 8rem;
   font-size: 1.8rem;
-  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+
+  code {
+    background: #4d4d4d;
+    outline: 1px solid #4d4d4d;
+  }
+
+  blockquote {
+    > * {
+      margin-left: 9px;
+    }
+
+    border-left: 2px solid var(--clr-primary);
+  }
 
   .credit {
     margin-top: -1.5rem;
+    text-align: center;
+  }
+
+  button.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   * {
@@ -82,16 +103,18 @@ export default {
 
   h2 + p {
     margin-top: -1.5rem;
+
+    @include respond(tab-land) {
+      margin-top: -0.5rem;
+    }
   }
 
   img {
-    max-width: 60%;
-    margin-left: auto;
-    margin-right: auto;
+    max-width: 100%;
   }
 
   canvas {
-    max-width: 60%;
+    max-width: 100%;
   }
 }
 </style>
