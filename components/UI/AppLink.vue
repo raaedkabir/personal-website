@@ -15,6 +15,7 @@ a {
   position: relative;
   text-decoration: none;
   color: inherit;
+  white-space: nowrap;
 
   &::after {
     content: '';

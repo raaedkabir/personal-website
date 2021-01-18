@@ -7,7 +7,7 @@
       </blockquote>
       <img src="~/assets/images/blog/video-game-data-exploration/data attributes.jpg" alt="data attributes sketch" />
       <p>I also like to see all the unique values for a categorical attribute to understand the data better.</p>
-      <pre><AppPrism lang="javascript">
+      <pre class="language-javascript"><AppPrism lang="javascript">
       let genres = [];
       data.forEach((d) => genres.push(d.Genre));
       genres = [...new Set(genres)];
@@ -62,7 +62,7 @@
           data points.
         </p>
       </blockquote>
-      <div class="d-flex justify-center">
+      <div class="d-flex justify-center vega">
         <div id="visScatter"></div>
       </div>
       <p>
@@ -70,7 +70,7 @@
         games. They seem to appear twice so that is perhaps because the game is realeased on multiple consoles. That is
         something to consider later on. The rest of the data generally follows the same trend.
       </p>
-      <div class="d-flex justify-center">
+      <div class="d-flex justify-center vega">
         <div id="visStackedHistogram"></div>
       </div>
       <p>
@@ -79,14 +79,14 @@
         results are probably skewed towards the high-budget AAA games. Which games are these? What would the colors look
         like if we included the whole dataset? Something to put on the tab and check out later.
       </p>
-      <div class="d-flex justify-center">
+      <div class="d-flex justify-center vega">
         <div id="visLineSales"></div>
       </div>
       <p>
         All the regions follow the same trend but there was a spike in 2006 so it might be worth looking at what caused
         that. I should also note that inflation has not been accounted for.
       </p>
-      <div class="d-flex justify-center">
+      <div class="d-flex justify-center vega">
         <div id="visLineGenres"></div>
       </div>
       <p>
@@ -120,7 +120,7 @@
       <svg id="dataVizEU"></svg>
       <h3 class="text-center">Japan</h3>
       <svg id="dataVizJP"></svg>
-      <p class="ma-0">
+      <p class="ma-0 text-right">
         <AppLink
           href="https://codepen.io/toddlowell/pen/qBaLPYQ"
           title="Source Code"
@@ -193,7 +193,7 @@
 
       <h2 class="heading__section">Code Snippets</h2>
       <h3 class="heading__sub-section">Get Top 3 Genres:</h3>
-      <pre><AppPrism lang="javascript">
+      <pre class="language-javascript"><AppPrism lang="javascript">
         const topTen = _.chain(data)
           .countBy('genre')
           .toPairs()
@@ -203,7 +203,7 @@
           .value();
         </AppPrism></pre>
       <h3 class="heading__sub-section">Aggregate Sales by Year:</h3>
-      <pre><AppPrism lang="javascript">
+      <pre class="language-javascript"><AppPrism lang="javascript">
         const sales = _.chain(data)
           .map((d) => {
             return {
@@ -323,10 +323,6 @@ export default {
       // Vega-Lite Stuff
       const scatterPlot = {
         width: 500,
-        autosize: {
-          type: 'fit-x',
-          contains: 'content',
-        },
         $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
         title: 'Meta Score vs. User Score',
         data: {
@@ -342,10 +338,6 @@ export default {
 
       const stackedHistogram = {
         width: 500,
-        autosize: {
-          type: 'fit-x',
-          contains: 'content',
-        },
         $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
         title: 'Score against Count by Genre',
         data: {
@@ -366,10 +358,6 @@ export default {
 
       const stackedLineSales = {
         width: 500,
-        autosize: {
-          type: 'fit-x',
-          contains: 'content',
-        },
         $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
         title: 'Sales by Region over the Years',
         data: {
@@ -399,10 +387,6 @@ export default {
 
       const stackedLineGenres = {
         width: 500,
-        autosize: {
-          type: 'fit-x',
-          contains: 'content',
-        },
         $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
         title: 'Sales by Genre over the Years',
         data: {
@@ -532,22 +516,22 @@ export default {
       /// draw SVG ///
       const svgNA = d3
         .select('#dataVizNA')
-        .attr('width', width)
-        .attr('height', height)
+        // .attr('width', width)
+        // .attr('height', height)
         .attr('preserveAspectRatio', 'xMinYMin meet')
         .attr('viewBox', `0 0 ${width} ${height}`);
 
       const svgEU = d3
         .select('#dataVizEU')
-        .attr('width', width)
-        .attr('height', height)
+        // .attr('width', width)
+        // .attr('height', height)
         .attr('preserveAspectRatio', 'xMinYMin meet')
         .attr('viewBox', `0 0 ${width} ${height}`);
 
       const svgJP = d3
         .select('#dataVizJP')
-        .attr('width', width)
-        .attr('height', height)
+        // .attr('width', width)
+        // .attr('height', height)
         .attr('preserveAspectRatio', 'xMinYMin meet')
         .attr('viewBox', `0 0 ${width} ${height}`);
 

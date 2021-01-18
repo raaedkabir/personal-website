@@ -132,5 +132,11 @@ export default {
   svg {
     max-width: 100%;
   }
+
+  @include respond(tab-port) {
+    .vega {
+      overflow-x: scroll;
+    }
+  }
 }
 </style>
