@@ -5,10 +5,15 @@
         Photo by
         <AppLink
           href="https://unsplash.com/@balazsketyi?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText"
+          target="_blank"
+          rel="noopener noreferrer"
           >Balázs Kétyi</AppLink
         >
         on
-        <AppLink href="https://unsplash.com/?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText"
+        <AppLink
+          href="https://unsplash.com/?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText"
+          target="_blank"
+          rel="noopener noreferrer"
           >Unsplash</AppLink
         >
       </div>
@@ -40,10 +45,15 @@
 
       <p>
         If I don't have a color in mind then I will scour through
-        <AppLink href="https://unsplash.com/" title="Unsplash">Unsplash</AppLink> for an image and then use that as a
-        base to pick colors from. Alternatively, instead of Photoshop I sometimes use
-        <AppLink href="https://www.0to255.com/" title="0to255">0to255</AppLink> to create darker and lighter accents to
-        a color. It's also important to consider asseibility.
+        <AppLink href="https://unsplash.com/" title="Unsplash" target="_blank" rel="noopener noreferrer"
+          >Unsplash</AppLink
+        >
+        for an image and then use that as a base to pick colors from. Alternatively, instead of Photoshop I sometimes
+        use
+        <AppLink href="https://www.0to255.com/" title="0to255" target="_blank" rel="noopener noreferrer"
+          >0to255</AppLink
+        >
+        to create darker and lighter accents to a color. It's also important to consider asseibility.
         <AppLink href="https://colorable.jxnblk.com/" title="Colorable" target="_blank" rel="noopener noreferrer"
           >Colorable</AppLink
         >
@@ -89,7 +99,7 @@
         Only 1 font is too plain and 3 can get too chaotic. Serif and Display fonts are good for headers. Sans-Serif
         font is good for paragraph/body text, it is also used on headers to give a more clean and professional feel like
         with Tech Sites. One tidbit to know is that since October 2020
-        <AppLink href="https://wicki.io/posts/2020-11-goodbye-google-fonts/"
+        <AppLink href="https://wicki.io/posts/2020-11-goodbye-google-fonts/" target="_blank" rel="noopener noreferrer"
           >Chrome no longer chaches Google Fonts</AppLink
         >
         between sites anymore.

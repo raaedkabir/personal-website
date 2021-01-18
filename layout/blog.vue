@@ -69,10 +69,10 @@ export default {
   max-width: 700px;
   margin: 0 auto;
 
-  code {
-    background: #4d4d4d;
-    outline: 1px solid #4d4d4d;
-  }
+  // code {
+  //   background: #4d4d4d;
+  //   outline: 1px solid #4d4d4d;
+  // }
 
   blockquote {
     > * {
@@ -93,6 +93,24 @@ export default {
     margin-right: auto;
   }
 
+  ul {
+    margin-left: 2.5rem;
+
+    li {
+      list-style-image: url("data:image/svg+xml,%3Csvg width='8' height='8' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle fill='%2366fcf1' cx='4' cy='4' r='4'/%3E%3C/svg%3E");
+
+      // &::before {
+      //   content: '\2022'; /* Add content: \2022 is the CSS Code/unicode for a bullet */
+      //   // transform: scale(1.5);
+      //   font-size: 28px;
+      //   color: var(--clr-primary); /* Change the color */
+      //   font-weight: bold; /* If you want it to be bold */
+      //   display: inline-block; /* Needed to add space between the bullet and the text */
+      //   width: 10px; /* Also needed for space (tweak if needed) */
+      // }
+    }
+  }
+
   * {
     margin-top: 2rem;
   }
@@ -109,11 +127,9 @@ export default {
     }
   }
 
-  img {
-    max-width: 100%;
-  }
-
-  canvas {
+  img,
+  canvas,
+  svg {
     max-width: 100%;
   }
 }

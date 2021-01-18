@@ -16,7 +16,7 @@
       <canvas id="c1" />
       <p>
         In tune with the title of this page, "Generative Art", it's time to add some randomness! Let's make the circles
-        smaller and randomly show half of them with <code>Math.random() > 0.5</code>.
+        smaller and randomly show half of them with <AppPrism lang="javascript">Math.random() > 0.5</AppPrism>.
       </p>
       <canvas id="c2" />
       <p>
@@ -28,7 +28,7 @@
       <canvas id="c3" />
       <p>
         And lastly let's add color! nice-color-palettes is a npm package with color paletters sourced from
-        <AppLink href="https://www.colourlovers.com/" target="_blank" rel="noopener noreferrer nofollow">
+        <AppLink href="https://www.colourlovers.com/" target="_blank" rel="noopener noreferrer">
           ColourLovers.com
         </AppLink>
         to give us nicely matching colors.

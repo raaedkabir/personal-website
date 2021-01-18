@@ -6,6 +6,15 @@
 
         <div class="projects-container">
           <AppWorkPreview
+            to="/blog/video-game-data-exploration"
+            img-src="/blog/video-game-data-exploration/heading.png"
+            img-alt="cover art"
+          >
+            <h2 class="heading__secondary">Data Exploration</h2>
+            <AppButton>write-up</AppButton>
+          </AppWorkPreview>
+
+          <AppWorkPreview
             to="/blog/development-process"
             img-src="/blog/development-process/hero.jpg"
             img-alt="cover art"
