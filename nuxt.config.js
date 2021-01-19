@@ -21,6 +21,70 @@ export default {
         content:
           "Hi! My name is Raaed. I am a web developer that loves to bring awesome ideas to life. If you're in need of a website or have an idea for a project then come check out what my work and let's hook up!",
       },
+
+      // OpenGraph tags
+      {
+        hid: 'og:title',
+        property: 'og:title',
+        content: "Raaed M. Kabir's Portfolio Site",
+      },
+      {
+        hid: 'og:description',
+        property: 'og:description',
+        content:
+          "Hi! My name is Raaed. I am a web developer that loves to bring awesome ideas to life. If you're in need of a website or have an idea for a project then come check out what my work and let's hook up!",
+      },
+      {
+        hid: 'og:url',
+        property: 'og:url',
+        content: 'https://www.raaedkabir.com/',
+      },
+      {
+        hid: 'og:type',
+        property: 'og:type',
+        content: 'website',
+      },
+      {
+        hid: 'og:image',
+        property: 'og:image',
+        content: 'https://www.raaedkabir.com/og_image.png',
+      },
+
+      // Twitter tags
+      {
+        hid: 'twitter:card',
+        name: 'twitter:card',
+        content: 'summary_large_image',
+      },
+      {
+        hid: 'twitter:site',
+        name: 'twitter:site',
+        content: '@raaedkabir',
+      },
+      {
+        hid: 'twitter:creator',
+        name: 'twitter:creator',
+        content: '@raaedkabir',
+      },
+      {
+        hid: 'twitter:image',
+        name: 'twitter:image',
+        content: 'https://www.raaedkabir.com/twitter_image.png',
+      },
+
+      // iOS tags
+      {
+        name: 'apple-mobile-web-app-capable',
+        content: 'yes',
+      },
+      {
+        name: 'apple-mobile-web-app-status-bar-style',
+        content: 'black',
+      },
+      {
+        name: 'apple-mobile-web-app-title',
+        content: 'Raaed M. Kabir',
+      },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' },
