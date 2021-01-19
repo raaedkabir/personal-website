@@ -131,6 +131,8 @@ export default {
   canvas,
   svg {
     max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   @include respond(tab-port) {

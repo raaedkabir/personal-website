@@ -1,6 +1,11 @@
 <template>
   <Layout img="/video-game-data-exploration/heading.png" title="My Data Exploration Process" date="January 2020">
     <div slot="content">
+      <p>
+        I found myself opening Evernote a lot to check my notes or references and thought a making a write-up would help
+        me remember. This page is meant to be a personal reference but hopefully it will be helpful to others too.
+      </p>
+
       <h2 class="heading__section">List Data Attributes</h2>
       <blockquote>
         <p>List all the Data Attributes and their types and highlight the ones which might be interesting.</p>
@@ -160,17 +165,24 @@
             rel="noopener noreferrer"
             >Nadieh Bremer’s Blocks</AppLink
           >
-          are a great place to see creative visualization and how they're done.
+          are a great place to see creative visualization and how they're done in code.
         </li>
         <li>
           <AppLink href="https://pudding.cool/" title="The Pudding" target="_blank" rel="noopener noreferrer"
             >The Pudding</AppLink
           >,
-          <AppLink href="https://infowetrust.com/" title="Info We Trust" target="_blank" rel="noopener noreferrer"
+          <AppLink href="https://infowetrust.com/work" title="Info We Trust" target="_blank" rel="noopener noreferrer"
             >Info We Trust</AppLink
           >,
           <AppLink href="https://www.datasketch.es/" title="Data Sketches" target="_blank" rel="noopener noreferrer"
             >Data Sketches</AppLink
+          >,
+          <AppLink
+            href="https://www.visualcinnamon.com/portfolio/"
+            title="Visual Cinnamon"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Nadieh Bremer's works</AppLink
           >,
           <AppLink
             href="https://www.informationisbeautifulawards.com/"
@@ -187,7 +199,7 @@
             rel="noopener noreferrer"
             >FlowingData</AppLink
           >
-          are also some nice inspirational sources for creative coding.
+          are also some great inspirational sources for seeing creative data visualizations in action.
         </li>
       </ul>
 
