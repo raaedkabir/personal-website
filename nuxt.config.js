@@ -9,7 +9,6 @@ export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     titleTemplate: (titleChunk) => {
-      // If undefined or blank then we don't need the hyphen
       return titleChunk ? `${titleChunk} | Raaed M. Kabir` : 'Raaed M. Kabir';
     },
     meta: [
