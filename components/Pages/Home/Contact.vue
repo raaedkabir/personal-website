@@ -83,9 +83,9 @@ export default {
       axios
         .post('https://rx65fhl4h1.execute-api.ap-southeast-1.amazonaws.com/dev/contact', {
           firstName: this.firstName,
-          lastName: this.lastName,
+          lastName: this.lastName || '',
           email: this.email,
-          subject: this.subject || 'No Title',
+          subject: this.subject,
           message: this.message,
         })
         .then((response) => {
