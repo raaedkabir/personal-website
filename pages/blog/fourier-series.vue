@@ -18,7 +18,12 @@
       <p>
         Fourier series are a way of representing periodic functions as a sum of sine waves. The more complex the
         function, the greater number of sine waves are needed to get that output. For functions that are not periodic,
-        the Fourier series is replaced by the Fourier transform, which swaps between time- and frequency-domain.
+        the Fourier series is replaced by the Fourier transform, which swaps between time- and frequency-domain. Jez
+        Swanson has a great
+        <AppLink href="http://www.jezzamon.com/fourier/index.html" target="_blank" rel="noopener noreferrer"
+          >Interactive Introduction</AppLink
+        >
+        to Fourier transforms.
       </p>
       <p>
         Below we have a Fourier series for a
