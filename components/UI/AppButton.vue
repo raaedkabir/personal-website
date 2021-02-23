@@ -53,6 +53,7 @@ export default {
 <style lang="scss" scoped>
 a,
 button {
+  cursor: pointer;
   display: inline-block;
   padding: 1rem 2.5rem;
   font-family: 'Roboto', sans-serif;

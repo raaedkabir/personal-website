@@ -49,6 +49,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+img {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .top {
   padding-bottom: 2rem;
   text-align: center;
@@ -68,11 +73,6 @@ export default {
   font-size: 1.8rem;
   max-width: 700px;
   margin: 0 auto;
-
-  // code {
-  //   background: #4d4d4d;
-  //   outline: 1px solid #4d4d4d;
-  // }
 
   blockquote {
     > * {
@@ -139,6 +139,17 @@ export default {
     .vega {
       overflow-x: scroll;
     }
+  }
+}
+</style>
+
+<style lang="scss">
+.write-up {
+  canvas {
+    height: auto !important;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 </style>
