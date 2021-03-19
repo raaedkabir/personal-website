@@ -6,6 +6,15 @@
 
         <div class="projects-container">
           <AppWorkPreview
+            to="/blog/fourier-series"
+            img-src="/blog/fourier-series/heading.png"
+            img-alt="preview of fourier series visualization"
+          >
+            <h2 class="heading__secondary">Fourier Series Visualization</h2>
+            <AppButton>write-up</AppButton>
+          </AppWorkPreview>
+
+          <AppWorkPreview
             to="/blog/video-game-data-exploration"
             img-src="/blog/video-game-data-exploration/heading.png"
             img-alt="cover art"
