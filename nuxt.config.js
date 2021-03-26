@@ -28,6 +28,11 @@ export default {
         content: "Raaed M. Kabir's Portfolio Site",
       },
       {
+        hid: 'og:site_name',
+        property: 'og:site_name',
+        content: "Raaed M. Kabir's Portfolio Site",
+      },
+      {
         hid: 'og:description',
         property: 'og:description',
         content:
@@ -46,6 +51,7 @@ export default {
       {
         hid: 'og:image',
         property: 'og:image',
+        itemprop: 'image',
         content: 'https://www.raaedkabir.com/og_image.png',
       },
 
