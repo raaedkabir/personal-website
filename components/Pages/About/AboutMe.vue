@@ -24,18 +24,25 @@
           <AppStripe v-if="showStripe" :amount="amount" style="margin: 3rem 0 0" />
         </div>
         <div class="attribution">
-          Icons made by
-          <AppLink
-            href="https://www.flaticon.com/authors/srip"
-            title="srip"
-            target="_blank"
-            rel="noopener noreferrer nofollow"
-            >srip</AppLink
-          >
-          from
-          <AppLink href="https://www.flaticon.com/" title="Flaticon" target="_blank" rel="noopener noreferrer nofollow"
-            >www.flaticon.com</AppLink
-          >.
+          <p>
+            Icons made by
+            <AppLink
+              href="https://www.flaticon.com/authors/srip"
+              title="srip"
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+              >srip</AppLink
+            >
+            from
+            <AppLink
+              href="https://www.flaticon.com/"
+              title="Flaticon"
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+              >www.flaticon.com</AppLink
+            >.
+          </p>
+          <p>All prices in CAD.</p>
         </div>
       </template>
     </AppModal>
@@ -122,7 +129,7 @@ export default {
 
   .attribution {
     text-align: right;
-    margin-top: 1em;
+    margin-top: 2rem;
     font-size: 1.4rem;
     font-weight: 300;
   }
