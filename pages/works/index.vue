@@ -44,10 +44,28 @@
           <AppWorkPreview
             outside
             to="https://comecommune.netlify.app/"
-            img-src="/works/website/ComeCommune.png"
+            img-src="/works/ComeCommune.png"
             img-alt="website hero area"
           >
             <h2 class="heading__secondary">ComeCommune Blog Site</h2>
+            <AppButton>project</AppButton>
+          </AppWorkPreview>
+
+          <AppWorkPreview
+            to=""
+            img-src="/works/motor_dashboard.png"
+            img-alt="motor dashboard made with vue"
+          >
+            <h2 class="heading__secondary">Motor Dashboard</h2>
+            <AppButton>project</AppButton>
+          </AppWorkPreview>
+
+          <AppWorkPreview
+            to="/works/components"
+            img-src="/works/component_library.png"
+            img-alt="pure css components"
+          >
+            <h2 class="heading__secondary">Pure CSS Components</h2>
             <AppButton>project</AppButton>
           </AppWorkPreview>
         </div>

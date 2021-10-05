@@ -2,51 +2,108 @@
   <section class="home__works">
     <div class="container">
       <h2 class="heading__section">My Works <span>_</span></h2>
-      <div class="wrapper">
-        <div class="home__works--container one">
-          <img src="@/assets/images/works/motor_dashboard.png" alt="" class="home__works--image" />
-          <p class="title">Motor Dashboard</p>
-          <p class="details">Made with Vue.</p>
-        </div>
-        <div class="home__works--container two">
-          <a href="https://comecommune.netlify.app/" target="_blank" rel="noopener noreferrer">
-            <img
-              src="@/assets/images/works/ComeCommune.png"
-              alt="ComeCommune website screenshot"
-              class="home__works--image"
-            />
-            <p class="title">ComeCommune Blog Site</p>
-            <p class="details">Designed in Photoshop and Developed in Gatsby.</p>
-          </a>
-        </div>
-        <div class="home__works--container three">
-          <img src="@/assets/images/works/lorem_image.jpg" alt="" class="home__works--image" />
-          <p class="title">Lorem Ipsum</p>
-          <!-- <p class="details">
-            Lorem.
-          </p> -->
-        </div>
-        <div class="home__works--container four">
-          <img src="@/assets/images/works/lorem_image.jpg" alt="" class="home__works--image" />
-          <p class="title">Lorem Ipsum</p>
-          <!-- <p class="details">
-            Lorem.
-          </p> -->
-        </div>
-        <div class="home__works--container five">
-          <img src="@/assets/images/works/project_generator_site.jpg" alt="" class="home__works--image" />
-          <p class="title">HTML & CSS Website Template</p>
-          <!-- <p class="details">
-              Made in HTML & CSS.
-            </p> -->
-        </div>
-        <div class="home__works--container six">
-          <router-link to="/works/components">
-            <img src="@/assets/images/works/component_library.png" alt="" class="home__works--image" />
-            <p class="title">Pure CSS Components</p>
-          </router-link>
-        </div>
+      <div class="projects-container">
+        <AppWorkPreview
+            to="/blog/fourier-series"
+            img-src="/blog/fourier-series/heading.png"
+            img-alt="preview of fourier series visualization"
+          >
+            <h2 class="heading__secondary">Fourier Series Visualization</h2>
+            <AppButton>write-up</AppButton>
+          </AppWorkPreview>
+
+          <AppWorkPreview
+            to="/blog/video-game-data-exploration"
+            img-src="/blog/video-game-data-exploration/heading.png"
+            img-alt="cover art"
+          >
+            <h2 class="heading__secondary">Data Exploration</h2>
+            <AppButton>write-up</AppButton>
+          </AppWorkPreview>
+
+          <AppWorkPreview
+            to="/blog/development-process"
+            img-src="/blog/development-process/hero.jpg"
+            img-alt="cover art"
+          >
+            <h2 class="heading__secondary">My Development Process</h2>
+            <AppButton>write-up</AppButton>
+          </AppWorkPreview>
+
+          <AppWorkPreview
+            to="/blog/generative-art"
+            img-src="/blog/generativeArt/heading.png"
+            img-alt="computer generated art"
+          >
+            <h2 class="heading__secondary">Generative Art</h2>
+            <AppButton>write-up</AppButton>
+          </AppWorkPreview>
+
+          <AppWorkPreview
+            outside
+            to="https://comecommune.netlify.app/"
+            img-src="/works/ComeCommune.png"
+            img-alt="website hero area"
+          >
+            <h2 class="heading__secondary">ComeCommune Blog Site</h2>
+            <AppButton>project</AppButton>
+          </AppWorkPreview>
+
+          <AppWorkPreview
+            to=""
+            img-src="/works/motor_dashboard.png"
+            img-alt="motor dashboard made with vue"
+          >
+            <h2 class="heading__secondary">Motor Dashboard</h2>
+            <AppButton>project</AppButton>
+          </AppWorkPreview>
+
+          <AppWorkPreview
+            to="/works/components"
+            img-src="/works/component_library.png"
+            img-alt="pure css components"
+          >
+            <h2 class="heading__secondary">Pure CSS Components</h2>
+            <AppButton>project</AppButton>
+          </AppWorkPreview>
       </div>
     </div>
   </section>
 </template>
+
+<style lang="scss" scoped>
+.projects-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 95%;
+  margin: 2rem auto 5rem;
+
+  button {
+    margin-left: 5%;
+    cursor: pointer;
+  }
+
+  > * {
+    flex: 0 50%;
+    padding-top: 3rem;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: var(--clr-dark-2);
+      transform: scale(1.02);
+
+      > h2 {
+        color: var(--clr-primary);
+      }
+    }
+
+    @include respond(phone) {
+      flex: 0 100%;
+    }
+
+    &:nth-child(n + 3) {
+      margin-top: 3rem;
+    }
+  }
+}
+</style>
