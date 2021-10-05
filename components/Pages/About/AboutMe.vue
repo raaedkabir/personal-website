@@ -49,7 +49,7 @@
 
     <div class="about-me">
       <div class="about-me--image">
-        <!-- image goes here -->
+        <img src="@/assets/images/me.png" alt="photo of myself" />
       </div>
       <div class="about-me--text">
         <p>
@@ -110,6 +110,8 @@ export default {
 
   &--image {
     grid-area: 1 / 1 / 2 / 2;
+    border-radius: 50%;
+    overflow: hidden;
   }
 
   p {
