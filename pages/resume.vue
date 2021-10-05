@@ -25,7 +25,7 @@
       <div class="category">
         <h3 class="subtitile">Experience</h3>
         <h4 class="detail myone-corp-color">MyOne Corporation Sdn. Bhd.</h4>
-        <p>Full Stack Developer (Contract) · June 2021 to October 2021</p>
+        <p>Full Stack Developer (Contract) · June 2021 to Present</p>
       </div>
       <div class="category">
         <h4 class="detail upm-color">Freelance</h4>
