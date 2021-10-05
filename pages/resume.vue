@@ -6,7 +6,7 @@
         Or view it
         <a
           class="link"
-          href="https://app.rezi.io/s/vVbqEtaIHbkPfjNxUKJT"
+          href="https://raaedkabir-assets.s3.amazonaws.com/Raaed+Kabir+-+Resume.pdf"
           target="_blank"
           rel="noopener noreferrer nofollow"
         >
@@ -18,34 +18,37 @@
       <div class="category">
         <h3 class="subtitile">Education</h3>
         <h4 class="detail upm-color">Universiti Putra Malaysia</h4>
-        <p>Bachelor of Electrical and Electronics Engineering · Est. July 2021</p>
+        <p>Bachelor of Electrical and Electronics Engineering with Honours</p>
         <br />
-        <p>Major in Control Systems, CGPA 3.293</p>
+        <p>Major in Control Systems.</p>
       </div>
       <div class="category">
         <h3 class="subtitile">Experience</h3>
         <h4 class="detail myone-corp-color">MyOne Corporation Sdn. Bhd.</h4>
-        <p>Front-End Developer Intern · August 2020 to November 2020</p>
-        <br />
-        <p>
-          Designed and Developed a Single Page Application Dashboard using Vue to display sensor data of over 10 motors
-          at once or dig deep to the details of a single motor.
-        </p>
+        <p>Full Stack Developer (Contract) · June 2021 to October 2021</p>
+      </div>
+      <div class="category">
+        <h4 class="detail upm-color">Freelance</h4>
+        <p>Web Developer (Contract) · January 2021</p>
+      </div>
+      <div class="category">
+        <h4 class="detail myone-corp-color">MyOne Corporation Sdn. Bhd.</h4>
+        <p>Frontend Developer Intern · August 2020 to November 2020</p>
       </div>
       <div class="category">
         <h4 class="detail clearoute-color">Clearoute Inc.</h4>
         <p>Digital Marketing Intern · July 2019 to August 2019</p>
-        <br />
-        <p>Monitored Facebook Ad Analytics to gauge performance and produced assets in Photoshop for A/B Testing.</p>
       </div>
       <div class="category">
         <h3 class="subtitile">Projects</h3>
-        <p>See My Works Page for Full List</p>
+        <p>See <AppLink><nuxt-link to="/works">My Works page</nuxt-link></AppLink> for full list.</p>        
       </div>
       <div class="category">
         <h3 class="subtitile">Skills</h3>
-        <p>Front-End: HTML, SCSS, JS, Vue, Nuxt, Gatsby, GSAP</p>
-        <p>Back-End: Node, EC2, Lambda</p>
+        <p>Front End: HTML, CSS, SCSS, Vue.js, React.js, D3.js, GSAP, TypeScript</p>
+        <p>Back End: Node.js, Linux, AWS, Netlify, Serverless Framework</p>
+        <p>Tools: Git, VS Code, Travis CI</p>
+        <p>Soft Skills: Teamwork, Leadership, Communication, Problem Analysis</p>
       </div>
       <div class="category">
         <h3 class="subtitile">Interests</h3>
