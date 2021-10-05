@@ -4,7 +4,7 @@
     <section class="home--about">
       <div class="container">
         <p>
-          As a <span>web developer</span> based in <span>Toronto</span> I like to create engaging online experiences for
+          As a <span>web developer</span> based in <span>London, ON</span> I like to create engaging online experiences for
           users.
         </p>
         <AppButton link to="/about" style="margin-top: 2rem">Learn More About Me</AppButton>
