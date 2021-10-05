@@ -43,6 +43,24 @@ export default {
   head() {
     return {
       title: this.title,
+      meta: [
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: this.title,
+        },
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          itemprop: 'image',
+          content: require('@/assets/images/blog' + this.img),
+        },
+        {
+          hid: 'twitter:image',
+          name: 'twitter:image',
+          content: require('@/assets/images/blog' + this.img),
+        },
+      ]
     };
   },
 };
