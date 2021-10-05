@@ -3,12 +3,14 @@
     <h2 class="heading__secondary text-center">Skills</h2>
 
     <div class="skills--container pt-2">
-      <AppSkill name="JavaScript" proficiency="70%" />
-      <AppSkill name="SCSS" proficiency="80%" />
-      <AppSkill name="Vue.js" proficiency="80%" />
-      <AppSkill name="Gatsby.js" proficiency="60%" />
+      <AppSkill name="JavaScript" proficiency="80%" />
+      <AppSkill name="SCSS" proficiency="70%" />
+      <AppSkill name="Vue.js" proficiency="70%" />
+      <AppSkill name="React.js" proficiency="60%" />
+      <AppSkill name="Nuxt.js" proficiency="70%" />
+      <AppSkill name="Gatsby.js" proficiency="50%" />
       <AppSkill name="Amazon Web Services" proficiency="60%" />
-      <AppSkill name="Node.js" proficiency="50%" />
+      <AppSkill name="Node.js" proficiency="60%" />
     </div>
   </div>
 </template>

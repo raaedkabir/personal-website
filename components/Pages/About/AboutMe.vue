@@ -53,12 +53,12 @@
       </div>
       <div class="about-me--text">
         <p>
-          I'm a self-taught programmer currently studying Electrical Engineering at
+          I'm a self-taught programmer and Electrical Engineering graduate from
           <span class="upm-color">UPM</span>.
         </p>
         <br />
         <p>
-          I started out with Python but accidentally stumbled into the world of JavaScript and Front-End Development
+          I started out with Python but accidentally stumbled into the world of JavaScript and Frontend Development
           where I found my home. I discovered that creating Web Apps fulfilled my two biggest passions of creating
           things and programming.
         </p>
