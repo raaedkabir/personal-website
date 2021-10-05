@@ -5,7 +5,7 @@
         <img ref="logo" src="@/assets/images/logo.svg" alt="logo" />
       </nuxt-link>
       <div class="contact-container">
-        <ul v-if="currentRouteName !== 'index'" class="contact">
+        <ul v-if="currentRouteName !== 'index' || scrolling" class="contact">
           <li>
             <a href="https://www.linkedin.com/in/raaedkabir" target="_blank" rel="noopener noreferrer nofollow">
               <img src="@/assets/images/social_icons/linkedin.svg" alt="LinkedIn Link" />
@@ -68,6 +68,7 @@ export default {
       firstItem: null,
       lastItem: null,
       event: null,
+      scrolling: false,
     };
   },
 
@@ -186,8 +187,10 @@ export default {
 
       if (scroll > 200 && !scrolling) {
         this.$refs.header.classList.add('scrolling');
+        this.scrolling = true;
       } else if (!(scroll > 200) && scrolling) {
         this.$refs.header.classList.remove('scrolling');
+        this.scrolling = false;
       }
 
       if (scroll > 350 && !scrolled) {
