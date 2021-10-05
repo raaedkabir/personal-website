@@ -103,15 +103,33 @@ export default {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
 
+  @include respond(phone) {
+    grid-template-columns: 1fr;
+  }
+
   &--text {
     grid-area: 1 / 2 / 2 / 4;
     margin-left: 5rem;
+
+    @include respond(phone) {
+      grid-area: inherit;
+      margin-left: 0;
+      margin-top: 4rem;
+    }
   }
 
   &--image {
     grid-area: 1 / 1 / 2 / 2;
-    border-radius: 50%;
-    overflow: hidden;
+
+    @include respond(phone) {
+      grid-area: inherit;
+    }
+
+    img {
+      margin: 0 auto;
+      max-height: 320px;
+      border-radius: 50%;
+    }
   }
 
   p {
