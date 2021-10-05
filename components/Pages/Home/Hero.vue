@@ -18,12 +18,12 @@
         </a>
       </li>
       <li>
-        <a href="https://github.com/ToddLowell" target="_blank" rel="noopener noreferrer nofollow">
+        <a href="https://github.com/raaedkabir" target="_blank" rel="noopener noreferrer nofollow">
           <img src="@/assets/images/social_icons/github.svg" alt="GitHub Link" />
         </a>
       </li>
       <li>
-        <a href="https://codepen.io/toddlowell" target="_blank" rel="noopener noreferrer nofollow">
+        <a href="https://codepen.io/raaedkabir" target="_blank" rel="noopener noreferrer nofollow">
           <img src="@/assets/images/social_icons/codepen.svg" alt="CodePen Link" />
         </a>
       </li>
