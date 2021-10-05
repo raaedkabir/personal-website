@@ -4,8 +4,27 @@
       <nuxt-link to="/" class="header__logo">
         <img ref="logo" src="@/assets/images/logo.svg" alt="logo" />
       </nuxt-link>
-      <div ref="toggleNav" class="header__toggle-nav" tabindex="0" @click="toggle" @keydown.enter="toggle">
-        <span class="header__toggle-nav--icon" />
+      <div class="contact-container">
+        <ul v-if="currentRouteName !== 'index'" class="contact">
+          <li>
+            <a href="https://www.linkedin.com/in/raaedkabir" target="_blank" rel="noopener noreferrer nofollow">
+              <img src="@/assets/images/social_icons/linkedin.svg" alt="LinkedIn Link" />
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/raaedkabir" target="_blank" rel="noopener noreferrer nofollow">
+              <img src="@/assets/images/social_icons/github.svg" alt="GitHub Link" />
+            </a>
+          </li>
+          <li>
+            <a href="https://codepen.io/raaedkabir" target="_blank" rel="noopener noreferrer nofollow">
+              <img src="@/assets/images/social_icons/codepen.svg" alt="CodePen Link" />
+            </a>
+          </li>
+        </ul>
+        <div ref="toggleNav" class="header__toggle-nav" tabindex="0" @click="toggle" @keydown.enter="toggle">
+          <span class="header__toggle-nav--icon" />
+        </div>
       </div>
     </header>
     <div class="mask" :class="{ active: displayNav }" />
@@ -55,6 +74,9 @@ export default {
   computed: {
     displayNav() {
       return this.$store.state.displayNav;
+    },
+    currentRouteName() {
+      return this.$route.name;
     },
   },
 
@@ -195,3 +217,47 @@ export default {
   //   }
 };
 </script>
+
+<style lang="scss" scoped>
+.contact-container {
+  display: flex;
+}
+
+.contact {
+  display: flex;
+  justify-content: center;
+  margin-right: 2rem;
+
+  li {
+    list-style: none;
+
+    &:not(:last-child) {
+      margin-right: 1rem;
+    }
+
+    a {
+      display: grid;
+      align-items: center;
+      justify-items: center;
+      place-items: center;
+      width: 5rem;
+      height: 5rem;
+      text-decoration: none;
+      border: 1px solid #fff;
+      padding: 1rem;   
+
+      img {
+        filter: invert(1);
+      }
+
+      &:hover {
+        background: #fff;
+
+        img {
+          filter: invert(0);
+        }
+      }
+    }
+  }
+}
+</style>
