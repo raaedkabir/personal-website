@@ -20,12 +20,16 @@
         <h4 class="detail upm-color">Universiti Putra Malaysia</h4>
         <p>Bachelor of Electrical and Electronics Engineering with Honours</p>
         <br />
-        <p>Major in Control Systems.</p>
+        <p>Major in Control Systems</p>
       </div>
       <div class="category">
         <h3 class="subtitile">Experience</h3>
+        <h4 class="detail telus-color">TELUS Digital</h4>
+        <p>Full Stack Developer · February 2022 to Present</p>
+      </div>
+      <div class="category">
         <h4 class="detail myone-corp-color">MyOne Corporation Sdn. Bhd.</h4>
-        <p>Full Stack Developer (Contract) · June 2021 to Present</p>
+        <p>Full Stack Developer (Contract) · June 2021 to November 2021</p>
       </div>
       <div class="category">
         <h4 class="detail upm-color">Freelance</h4>
@@ -89,6 +93,10 @@ export default {
 
     &.upm-color {
       color: #c8234a;
+    }
+
+    &.telus-color {
+      color: #66CC00;
     }
 
     &.myone-corp-color {
