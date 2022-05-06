@@ -10,10 +10,10 @@
 
         <Certifications class="mt-6" />
 
-        <div class="mt-6">
+        <!-- <div class="mt-6">
           <h2 class="heading__secondary text-center">Timeline</h2>
           <p class="text-center">Coming Soon</p>
-        </div>
+        </div> -->
       </div>
     </section>
   </main>

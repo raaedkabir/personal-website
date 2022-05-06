@@ -49,7 +49,8 @@
 
     <div class="about-me">
       <div class="about-me--image">
-        <img src="@/assets/images/me.png" alt="photo of myself" />
+        <img src="@/assets/images/me.png" alt="photo of myself" @load="onImgLoad" />
+        <div id="chart"></div>
       </div>
       <div class="about-me--text">
         <p>
@@ -73,6 +74,8 @@
 </template>
 
 <script>
+import * as d3 from 'd3';
+
 export default {
   data() {
     return {
@@ -95,6 +98,108 @@ export default {
       }
     },
   },
+
+  methods: {
+		onImgLoad() {
+      // Set the dimensions of the chart
+      const img = document.querySelector('.about-me--image > img');
+      const multiplier = 1.5;
+      const diameter = img.width * multiplier;
+
+      // Set the minimum inner radius and max outer radius of the chart
+      const innerRadius = (diameter / multiplier / 2) * .95;
+      const outerRadius = innerRadius * .6;
+
+      // Add the svg canvas for the line chart
+      const svg = d3.select('#chart')
+        .append('svg')
+        .attr('width', diameter)
+        .attr('height', diameter)
+        .append('g')
+        .attr('transform', 'translate(' + (diameter / 2) + ', ' + (diameter / 2) + ')');
+
+      const numColors = 10;
+      const colorScale = d3.scaleLinear()
+        .domain([0, (numColors - 1) / 2, numColors - 1])
+        .range(['#50c7e6', '#66fcf1'])
+        .interpolate(d3.interpolateHcl);
+
+      svg.append('defs').append('radialGradient')
+        .attr('id', 'gradientRainbow')
+        .attr('gradientUnits', 'userSpaceOnUse') 
+        .attr('cx', '0%')
+        .attr('cy', '0%')
+        .attr('r', '45%')
+        .selectAll('stop') 
+        .data(d3.range(numColors))                  
+        .enter().append('stop') 
+        .attr('offset', function(d, i) { return (i / (numColors - 1) * 50 + 40) + '%'; })   
+        .attr('stop-color', function(d) { return colorScale(d); });
+
+      // Create the data
+      function getRandomNumber(start, end) {
+        return (Math.random() * (end - start) * 100) / 100 + start;
+      }
+
+      // Create approximate bell curve
+      function rnd2() {
+        return ((Math.random() + Math.random() + Math.random() + Math.random()) - 2) / 2;
+      }
+      
+      // Adjust circle sizes to browser size
+      const circleRanges = [20 * diameter / 1000, 6 * diameter / 1000];
+    
+      // Create random dataset
+      const dataset = [];
+      for (let i = 0; i < 2000; i++) {
+        let outward = Math.abs(rnd2()) * (outerRadius * 0.8) + innerRadius; // getRandomNumber(innerRadius, outerRadius),
+        const radius = Math.abs(rnd2() * circleRanges[0] + circleRanges[1]); // getRandomNumber(1, 18);
+    
+        if (outward - radius < innerRadius) {
+          outward = innerRadius + radius;
+        }
+
+        dataset.push({
+          outward, 
+          theta: getRandomNumber(1, 360) * Math.PI / 180,
+          radius,
+        })	
+      }
+
+      // Append the lines radiating outward
+      const lineWrapper = svg.append('g').attr('class', 'lineWrapper');
+
+      lineWrapper.selectAll('.lines')
+        .data(d3.range(1, 80))
+        .enter().append('line')
+        .attr('class', 'lines')
+        .attr('transform', function(d, i) { return 'rotate(' + ( getRandomNumber(1, 360) ) + ')'; })
+        .attr('x1', 0)
+        .attr('y1', function(d) { return getRandomNumber(innerRadius, outerRadius * 1.3); })
+        .attr('x2', 0)
+        .attr('y2', function(d) { return getRandomNumber(innerRadius, outerRadius * 1.3); })
+        .style('stroke', 'url(#gradientRainbow)')
+        .style('stroke-width', function(d) { return getRandomNumber(0.5, 3); })
+        .style('opacity', 0)
+        .transition().duration(750)
+        .style('opacity', function(d) { return getRandomNumber(0.2, 0.7); });
+
+      // Append the circles
+      const circleWrapper = svg.append('g').attr('class', 'circleWrapper');
+
+      circleWrapper.selectAll('.dots')
+        .data(dataset)
+        .enter().append('circle')
+        .attr('class', 'dots')
+        .attr('cx', function(d) { return d.outward * Math.cos(d.theta); })
+        .attr('cy', function(d) { return d.outward * Math.sin(d.theta); })
+        .attr('r', function(d) { return d.radius; })
+        .style('fill', 'url(#gradientRainbow)')
+        .style('opacity', 0)
+        .transition().duration(750)
+        .style('opacity', function(d) { return getRandomNumber(0.2, 0.7); });
+    }
+  }
 };
 </script>
 
@@ -119,6 +224,7 @@ export default {
   }
 
   &--image {
+    position: relative;
     grid-area: 1 / 1 / 2 / 2;
 
     @include respond(phone) {
@@ -129,6 +235,18 @@ export default {
       margin: 0 auto;
       max-height: 320px;
       border-radius: 50%;
+    }
+
+    div {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+
+      svg {
+        overflow: visible;
+      }
     }
   }
 
