@@ -4,7 +4,7 @@
 
 [![forthebadge](https://forthebadge.com/images/badges/made-with-vue.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/powered-by-coffee.svg)](https://forthebadge.com)
 
-[![Build Status](https://img.shields.io/travis/com/ToddLowell/personal-website/master?style=for-the-badge)](https://travis-ci.com/ToddLowell/personal-website)
+[![Build Status](https://img.shields.io/github/workflow/status/raaedkabir/personal-website/main?style=for-the-badge)](https://github.com/raaedkabir/personal-website/actions/workflows/main.yml)
 
 </div>
 
@@ -38,17 +38,17 @@ This webapp was using the third option but has instead now migrated to Nuxt. But
 
 ```js
 // array of known routes
-const pages = [...known_routes];
+const pages = [...known_routes]
 
 exports.handler = (event, context, callback) => {
-  const request = event.Records[0].cf.request;
+  const request = event.Records[0].cf.request
 
   // replace URI if route is valid
   if (pages.indexOf(request.uri.slice(1)) > -1) {
-    request.uri = '/index.html';
+    request.uri = '/index.html'
   }
 
   // pass route back to request
-  callback(null, request);
-};
+  callback(null, request)
+}
 ```
