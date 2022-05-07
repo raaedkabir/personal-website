@@ -4,7 +4,7 @@
 
 [![forthebadge](https://forthebadge.com/images/badges/made-with-vue.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/powered-by-coffee.svg)](https://forthebadge.com)
 
-[![Build Status](https://img.shields.io/github/workflow/status/raaedkabir/personal-website/main?style=for-the-badge)](https://github.com/raaedkabir/personal-website/actions/workflows/main.yml)
+[![Build Status](https://img.shields.io/github/workflow/status/raaedkabir/personal-website/Deploy%20Website?style=for-the-badge)](https://github.com/raaedkabir/personal-website/actions/workflows/main.yml)
 
 </div>
 
