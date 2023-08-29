@@ -52,7 +52,8 @@
           </AppWorkPreview>
 
           <AppWorkPreview
-            to=""
+            outside
+            to="https://raaedkabir-assets.s3.amazonaws.com/Motor+Dashboard+Demo.mp4"
             img-src="/works/motor_dashboard.png"
             img-alt="motor dashboard made with vue"
           >
