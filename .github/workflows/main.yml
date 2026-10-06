@@ -8,10 +8,13 @@ on:
 
 permissions:
   contents: read
-  id-token: write
+
+concurrency:
+  group: deploy-website
+  cancel-in-progress: false
 
 jobs:
-  deploy:
+  build:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
@@ -27,11 +30,32 @@ jobs:
         run: npm ci
       - name: Build application
         run: npm run generate
+      - name: Upload build
+        uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: dist
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 1
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - name: Download build
+        uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: us-east-1
+          mask-aws-account-id: true
       - name: Deploy to S3
         run: aws s3 sync ./dist s3://${{ secrets.BUCKET_ID }} --delete
       - name: Create CloudFront invalidation
