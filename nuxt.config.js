@@ -131,6 +131,14 @@ export default {
     '@nuxtjs/style-resources',
   ],
 
+  pwa: {
+    // Don't let the PWA module set the default title to the package.json name;
+    // fall back to the titleTemplate's 'Raaed M. Kabir' instead.
+    meta: {
+      name: false,
+    },
+  },
+
   styleResources: {
     scss: ['~/assets/scss/abstracts/_mixins.scss'],
   },
