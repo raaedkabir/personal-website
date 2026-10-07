@@ -10,6 +10,18 @@
 
 ---
 
+**Local Development**
+
+Requires the Node version in `.nvmrc` and [pnpm](https://pnpm.io/installation) (pinned via `packageManager` in `package.json`, so `corepack enable` will pick it up).
+
+```bash
+pnpm install    # install dependencies
+pnpm dev        # dev server on localhost:3000
+pnpm generate   # static build to /dist
+```
+
+---
+
 **AWS Hosting**
 
 - DNS setup with Route 53

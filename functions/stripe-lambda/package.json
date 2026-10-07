@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Stripe integration using AWS Lambda.",
   "main": "handler.js",
+  "packageManager": "pnpm@11.28.2",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

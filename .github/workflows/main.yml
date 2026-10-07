@@ -26,10 +26,14 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          cache: true
       - name: Install modules
-        run: npm ci
+        run: pnpm install --frozen-lockfile
       - name: Build application
-        run: npm run generate
+        run: pnpm run generate
       - name: Upload build
         uses: actions/upload-artifact@v7
         with:
@@ -85,10 +89,12 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v6
       - name: Install Serverless Framework
-        run: npm install --global serverless@4
+        run: pnpm add --global serverless@4
       - name: Install modules
-        run: if [ -f package-lock.json ]; then npm ci; fi
+        run: if [ -f pnpm-lock.yaml ]; then pnpm install --frozen-lockfile; fi
       - name: Create config
         if: matrix.function == 'stripe-lambda'
         # config.js is git-ignored; it reads the key from the deploy step's environment
