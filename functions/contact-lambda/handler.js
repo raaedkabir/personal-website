@@ -228,7 +228,7 @@ function sendEmail(formData, callback) {
                                           </td>
                                           <td style="padding: 0px; line-height: 24px">
                                             <p style="font-size: 16px; margin: 0">
-                                              <a href="https://codepen.io/toddlowell">Visit my CodePen</a>
+                                              <a href="https://codepen.io/raaedkabir">Visit my CodePen</a>
                                             </p>
                                           </td>
                                         </tr>

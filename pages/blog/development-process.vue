@@ -150,7 +150,7 @@
         data-height="615"
         data-theme-id="dark"
         data-default-tab="result"
-        data-user="toddlowell"
+        data-user="raaedkabir"
         data-slug-hash="JjReNZz"
         data-pen-title="Example Layout"
         style="
@@ -165,9 +165,9 @@
         "
       >
         <span>
-          See the Pen <a href="https://codepen.io/toddlowell/pen/JjReNZz"> Example Layout</a> by Raaed M. Kabir (<a
-            href="https://codepen.io/toddlowell"
-            >@toddlowell</a
+          See the Pen <a href="https://codepen.io/raaedkabir/pen/JjReNZz"> Example Layout</a> by Raaed Kabir (<a
+            href="https://codepen.io/raaedkabir"
+            >@raaedkabir</a
           >) on <a href="https://codepen.io">CodePen</a>.
         </span>
       </p>
