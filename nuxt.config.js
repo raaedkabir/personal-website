@@ -9,7 +9,7 @@ export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     titleTemplate: (titleChunk) => {
-      return titleChunk ? `${titleChunk} | Raaed M. Kabir` : 'Raaed M. Kabir';
+      return titleChunk ? `${titleChunk} | Raaed Kabir` : 'Raaed Kabir';
     },
     meta: [
       { charset: 'utf-8' },
@@ -25,12 +25,12 @@ export default {
       {
         hid: 'og:title',
         property: 'og:title',
-        content: "Raaed M. Kabir's Portfolio Site",
+        content: "Raaed Kabir's Portfolio Site",
       },
       {
         hid: 'og:site_name',
         property: 'og:site_name',
-        content: "Raaed M. Kabir's Portfolio Site",
+        content: "Raaed Kabir's Portfolio Site",
       },
       {
         hid: 'og:description',
@@ -88,7 +88,7 @@ export default {
       },
       {
         name: 'apple-mobile-web-app-title',
-        content: 'Raaed M. Kabir',
+        content: 'Raaed Kabir',
       },
     ],
     link: [
@@ -130,6 +130,14 @@ export default {
     // https://www.npmjs.com/package/@nuxtjs/style-resources
     '@nuxtjs/style-resources',
   ],
+
+  pwa: {
+    // Don't let the PWA module set the default title to the package.json name;
+    // fall back to the titleTemplate's 'Raaed Kabir' instead.
+    meta: {
+      name: false,
+    },
+  },
 
   styleResources: {
     scss: ['~/assets/scss/abstracts/_mixins.scss'],

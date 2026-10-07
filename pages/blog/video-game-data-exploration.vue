@@ -127,7 +127,7 @@
       <svg id="dataVizJP"></svg>
       <p class="ma-0 text-right">
         <AppLink
-          href="https://codepen.io/toddlowell/pen/qBaLPYQ"
+          href="https://codepen.io/raaedkabir/pen/qBaLPYQ"
           title="Source Code"
           target="_blank"
           rel="noopener noreferrer"
