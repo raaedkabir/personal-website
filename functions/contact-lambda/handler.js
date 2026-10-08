@@ -262,7 +262,7 @@ function sendEmail(formData, callback) {
                                           </td>
                                           <td style="padding: 0px; line-height: 24px">
                                             <p style="font-size: 16px; margin: 0">
-                                              <a href="https://github.com/ToddLowell">Visit my GitHub</a>
+                                              <a href="https://github.com/raaedkabir">Visit my GitHub</a>
                                             </p>
                                           </td>
                                         </tr>
