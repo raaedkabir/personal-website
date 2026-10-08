@@ -1,3 +1,5 @@
+org: raaedkabir
+app: personal-website
 service: stripe-lambda
 
 frameworkVersion: '4'
@@ -8,7 +10,7 @@ provider:
   apiGateway:
     shouldStartNameWithService: true
   profile: default
-  region: ap-southeast-1
+  region: ca-central-1
   stage: dev
   environment:
     STRIPE_SECRET_KEY: ${file(./config.js):STRIPE_SECRET_KEY}
