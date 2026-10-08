@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
+  build-website:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
@@ -40,7 +40,7 @@ jobs:
           retention-days: 1
 
   deploy-website:
-    needs: build
+    needs: build-website
     runs-on: ubuntu-latest
     permissions:
       id-token: write
