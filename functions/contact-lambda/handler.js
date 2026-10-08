@@ -1,7 +1,8 @@
-const AWS = require('aws-sdk');
-const SES = new AWS.SES();
+// AWS SDK v3 is included in the Lambda Node.js runtime, so it isn't a dependency here
+const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses');
+const ses = new SESClient();
 
-function sendEmail(formData, callback) {
+function sendEmail(formData) {
   const emailParams = {
     Source: 'raaed.kabir@gmail.com', // send from
     ReplyToAddresses: [formData.email],
@@ -325,24 +326,28 @@ function sendEmail(formData, callback) {
     },
   };
 
-  SES.sendEmail(emailParams, callback);
+  return ses.send(new SendEmailCommand(emailParams));
 }
 
-module.exports.contact = (event, context, callback) => {
+module.exports.contact = async (event) => {
   const formData = JSON.parse(event.body);
 
-  sendEmail(formData, (err, data) => {
-    const response = {
-      statusCode: err ? 500 : 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
-      body: JSON.stringify({
-        message: err ? err.message : data,
-      }),
-    };
+  let statusCode = 200;
+  let message;
 
-    callback(null, response);
-  });
+  try {
+    message = await sendEmail(formData);
+  } catch (err) {
+    statusCode = 500;
+    message = err.message;
+  }
+
+  return {
+    statusCode,
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    },
+    body: JSON.stringify({ message }),
+  };
 };

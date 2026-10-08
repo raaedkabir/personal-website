@@ -1,20 +1,22 @@
 service: contact-lambda
 
-frameworkVersion: '2'
+frameworkVersion: '4'
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs24.x
   apiGateway:
     shouldStartNameWithService: true
   profile: default
   region: ap-southeast-1
   stage: dev
-  iamRoleStatements:
-    - Effect: 'Allow'
-      Action:
-        - 'ses:SendEmail'
-      Resource: ['*']
+  iam:
+    role:
+      statements:
+        - Effect: 'Allow'
+          Action:
+            - 'ses:SendEmail'
+          Resource: ['*']
 
 functions:
   contact:
