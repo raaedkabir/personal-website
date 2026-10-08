@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "stripe": "^8.130.0"
+    "stripe": "^23.0.0"
   },
   "devDependencies": {
     "serverless-offline": "^14.8.3"
