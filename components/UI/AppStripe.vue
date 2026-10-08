@@ -43,7 +43,7 @@ export default {
   methods: {
     // make a request to the server to create a new PaymentIntent
     fetchPaymentIntent() {
-      fetch('https://ntksvk74p6.execute-api.ap-southeast-1.amazonaws.com/dev/stripe', {
+      fetch('https://d9lfm4l7tc.execute-api.ca-central-1.amazonaws.com/dev/stripe', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
