@@ -9,7 +9,6 @@ provider:
   runtime: nodejs24.x
   apiGateway:
     shouldStartNameWithService: true
-  profile: default
   region: ca-central-1
   stage: dev
   environment:

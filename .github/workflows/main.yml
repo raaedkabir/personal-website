@@ -1,4 +1,4 @@
-name: Deploy Website
+name: Deploy
 
 on:
   push:
@@ -10,11 +10,11 @@ permissions:
   contents: read
 
 concurrency:
-  group: deploy-website
+  group: deploy
   cancel-in-progress: false
 
 jobs:
-  build:
+  build-website:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
@@ -39,8 +39,8 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-  deploy:
-    needs: build
+  deploy-website:
+    needs: build-website
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -60,3 +60,48 @@ jobs:
         run: aws s3 sync ./dist s3://${{ secrets.BUCKET_ID }} --delete
       - name: Create CloudFront invalidation
         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths "/*"
+
+  deploy-functions:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    strategy:
+      fail-fast: false
+      matrix:
+        function:
+          - contact-lambda
+          - stripe-lambda
+    defaults:
+      run:
+        working-directory: functions/${{ matrix.function }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Set node version
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+      - name: Install Serverless Framework
+        run: npm install --global serverless@4
+      - name: Install modules
+        run: if [ -f package-lock.json ]; then npm ci; fi
+      - name: Create config
+        if: matrix.function == 'stripe-lambda'
+        # config.js is git-ignored; it reads the key from the deploy step's environment
+        run: |
+          echo 'module.exports = { STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY };' > config.js
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ca-central-1
+          mask-aws-account-id: true
+      - name: Deploy to Lambda
+        run: serverless deploy --verbose
+        env:
+          SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
