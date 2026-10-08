@@ -1,0 +1,11 @@
+# Standalone project (not part of the site's workspace). Serverless packages
+# node_modules as-is, so keep npm's flat layout.
+nodeLinker: hoisted
+
+allowBuilds:
+  # all dev-only (serverless-offline and its serverless peer); none are needed:
+  # esbuild's binary comes from its @esbuild/* optional dependency, fsevents
+  # ships prebuilt, and serverless only pre-downloads what it fetches on first run
+  esbuild: false
+  fsevents: false
+  serverless: false

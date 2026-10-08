@@ -1,0 +1,10 @@
+# Nuxt 2 / webpack 4 / eslint-plugin-import expect npm's flat node_modules
+nodeLinker: hoisted
+
+allowBuilds:
+  # postinstall scripts only print funding messages
+  core-js: false
+  nuxt: false
+  # macOS-only; chokidar@3 uses the prebuilt fsevents@2, so the native
+  # fsevents@1 build (for the unused watchpack-chokidar2 fallback) is skipped
+  fsevents: false

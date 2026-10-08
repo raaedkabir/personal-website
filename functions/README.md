@@ -19,7 +19,7 @@ Pushes to `master` deploy both functions from GitHub Actions (`.github/workflows
 
 ```bash
 # Install
-$ npm i -g serverless
+$ pnpm add -g serverless
 
 # Sign In
 $ serverless login
@@ -31,7 +31,7 @@ $ serverless
 $ cd <path>
 
 # Install Dependencies (stripe-lambda)
-$ npm ci
+$ pnpm install --frozen-lockfile
 
 # Invoke Function Locally
 $ sls invoke local -f <function_name>
