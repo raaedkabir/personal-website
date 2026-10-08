@@ -13,7 +13,7 @@ module.exports = { STRIPE_SECRET_KEY: '<secret_key>' };
 ```
 
 Pushes to `master` deploy both functions from GitHub Actions (`.github/workflows/main.yml`). The job assumes the
-`AWS_ROLE_ARN` role via OIDC, so that role also needs permission to deploy a Serverless stack in `ap-southeast-1`
+`AWS_ROLE_ARN` role via OIDC, so that role also needs permission to deploy a Serverless stack in `ca-central-1`
 (CloudFormation, Lambda, API Gateway, IAM, S3 and CloudWatch Logs). It reads `SERVERLESS_ACCESS_KEY` and
 `STRIPE_SECRET_KEY` from repository secrets and writes a `config.js` that passes the key through.
 

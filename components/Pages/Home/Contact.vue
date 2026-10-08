@@ -81,7 +81,7 @@ export default {
       this.loading = true;
 
       axios
-        .post('https://rx65fhl4h1.execute-api.ap-southeast-1.amazonaws.com/dev/contact', {
+        .post('https://thkf162jn1.execute-api.ca-central-1.amazonaws.com/dev/contact', {
           firstName: this.firstName,
           lastName: this.lastName || '',
           email: this.email,

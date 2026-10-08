@@ -1,3 +1,5 @@
+org: raaedkabir
+app: personal-website
 service: contact-lambda
 
 frameworkVersion: '4'
@@ -7,7 +9,7 @@ provider:
   runtime: nodejs24.x
   apiGateway:
     shouldStartNameWithService: true
-  region: ap-southeast-1
+  region: ca-central-1
   stage: dev
   iam:
     role:
