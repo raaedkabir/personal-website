@@ -20,7 +20,10 @@ pnpm dev        # dev server on localhost:3000
 pnpm generate   # static build to /dist
 ```
 
-`pnpm install` also sets up [Husky](https://typicode.github.io/husky/) git hooks: the pre-commit hook runs `pnpm lint`.
+`pnpm install` also sets up [Husky](https://typicode.github.io/husky/) git hooks:
+
+- `pre-commit` runs `pnpm lint`
+- `commit-msg` runs [commitlint](https://commitlint.js.org/), so commit messages must follow [Conventional Commits](https://www.conventionalcommits.org/) (e.g. `feat: add contact form`, `fix(blog): correct styles`)
 
 ---
 
