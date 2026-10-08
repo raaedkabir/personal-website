@@ -26,6 +26,9 @@
 3. Assume the deploy IAM role via GitHub OIDC (no long-lived AWS keys)
 4. Upload /dist to S3
 5. Invalidate CloudFront's cache
+6. Deploy the Lambda functions in `functions/` with Serverless Framework (in parallel with steps 2–5)
+
+Repository secrets: `AWS_ROLE_ARN`, `BUCKET_ID`, `CLOUDFRONT_ID`, `SERVERLESS_ACCESS_KEY` and `STRIPE_SECRET_KEY`.
 
 ---
 

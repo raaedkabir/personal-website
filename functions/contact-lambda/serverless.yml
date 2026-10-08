@@ -7,7 +7,6 @@ provider:
   runtime: nodejs24.x
   apiGateway:
     shouldStartNameWithService: true
-  profile: default
   region: ap-southeast-1
   stage: dev
   iam:
