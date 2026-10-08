@@ -262,7 +262,7 @@ export default {
 
   async fetch() {
     this.csvData = await d3.csv(
-      'https://gist.githubusercontent.com/ToddLowell/599a07d370dcefc6659c2b91dacaf542/raw/385abd5224858adb617552dcb96323d9d0783441/Video%2520Game%2520Sales%2520with%2520Ratings.csv'
+      'https://gist.githubusercontent.com/raaedkabir/599a07d370dcefc6659c2b91dacaf542/raw/385abd5224858adb617552dcb96323d9d0783441/Video%2520Game%2520Sales%2520with%2520Ratings.csv'
     );
 
     this.vegaLiteClean(this.csvData);
