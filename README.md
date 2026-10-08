@@ -20,6 +20,8 @@ pnpm dev        # dev server on localhost:3000
 pnpm generate   # static build to /dist
 ```
 
+`pnpm install` also sets up [Husky](https://typicode.github.io/husky/) git hooks: the pre-commit hook runs `pnpm lint`.
+
 ---
 
 **AWS Hosting**
