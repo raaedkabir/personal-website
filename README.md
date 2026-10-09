@@ -56,21 +56,72 @@ Repository secrets: `AWS_ROLE_ARN`, `BUCKET_ID`, `CLOUDFRONT_ID`, `SERVERLESS_AC
 
 Live site: [www.raaedkabir.com](https://www.raaedkabir.com/)
 
-| Service | Notes |
-| --- | --- |
-| [Route 53](https://console.aws.amazon.com/route53/v2/hostedzones) | DNS hosted zone |
-| [Certificate Manager](https://us-east-1.console.aws.amazon.com/acm/home?region=us-east-1#/certificates/list) | SSL certificate (`us-east-1`, as CloudFront requires) |
-| [S3](https://console.aws.amazon.com/s3/buckets) | Site bucket (`BUCKET_ID`); resume, demo video and email images are in [`raaedkabir-assets`](https://console.aws.amazon.com/s3/buckets/raaedkabir-assets) |
-| [CloudFront](https://console.aws.amazon.com/cloudfront/v4/home#/distributions) | Site distribution (`CLOUDFRONT_ID`) |
-| [IAM roles](https://console.aws.amazon.com/iam/home#/roles) / [identity providers](https://console.aws.amazon.com/iam/home#/identity_providers) | Deploy role (`AWS_ROLE_ARN`) and the GitHub OIDC provider it trusts |
-| [Serverless Dashboard](https://app.serverless.com/raaedkabir) | Org `raaedkabir`, app `personal-website`: function deploys, and the access key for `SERVERLESS_ACCESS_KEY` |
-| [Lambda](https://ca-central-1.console.aws.amazon.com/lambda/home?region=ca-central-1#/functions) | `contact-lambda-dev-contact` and `stripe-lambda-dev-stripe` (`ca-central-1`) |
-| [API Gateway](https://ca-central-1.console.aws.amazon.com/apigateway/main/apis?region=ca-central-1) | `POST /dev/contact` and `POST /dev/stripe` endpoints |
-| [CloudFormation](https://ca-central-1.console.aws.amazon.com/cloudformation/home?region=ca-central-1#/stacks) | Serverless stacks `contact-lambda-dev` and `stripe-lambda-dev` |
-| [CloudWatch Logs](https://ca-central-1.console.aws.amazon.com/cloudwatch/home?region=ca-central-1#logsV2:log-groups) | Function logs under `/aws/lambda/` |
-| [SES](https://ca-central-1.console.aws.amazon.com/ses/home?region=ca-central-1#/identities) | Verified sender identity for the contact form |
-| [Stripe](https://dashboard.stripe.com/payments) | Payments; keys under [API keys](https://dashboard.stripe.com/apikeys) (`STRIPE_SECRET_KEY`) |
-| [Google Analytics](https://analytics.google.com/) | Measurement ID `G-HWHNZXBHTF` |
+| Provider | Console | Notes |
+| --- | --- | --- |
+| **AWS** | [Route 53](https://console.aws.amazon.com/route53/v2/hostedzones) | DNS hosted zone |
+| | [Certificate Manager](https://us-east-1.console.aws.amazon.com/acm/home?region=us-east-1#/certificates/list) | SSL certificate (`us-east-1`, as CloudFront requires) |
+| | [S3](https://console.aws.amazon.com/s3/buckets) | Site bucket (`BUCKET_ID`); resume, demo video and email images are in [`raaedkabir-assets`](https://console.aws.amazon.com/s3/buckets/raaedkabir-assets) |
+| | [CloudFront](https://console.aws.amazon.com/cloudfront/v4/home#/distributions) | Site distribution (`CLOUDFRONT_ID`) |
+| | [IAM roles](https://console.aws.amazon.com/iam/home#/roles) / [identity providers](https://console.aws.amazon.com/iam/home#/identity_providers) | Deploy role (`AWS_ROLE_ARN`) and the GitHub OIDC provider it trusts |
+| | [Lambda](https://ca-central-1.console.aws.amazon.com/lambda/home?region=ca-central-1#/functions) | `contact-lambda-dev-contact` and `stripe-lambda-dev-stripe` (`ca-central-1`) |
+| | [API Gateway](https://ca-central-1.console.aws.amazon.com/apigateway/main/apis?region=ca-central-1) | `POST /dev/contact` and `POST /dev/stripe` endpoints |
+| | [CloudFormation](https://ca-central-1.console.aws.amazon.com/cloudformation/home?region=ca-central-1#/stacks) | Serverless stacks `contact-lambda-dev` and `stripe-lambda-dev` |
+| | [CloudWatch Logs](https://ca-central-1.console.aws.amazon.com/cloudwatch/home?region=ca-central-1#logsV2:log-groups) | Function logs under `/aws/lambda/` |
+| | [SES](https://ca-central-1.console.aws.amazon.com/ses/home?region=ca-central-1#/identities) | Verified sender identity for the contact form |
+| **Serverless** | [Dashboard](https://app.serverless.com/raaedkabir) | Org `raaedkabir`, app `personal-website`: function deploys, and the access key for `SERVERLESS_ACCESS_KEY` |
+| **Stripe** | [Payments](https://dashboard.stripe.com/payments) / [API keys](https://dashboard.stripe.com/apikeys) | Card payments; `STRIPE_SECRET_KEY` |
+| **Google** | [Analytics](https://analytics.google.com/) | Measurement ID `G-HWHNZXBHTF` |
+
+```mermaid
+flowchart TB
+  visitor([Visitor])
+
+  subgraph aws [AWS]
+    subgraph site [Website]
+      route53[Route 53] --> cloudfront[CloudFront] --> s3[S3]
+      acm[Certificate Manager] -.-> cloudfront
+    end
+    subgraph functions ["Functions (ca-central-1)"]
+      apigateway[API Gateway] --> lambda[Lambda] --> ses[SES]
+      lambda -.-> logs[CloudWatch Logs]
+      cloudformation[CloudFormation] -.-> apigateway & lambda
+    end
+    iam[IAM]
+  end
+
+  subgraph serverless [Serverless]
+    dashboard[Dashboard]
+  end
+
+  subgraph stripe [Stripe]
+    payments[Payments]
+  end
+
+  subgraph google [Google]
+    analytics[Analytics]
+  end
+
+  visitor --> route53
+  visitor --> apigateway
+  visitor --> payments
+  visitor -.-> analytics
+  lambda --> payments
+  dashboard -.->|tracks deploys| cloudformation
+
+  click route53 href "https://console.aws.amazon.com/route53/v2/hostedzones" _blank
+  click acm href "https://us-east-1.console.aws.amazon.com/acm/home?region=us-east-1#/certificates/list" _blank
+  click s3 href "https://console.aws.amazon.com/s3/buckets" _blank
+  click cloudfront href "https://console.aws.amazon.com/cloudfront/v4/home#/distributions" _blank
+  click iam href "https://console.aws.amazon.com/iam/home#/roles" _blank
+  click lambda href "https://ca-central-1.console.aws.amazon.com/lambda/home?region=ca-central-1#/functions" _blank
+  click apigateway href "https://ca-central-1.console.aws.amazon.com/apigateway/main/apis?region=ca-central-1" _blank
+  click cloudformation href "https://ca-central-1.console.aws.amazon.com/cloudformation/home?region=ca-central-1#/stacks" _blank
+  click logs href "https://ca-central-1.console.aws.amazon.com/cloudwatch/home?region=ca-central-1#logsV2:log-groups" _blank
+  click ses href "https://ca-central-1.console.aws.amazon.com/ses/home?region=ca-central-1#/identities" _blank
+  click dashboard href "https://app.serverless.com/raaedkabir" _blank
+  click payments href "https://dashboard.stripe.com/payments" _blank
+  click analytics href "https://analytics.google.com/" _blank
+```
 
 ---
 
