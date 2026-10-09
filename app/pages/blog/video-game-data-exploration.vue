@@ -331,7 +331,8 @@ export default {
       // Vega-Lite Stuff
       const scatterPlot = {
         width: 500,
-        $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
+        height: 200,
+        $schema: 'https://vega.github.io/schema/vega-lite/v6.json',
         title: 'Meta Score vs. User Score',
         data: {
           values: data,
@@ -342,11 +343,12 @@ export default {
           y: { field: 'criticScore', type: 'quantitative' },
         },
       };
-      vegaEmbed('#visScatter', scatterPlot);
+      vegaEmbed('#visScatter', scatterPlot, { renderer: 'canvas' });
 
       const stackedHistogram = {
         width: 500,
-        $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
+        height: 200,
+        $schema: 'https://vega.github.io/schema/vega-lite/v6.json',
         title: 'Score against Count by Genre',
         data: {
           values: data,
@@ -354,7 +356,7 @@ export default {
         mark: { type: 'bar' },
         encoding: {
           x: { bin: true, field: 'userScore', type: 'quantitative' },
-          y: { field: 'userCount', type: 'quantitative' },
+          y: { field: 'userCount', type: 'quantitative', stack: null },
           color: {
             field: 'genre',
             type: 'nominal',
@@ -362,11 +364,12 @@ export default {
           tooltip: [{ field: 'userCount', type: 'quantitative' }],
         },
       };
-      vegaEmbed('#visStackedHistogram', stackedHistogram);
+      vegaEmbed('#visStackedHistogram', stackedHistogram, { renderer: 'canvas' });
 
       const stackedLineSales = {
         width: 500,
-        $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
+        height: 200,
+        $schema: 'https://vega.github.io/schema/vega-lite/v6.json',
         title: 'Sales by Region over the Years',
         data: {
           values: data,
@@ -391,11 +394,12 @@ export default {
           },
         },
       };
-      vegaEmbed('#visLineSales', stackedLineSales);
+      vegaEmbed('#visLineSales', stackedLineSales, { renderer: 'canvas' });
 
       const stackedLineGenres = {
         width: 500,
-        $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
+        height: 200,
+        $schema: 'https://vega.github.io/schema/vega-lite/v6.json',
         title: 'Sales by Genre over the Years',
         data: {
           values: data,
@@ -420,7 +424,7 @@ export default {
           },
         },
       };
-      vegaEmbed('#visLineGenres', stackedLineGenres);
+      vegaEmbed('#visLineGenres', stackedLineGenres, { renderer: 'canvas' });
     },
 
     d3Clean(rawData) {
@@ -630,7 +634,7 @@ export default {
       // event listeners
       [svgNA, svgEU, svgJP].forEach((el) => {
         el.on('touchmove mousemove', (e) => {
-          const m = d3.pointer(event);
+          const m = d3.pointer(e);
 
           // check if within chart range
           if (m[0] > margin.left && m[0] < width - margin.right && m[1] < height - margin.bottom) {

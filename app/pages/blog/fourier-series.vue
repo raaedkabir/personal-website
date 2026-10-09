@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import opentype from 'opentype.js';
+import * as opentype from 'opentype.js';
 
 import Layout from '~/layout/blog.vue';
 import squareWaveEquation from '~/assets/images/blog/fourier-series/square-wave-equation.png';
@@ -228,8 +228,9 @@ export default {
 
     async textToSVG() {
       // load a font asynchronously
-      const font = await opentype.load('/fonts/Roboto-Black.ttf');
-      const path = font.getPath(this.text, 0, 0, 20).toPathData();
+      const response = await fetch('/fonts/Roboto-Black.ttf');
+      const font = opentype.parse(await response.arrayBuffer());
+      const path = font.getPath(this.text, 0, 0, 20).toPathData({ flipY: false, optimize: false });
 
       return path;
     },
