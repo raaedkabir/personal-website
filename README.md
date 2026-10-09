@@ -58,8 +58,6 @@ Live site: [www.raaedkabir.com](https://www.raaedkabir.com/)
 
 | Service | Notes |
 | --- | --- |
-| [GitHub Actions](https://github.com/raaedkabir/personal-website/actions/workflows/main.yml) | Deploy workflow runs |
-| [GitHub repository secrets](https://github.com/raaedkabir/personal-website/settings/secrets/actions) | The secrets listed above |
 | [Route 53](https://console.aws.amazon.com/route53/v2/hostedzones) | DNS hosted zone |
 | [Certificate Manager](https://us-east-1.console.aws.amazon.com/acm/home?region=us-east-1#/certificates/list) | SSL certificate (`us-east-1`, as CloudFront requires) |
 | [S3](https://console.aws.amazon.com/s3/buckets) | Site bucket (`BUCKET_ID`); resume, demo video and email images are in [`raaedkabir-assets`](https://console.aws.amazon.com/s3/buckets/raaedkabir-assets) |
