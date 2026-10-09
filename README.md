@@ -52,6 +52,30 @@ Repository secrets: `AWS_ROLE_ARN`, `BUCKET_ID`, `CLOUDFRONT_ID`, `SERVERLESS_AC
 
 ---
 
+**Dashboards & Consoles**
+
+Live site: [www.raaedkabir.com](https://www.raaedkabir.com/)
+
+| Service | Notes |
+| --- | --- |
+| [GitHub Actions](https://github.com/raaedkabir/personal-website/actions/workflows/main.yml) | Deploy workflow runs |
+| [GitHub repository secrets](https://github.com/raaedkabir/personal-website/settings/secrets/actions) | The secrets listed above |
+| [Route 53](https://console.aws.amazon.com/route53/v2/hostedzones) | DNS hosted zone |
+| [Certificate Manager](https://us-east-1.console.aws.amazon.com/acm/home?region=us-east-1#/certificates/list) | SSL certificate (`us-east-1`, as CloudFront requires) |
+| [S3](https://console.aws.amazon.com/s3/buckets) | Site bucket (`BUCKET_ID`); resume, demo video and email images are in [`raaedkabir-assets`](https://console.aws.amazon.com/s3/buckets/raaedkabir-assets) |
+| [CloudFront](https://console.aws.amazon.com/cloudfront/v4/home#/distributions) | Site distribution (`CLOUDFRONT_ID`) |
+| [IAM roles](https://console.aws.amazon.com/iam/home#/roles) / [identity providers](https://console.aws.amazon.com/iam/home#/identity_providers) | Deploy role (`AWS_ROLE_ARN`) and the GitHub OIDC provider it trusts |
+| [Serverless Dashboard](https://app.serverless.com/raaedkabir) | Org `raaedkabir`, app `personal-website`: function deploys, and the access key for `SERVERLESS_ACCESS_KEY` |
+| [Lambda](https://ca-central-1.console.aws.amazon.com/lambda/home?region=ca-central-1#/functions) | `contact-lambda-dev-contact` and `stripe-lambda-dev-stripe` (`ca-central-1`) |
+| [API Gateway](https://ca-central-1.console.aws.amazon.com/apigateway/main/apis?region=ca-central-1) | `POST /dev/contact` and `POST /dev/stripe` endpoints |
+| [CloudFormation](https://ca-central-1.console.aws.amazon.com/cloudformation/home?region=ca-central-1#/stacks) | Serverless stacks `contact-lambda-dev` and `stripe-lambda-dev` |
+| [CloudWatch Logs](https://ca-central-1.console.aws.amazon.com/cloudwatch/home?region=ca-central-1#logsV2:log-groups) | Function logs under `/aws/lambda/` |
+| [SES](https://ca-central-1.console.aws.amazon.com/ses/home?region=ca-central-1#/identities) | Verified sender identity for the contact form |
+| [Stripe](https://dashboard.stripe.com/payments) | Payments; keys under [API keys](https://dashboard.stripe.com/apikeys) (`STRIPE_SECRET_KEY`) |
+| [Google Analytics](https://analytics.google.com/) | Measurement ID `G-HWHNZXBHTF` |
+
+---
+
 **Problems with Configuring Client-Side Routing (for SPAs)**
 
 - Setting the Error Document in S3 makes potential valid URLs treated as 404s
