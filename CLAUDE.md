@@ -11,12 +11,45 @@ pnpm install    # also runs `nuxt prepare` (generates .nuxt/) and installs Husky
 pnpm dev        # dev server on localhost:3000
 pnpm generate   # prerender the static site to .output/public (dist/ is a symlink to it)
 pnpm preview    # serve the production build
-pnpm lint       # eslint . — the only automated check; there is no test suite or typecheck script
+pnpm lint       # eslint . — the only code check; there is no test suite or typecheck script
+pnpm run audit  # dependency audit with audit-ci (see Dependency audit below)
 ```
 
 - `eslint.config.mjs` imports `./.nuxt/eslint.config.mjs`, so lint fails until `nuxt prepare` has run (`pnpm install` does it).
-- Husky: `pre-commit` runs `pnpm lint`; `commit-msg` runs commitlint on each local commit message.
+- Husky: `pre-commit` runs `pnpm lint`; `commit-msg` runs commitlint on each local commit message; `pre-push` runs `pnpm run audit`.
 - `.prettierrc` says no semicolons, but Prettier isn't wired into any script and most files use semicolons. Match the file you're editing.
+
+## Dependency audit
+
+`pnpm run audit` runs [audit-ci](https://github.com/IBM/audit-ci) with `audit-ci.json` and fails on moderate or worse advisories. Husky runs it on `pre-push`. Use `pnpm run audit`, not `pnpm audit` (pnpm's built-in command).
+
+When it fails, fix the advisory before allowlisting it:
+
+1. Upgrade the direct dependency that pulls in the vulnerable package.
+2. If no compatible upgrade exists, force the patched version with a pnpm override in `pnpm-workspace.yaml` (e.g. `d3-color@<3.1.0: ^3.1.0`), then run `pnpm install`.
+3. Check the fix with `pnpm lint`, `pnpm generate` and `pnpm run audit`.
+
+### Allowlisting
+
+Allowlist an advisory in `audit-ci.json` only when no patched release exists, or when the fix breaks the build and the vulnerable code isn't reachable here.
+
+- Key each entry by advisory ID and dependency path: `GHSA-xxxx-xxxx-xxxx|parent>child>package`. Copy it from the `Found vulnerable advisory paths` section of the audit output. Use `*` to match several paths, e.g. `nitropack>*>braces`.
+- Never allowlist a bare package name or bare GHSA ID. That suppresses the advisory on every path, including new ones.
+- Give each entry its own object. audit-ci only reads the first key of each object.
+- Set `active: true`, an `expiry` about three months out (`YYYY-MM-DD`), and `notes` explaining why it's safe or blocked and what would unblock the fix.
+- `audit-ci.json` is plain JSON, so it has no comments. The reasoning goes in `notes`.
+
+```json
+{
+  "GHSA-xxxx-xxxx-xxxx|parent>child>package": {
+    "active": true,
+    "expiry": "YYYY-MM-DD",
+    "notes": "Why it's safe or blocked, and what unblocks the fix"
+  }
+}
+```
+
+When an entry expires, the audit fails again. Check whether a fix has shipped and remove the entry if so. Otherwise, confirm the reasoning still holds and extend the expiry.
 
 ## Commits and pull requests
 

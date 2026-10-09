@@ -11,6 +11,7 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
+    "audit": "pnpm dlx audit-ci@^7 --config ./audit-ci.json",
     "prepare": "husky"
   },
   "dependencies": {
