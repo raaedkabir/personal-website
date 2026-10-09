@@ -11,15 +11,73 @@ pnpm install    # also runs `nuxt prepare` (generates .nuxt/) and installs Husky
 pnpm dev        # dev server on localhost:3000
 pnpm generate   # prerender the static site to .output/public (dist/ is a symlink to it)
 pnpm preview    # serve the production build
-pnpm lint       # eslint . (there is no unit test suite or typecheck script)
-pnpm test:a11y  # prerender the site and scan every page with axe (see Accessibility tests below)
+pnpm lint       # eslint .
 pnpm run audit  # dependency audit with audit-ci (see Dependency audit below)
+pnpm test:e2e   # build this branch and screenshot its base commit, then run the Playwright suite (see Testing below)
+pnpm test:e2e:report     # open the HTML report of the last run
+pnpm test:a11y           # build, then run only the accessibility scan
+pnpm test:e2e:typecheck  # type-check the tests; Playwright itself only strips the types
 ```
 
 - `eslint.config.mjs` imports `./.nuxt/eslint.config.mjs`, so lint fails until `nuxt prepare` has run (`pnpm install` does it).
-- Husky: `pre-commit` runs `pnpm lint`; `commit-msg` runs commitlint on each local commit message; `pre-push` runs `pnpm run audit`. PRs run the same checks in CI through the `Lint`, `Commitlint` and `Audit` workflows, plus `pnpm test:a11y` through the `Accessibility` workflow, which has no hook because it's too slow for one.
+- Husky: `pre-commit` runs `pnpm lint`; `commit-msg` runs commitlint on each local commit message; `pre-push` runs `pnpm run audit`. PRs run the same checks in CI through the `Lint`, `Commitlint` and `Audit` workflows, plus the Playwright suite through the `Test` workflow, which has no hook because it's too slow for one.
 - Every Husky hook needs a matching GitHub Actions workflow. Hooks only run where they're installed, and `--no-verify` skips them, so CI is what enforces them. When you add or change a hook in `.husky/`, add or update a `pull_request` workflow in `.github/workflows/` that runs the same command (copy the setup steps from `lint.yml`), and update the hook and workflow lists here and in the README.
 - `.prettierrc` says no semicolons, but Prettier isn't wired into any script and most files use semicolons. Match the file you're editing.
+
+## Testing
+
+Nobody reviews the site by hand after a change, so the Playwright suite in `tests/` is how a change gets validated. It runs against the production build (`pnpm generate`, served from `.output/public` with sirv on port 4173) in Chromium at a desktop size and a Pixel 7 size, and in CI through the `Test` workflow on pull requests.
+
+Whenever you touch `app/`, `public/`, `nuxt.config.ts` or dependencies, run `pnpm test:e2e` before committing. It runs `tests/e2e/run.sh`, which:
+
+1. builds this branch (`pnpm generate`);
+2. builds the commit this branch is based on (`git merge-base HEAD origin/main`, or `E2E_BASE=<commit>`) in a temporary git worktree and screenshots it into `tests/e2e/__snapshots__/` (git-ignored). The screenshots are reused until the base commit, `tests/e2e/`, `playwright.config.ts` or `pnpm-lock.yaml` changes;
+3. runs the whole suite against this branch, comparing its screenshots with the base's.
+
+That takes about 8 minutes, or 5 when the base's screenshots are reused. To rerun a few tests against the last build, use `pnpm exec playwright test <file or -g pattern>` (add `--project=desktop` to narrow it further). If you edited the tests, also run `pnpm test:e2e:typecheck`, since a mistyped Playwright option is otherwise silently ignored.
+
+In Claude Code cloud sessions Chromium is already installed and `@playwright/test` is pinned to the version that matches it (1.56.1); don't run `playwright install` there. Elsewhere, run `pnpm exec playwright install chromium` once before the first local run. Cloud sessions clone the repo shallowly; if `run.sh` says it can't find where the branch left `origin/main`, run `git fetch origin main` (or `git fetch --deepen=100`) and rerun.
+
+- `e2e/smoke.spec.ts`: every page loads with its title and heading, with no console errors, broken images or sideways scrolling; the 404 page.
+- `e2e/navigation.spec.ts`, `e2e/contact.spec.ts`, `e2e/about.spec.ts`: the menu (mouse and keyboard), links, back-to-top, the contact form and the buy-me-a-coffee dialog.
+- `e2e/visual.spec.ts`: full-page screenshots of every page, plus the open menu, the coffee dialog, the sent contact form and the 404 page, compared with the same screenshots of the base commit. A difference doesn't fail the test (see Screenshot changes below).
+- `a11y.spec.ts`: the axe scan (see Accessibility scan below).
+- `e2e/support/test.ts`: the shared fixture of the `e2e/` specs. It stubs every outside service (analytics, both Lambdas, Stripe, the embeds, the data gist), fails a test on page errors or requests to unknown hosts, and has `freeze()`/`settle()`, which stop the clock and seed `Math.random` so screenshots come out identical.
+- `e2e/support/visual-reporter.ts`: lists the screenshots that differ from the base at the end of the run and, in CI, in the job summary.
+- `e2e/support/routes.ts`: every page with its title, heading and screenshot masks. Add new pages here so they get smoke and screenshot tests (the accessibility scan finds new pages by itself). If part of a page still differs between runs, add it to that route's `mask`.
+
+When a test fails:
+
+- **"Process from config.webServer was not able to start"**: `pnpm generate` failed. Read the `[WebServer]` lines above it; a link to a page that doesn't exist fails the prerender, for example.
+- **Functional test** (smoke, navigation, contact, about): something a visitor uses is broken. Fix the code, not the test.
+- **Screenshot**: a visual test fails only when it can't take its screenshot. "Failed to take two consecutive stable screenshots" means part of the page keeps moving with the clock frozen; add it to that route's `mask`.
+- **Accessibility**: see Accessibility scan below.
+- **"Request to an unexpected host"**: the page now calls an outside service. Add a stub for it in `tests/e2e/support/test.ts`; tests must never hit real services (the contact Lambda sends real email).
+- **A `test.fail()` test "passes unexpectedly"**: a known bug got fixed. Remove its entry (e.g. from `knownMobileOverflow` in `smoke.spec.ts`).
+
+Never skip, delete or loosen a test, or raise a tolerance, to get green.
+
+### Screenshot changes
+
+The suite passes whether or not the screenshots changed, so read the "Screenshots compared with the base commit" list at the end of every run. For each screenshot in it, open `test-results/<test>/*-diff.png` (changed pixels in red) next to `*-expected.png` (the base) and `*-actual.png` (this branch), or use `pnpm test:e2e:report`.
+
+- If a change is unintended, fix it.
+- If it is the point of your change, list the changed screenshots in the PR description.
+- "no baseline" means a page or state that is new on this branch (its screenshot is attached to the test in the report), or one that failed to render on the base commit (the base run's output above says why).
+- "Screenshots weren't compared with a base commit" is followed by the reason: the base commit couldn't be found, built or screenshotted. Fix that if it's in your branch (a broken test, a stale `origin/main`), then rerun.
+- If every screenshot changed, look for a cause outside your change before anything else. Google Fonts is loaded for real, so a failed font download in one of the two runs changes every page; rerun.
+
+### Accessibility scan
+
+`tests/a11y.spec.ts` uses Playwright and [@axe-core/playwright](https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright) to scan the prerendered site at a desktop and a phone viewport. It checks WCAG 2.2 A and AA plus axe's best practices, and fails on any violation.
+
+- It scans every `index.html` page in `.output/public`, so new pages are covered without changes, plus `/404.html` and the open navigation menu.
+- `pnpm test:e2e` runs it with everything else; `pnpm test:a11y` builds and runs only the scan. To rescan the existing build, run `pnpm exec playwright test a11y` (add `--project=desktop` or a title filter to narrow it).
+- Requests to other origins are aborted, so test runs never send analytics hits, create Stripe PaymentIntents (the About page does on load) or load embeds. Third-party content isn't scanned.
+- Pages whose content fades in are listed in `introDurations` with the length of the intro. The test fast-forwards Playwright's fake clock by that much so axe sees the settled page. Add an entry when a page gets an intro animation.
+- A failure lists each rule with the selectors that break it. The HTML report (`playwright-report/`, uploaded as an artifact in CI) has the full axe results for each page, including `failureSummary` with measured contrast ratios.
+- Fix violations in the markup or styles. Don't disable rules or exclude elements unless axe is demonstrably wrong, and explain why in a comment.
+- axe can't judge contrast over background images, gradients or pseudo-element backgrounds. It reports those as `incomplete` rather than as violations (the home hero and the navigation menu, for example), so check them by hand.
 
 ## Dependency audit
 
@@ -52,18 +110,6 @@ Allowlist an advisory in `audit-ci.json` only when no patched release exists, or
 ```
 
 When an entry expires, the audit fails again. Check whether a fix has shipped and remove the entry if so. Otherwise, confirm the reasoning still holds and extend the expiry.
-
-## Accessibility tests
-
-`tests/a11y.spec.ts` uses Playwright and [@axe-core/playwright](https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright) to scan the prerendered site at a desktop and a phone viewport. It checks WCAG 2.2 A and AA plus axe's best practices, and fails on any violation.
-
-- It scans every `index.html` page in `.output/public`, so new pages are covered without changes, plus `/404.html` and the open navigation menu.
-- `pnpm test:a11y` runs `nuxt generate` first. To rescan the existing build, run `pnpm exec playwright test` (add `--project=desktop` or a title filter to narrow it). `playwright.config.ts` serves `.output/public` with sirv on port 4173. Run `pnpm exec playwright install chromium` once before the first local run.
-- Requests to other origins are aborted, so test runs never send analytics hits, create Stripe PaymentIntents (the About page does on load) or load embeds. Third-party content isn't scanned.
-- Pages whose content fades in are listed in `introDurations` with the length of the intro. The test fast-forwards Playwright's fake clock by that much so axe sees the settled page. Add an entry when a page gets an intro animation.
-- A failure lists each rule with the selectors that break it. The HTML report (`playwright-report/`, uploaded as an artifact in CI) has the full axe results for each page, including `failureSummary` with measured contrast ratios.
-- Fix violations in the markup or styles. Don't disable rules or exclude elements unless axe is demonstrably wrong, and explain why in a comment.
-- axe can't judge contrast over background images, gradients or pseudo-element backgrounds. It reports those as `incomplete` rather than as violations (the home hero and the navigation menu, for example), so check them by hand.
 
 ## Commits and pull requests
 

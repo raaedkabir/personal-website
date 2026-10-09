@@ -83,6 +83,8 @@ dist
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+# the base commit's screenshots, taken by tests/e2e/run.sh
+/tests/e2e/__snapshots__/
 
 # Serverless directories
 .serverless
