@@ -78,6 +78,12 @@ dist
 # vuepress build output
 .vuepress/dist
 
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
 # Serverless directories
 .serverless
 

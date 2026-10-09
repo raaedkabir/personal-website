@@ -11,12 +11,13 @@ pnpm install    # also runs `nuxt prepare` (generates .nuxt/) and installs Husky
 pnpm dev        # dev server on localhost:3000
 pnpm generate   # prerender the static site to .output/public (dist/ is a symlink to it)
 pnpm preview    # serve the production build
-pnpm lint       # eslint . — the only code check; there is no test suite or typecheck script
+pnpm lint       # eslint . (there is no unit test suite or typecheck script)
+pnpm test:a11y  # prerender the site and scan every page with axe (see Accessibility tests below)
 pnpm run audit  # dependency audit with audit-ci (see Dependency audit below)
 ```
 
 - `eslint.config.mjs` imports `./.nuxt/eslint.config.mjs`, so lint fails until `nuxt prepare` has run (`pnpm install` does it).
-- Husky: `pre-commit` runs `pnpm lint`; `commit-msg` runs commitlint on each local commit message; `pre-push` runs `pnpm run audit`. PRs run the same checks in CI through the `Lint`, `Commitlint` and `Audit` workflows.
+- Husky: `pre-commit` runs `pnpm lint`; `commit-msg` runs commitlint on each local commit message; `pre-push` runs `pnpm run audit`. PRs run the same checks in CI through the `Lint`, `Commitlint` and `Audit` workflows, plus `pnpm test:a11y` through the `Accessibility` workflow, which has no hook because it's too slow for one.
 - Every Husky hook needs a matching GitHub Actions workflow. Hooks only run where they're installed, and `--no-verify` skips them, so CI is what enforces them. When you add or change a hook in `.husky/`, add or update a `pull_request` workflow in `.github/workflows/` that runs the same command (copy the setup steps from `lint.yml`), and update the hook and workflow lists here and in the README.
 - `.prettierrc` says no semicolons, but Prettier isn't wired into any script and most files use semicolons. Match the file you're editing.
 
@@ -51,6 +52,18 @@ Allowlist an advisory in `audit-ci.json` only when no patched release exists, or
 ```
 
 When an entry expires, the audit fails again. Check whether a fix has shipped and remove the entry if so. Otherwise, confirm the reasoning still holds and extend the expiry.
+
+## Accessibility tests
+
+`tests/a11y.spec.ts` uses Playwright and [@axe-core/playwright](https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright) to scan the prerendered site at a desktop and a phone viewport. It checks WCAG 2.2 A and AA plus axe's best practices, and fails on any violation.
+
+- It scans every `index.html` page in `.output/public`, so new pages are covered without changes, plus `/404.html` and the open navigation menu.
+- `pnpm test:a11y` runs `nuxt generate` first. To rescan the existing build, run `pnpm exec playwright test` (add `--project=desktop` or a title filter to narrow it). `playwright.config.ts` serves `.output/public` with sirv on port 4173. Run `pnpm exec playwright install chromium` once before the first local run.
+- Requests to other origins are aborted, so test runs never send analytics hits, create Stripe PaymentIntents (the About page does on load) or load embeds. Third-party content isn't scanned.
+- Pages whose content fades in are listed in `introDurations` with the length of the intro. The test fast-forwards Playwright's fake clock by that much so axe sees the settled page. Add an entry when a page gets an intro animation.
+- A failure lists each rule with the selectors that break it. The HTML report (`playwright-report/`, uploaded as an artifact in CI) has the full axe results for each page, including `failureSummary` with measured contrast ratios.
+- Fix violations in the markup or styles. Don't disable rules or exclude elements unless axe is demonstrably wrong, and explain why in a comment.
+- axe can't judge contrast over background images, gradients or pseudo-element backgrounds. It reports those as `incomplete` rather than as violations (the home hero and the navigation menu, for example), so check them by hand.
 
 ## Commits and pull requests
 
