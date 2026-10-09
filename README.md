@@ -12,9 +12,10 @@
 
 **Local Development**
 
-Requires the Node version in `.nvmrc` and [pnpm](https://pnpm.io/installation) (pinned via `packageManager` in `package.json`, so `corepack enable` will pick it up).
+Requires the Node version in `.nvmrc` and [pnpm](https://pnpm.io/installation) (pinned via `packageManager` in `package.json`, so `corepack enable` will pick it up). On Linux and macOS, `./init.sh` sets both up and installs the dependencies; add `--functions` to also set up the Lambda functions and the Serverless Framework CLI.
 
 ```bash
+./init.sh       # first-time setup: Node.js, pnpm and dependencies
 pnpm install    # install dependencies
 pnpm dev        # dev server on localhost:3000
 pnpm generate   # static build to /dist
