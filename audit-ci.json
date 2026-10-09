@@ -1,5 +1,48 @@
 {
   "$schema": "https://github.com/IBM/audit-ci/raw/main/docs/schema.json",
   "moderate": true,
-  "allowlist": []
+  "allowlist": [
+    {
+      "GHSA-x6jw-m9v5-85vh|nuxt>@nuxt/devtools>simple-git": {
+        "active": true,
+        "expiry": "2027-01-09",
+        "notes": "Fixed in simple-git 4, which breaks @nuxt/devtools 3.x. Dev-only, fixed args. Remove once Nuxt ships @nuxt/devtools v4"
+      }
+    },
+    {
+      "GHSA-g4wm-2vf7-vfgr|nuxt>@nuxt/devtools>simple-git": {
+        "active": true,
+        "expiry": "2027-01-09",
+        "notes": "Fixed in simple-git 4, which breaks @nuxt/devtools 3.x. Dev-only, fixed args. Remove once Nuxt ships @nuxt/devtools v4"
+      }
+    },
+    {
+      "GHSA-858h-whjf-mvg5|nuxt>@nuxt/devtools>simple-git": {
+        "active": true,
+        "expiry": "2027-01-09",
+        "notes": "Fixed in simple-git 4, which breaks @nuxt/devtools 3.x. Dev-only, fixed args. Remove once Nuxt ships @nuxt/devtools v4"
+      }
+    },
+    {
+      "GHSA-v5rq-49vh-5v5c|nuxt>@nuxt/devtools>simple-git>@simple-git/argv-parser": {
+        "active": true,
+        "expiry": "2027-01-09",
+        "notes": "Fixed in simple-git 4, which breaks @nuxt/devtools 3.x. Dev-only, fixed args. Remove once Nuxt ships @nuxt/devtools v4"
+      }
+    },
+    {
+      "GHSA-vfj7-8cjw-p6xm|nuxt>@nuxt/nitro-server>nitropack>*>braces": {
+        "active": true,
+        "expiry": "2027-01-09",
+        "notes": "No patched release. Only matches nitropack's own build-time glob patterns"
+      }
+    },
+    {
+      "GHSA-86w9-cpqp-85rv|nuxt>@nuxt/nitro-server>nitropack>listhen>node-forge": {
+        "active": true,
+        "expiry": "2027-01-09",
+        "notes": "No patched release. listhen only creates dev HTTPS certs and never verifies RSA signatures"
+      }
+    }
+  ]
 }
