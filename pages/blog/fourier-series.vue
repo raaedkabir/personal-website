@@ -107,8 +107,24 @@ export default {
     return {
       value: 5,
       text: 'Hello World!',
-      textCanvas: null,
     };
+  },
+
+  created() {
+    // p5 instances are kept out of `data` so Vue doesn't make them deeply reactive,
+    // which wraps every property p5 reads and writes while drawing in a getter/setter
+    this.sketches = [];
+    this.textCanvas = null;
+    this.isDestroyed = false;
+  },
+
+  beforeDestroy() {
+    // stop every draw loop, otherwise they keep running after leaving the page
+    // and pile up each time the page is visited again
+    this.isDestroyed = true;
+    this.sketches.forEach((sketch) => sketch.remove());
+    this.sketches = [];
+    this.textCanvas = null;
   },
 
   async mounted() {
@@ -127,6 +143,22 @@ export default {
       const textPath = await this.textToSVG();
       this.fourierTextMultiLine(textPath);
     },
+
+    async createSketch(sketch, el) {
+      const { default: P5 } = await import('p5');
+      // the page may have been left while p5 was loading
+      if (this.isDestroyed) return null;
+
+      const instance = new P5(sketch, el);
+      this.sketches.push(instance);
+      return instance;
+    },
+
+    removeSketch(instance) {
+      instance.remove();
+      this.sketches = this.sketches.filter((sketch) => sketch !== instance);
+    },
+
     // Discrete Fourier Transform
     dft(x) {
       // formula from:
@@ -203,8 +235,6 @@ export default {
     },
 
     async squareWave() {
-      const { default: P5 } = await import('p5');
-
       /** @type {P5Instance}  */
       const sketchSquareWave = (s) => {
         let time = 0;
@@ -307,13 +337,10 @@ export default {
         };
       };
 
-      // eslint-disable-next-line no-unused-vars
-      const canvas = new P5(sketchSquareWave, this.$refs.squareWave);
+      await this.createSketch(sketchSquareWave, this.$refs.squareWave);
     },
 
     async fourierCircle() {
-      const { default: P5 } = await import('p5');
-
       /** @type {P5Instance}  */
       const sketchCircle = (s) => {
         let time = 0;
@@ -382,17 +409,15 @@ export default {
         };
       };
 
-      // eslint-disable-next-line no-unused-vars
-      const canvas = new P5(sketchCircle, this.$refs.circle);
+      await this.createSketch(sketchCircle, this.$refs.circle);
     },
 
     async fourierTextOneLine(textPath) {
-      const { default: P5 } = await import('p5');
-
       /** @type {P5Instance}  */
       const sketchEpicycles = (s) => {
         let time = 0;
         let path = [];
+        let pausedUntil = 0;
         let fourierY;
         let fourierX;
         const x = [];
@@ -428,6 +453,9 @@ export default {
         };
 
         s.draw = () => {
+          // keep the finished drawing on screen for a moment before starting over
+          if (s.millis() < pausedUntil) return;
+
           const offsetX = -200;
           const offsetY = -20;
           s.clear();
@@ -456,29 +484,23 @@ export default {
           time += dt;
 
           if (time > s.TWO_PI) {
-            s.noLoop();
-
-            setTimeout(() => {
-              time = 0;
-              path = [];
-              s.loop();
-            }, 2000);
+            time = 0;
+            path = [];
+            pausedUntil = s.millis() + 2000;
           }
         };
       };
 
-      // eslint-disable-next-line no-unused-vars
-      const canvas = new P5(sketchEpicycles, this.$refs.textOneLine);
+      await this.createSketch(sketchEpicycles, this.$refs.textOneLine);
     },
 
     async fourierTextMultiLine(textPath) {
-      const { default: P5 } = await import('p5');
-
       /** @type {P5Instance}  */
       const sketchEpicycles = (s) => {
         let time = 0;
         let paths = [];
         let pathNum = 0;
+        let pausedUntil = 0;
         let fourierY;
         let fourierX;
         const x = [];
@@ -516,6 +538,9 @@ export default {
         };
 
         s.draw = () => {
+          // keep the finished drawing on screen for a moment before starting over
+          if (s.millis() < pausedUntil) return;
+
           const offsetX = -200;
           const offsetY = -20;
           s.clear();
@@ -559,23 +584,21 @@ export default {
           time += dt;
 
           if (time > s.TWO_PI) {
-            s.noLoop();
-
-            setTimeout(() => {
-              time = 0;
-              paths = [];
-              pathNum = 0;
-              vectorXprev = null;
-              vectorYprev = null;
-              s.loop();
-            }, 2000);
+            time = 0;
+            paths = [];
+            pathNum = 0;
+            vectorXprev = null;
+            vectorYprev = null;
+            pausedUntil = s.millis() + 2000;
           }
         };
       };
 
-      if (this.textCanvas) this.textCanvas.remove();
+      const sketch = await this.createSketch(sketchEpicycles, this.$refs.textMultiLine);
+      if (!sketch) return;
 
-      this.textCanvas = new P5(sketchEpicycles, this.$refs.textMultiLine);
+      if (this.textCanvas) this.removeSketch(this.textCanvas);
+      this.textCanvas = sketch;
     },
   },
 

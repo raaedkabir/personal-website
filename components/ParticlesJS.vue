@@ -11,6 +11,17 @@ export default {
     });
   },
 
+  beforeDestroy() {
+    // particles.js never stops an instance's animation loop on its own, so without this every
+    // navigation leaves another loop drawing to a removed canvas. Its destroypJS() isn't used
+    // because it also sets the global pJSDom to null, which breaks the next particlesJS() call.
+    const index = window.pJSDom.findIndex(({ pJS }) => pJS.canvas.el.parentNode === this.$el);
+    if (index === -1) return;
+
+    const [{ pJS }] = window.pJSDom.splice(index, 1);
+    cancelAnimationFrame(pJS.fn.drawAnimFrame);
+  },
+
   methods: {
     initParticlesJS() {
       /* eslint-disable */
