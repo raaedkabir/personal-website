@@ -10,3 +10,6 @@ overrides:
   # d3-svg-legend pins d3-scale/d3-transition 1.x, which pull in d3-color <3.1.0
   # (GHSA-36jr-mh4h-2g58, ReDoS)
   d3-color@<3.1.0: ^3.1.0
+  # @axe-core/playwright would install the latest playwright-core for itself; keep it on the version
+  # @playwright/test is pinned to (see CLAUDE.md, Testing)
+  playwright-core: 1.56.1

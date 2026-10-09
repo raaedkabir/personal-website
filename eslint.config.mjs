@@ -3,6 +3,10 @@ import withNuxt from './.nuxt/eslint.config.mjs';
 
 export default withNuxt(
   {
+    // Playwright's report and test output
+    ignores: ['playwright-report/', 'test-results/', 'blob-report/'],
+  },
+  {
     rules: {
       // section components under components/Pages are named after what they render (Hero, Works, ...)
       'vue/multi-word-component-names': 'off',

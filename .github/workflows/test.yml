@@ -1,6 +1,6 @@
-name: Accessibility
+name: Test
 
-# Prerenders the site and scans every page with axe-core in Playwright (tests/a11y.spec.ts).
+# Runs the Playwright suite in tests/ (functional, screenshot and axe accessibility tests) on pull requests.
 # There is no matching Husky hook: building the site and driving a browser is too slow for one.
 on:
   pull_request:
@@ -13,8 +13,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  axe:
-    runs-on: ubuntu-latest
+  e2e:
+    # pinned rather than ubuntu-latest: the screenshots are compared pixel for pixel, so the OS fonts must not change
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -30,15 +32,25 @@ jobs:
           cache: true
       - name: Install modules
         run: pnpm install --frozen-lockfile
+      - name: Type-check tests
+        run: pnpm test:e2e:typecheck
       - name: Install Chromium
         run: pnpm exec playwright install --with-deps chromium
-      - name: Run accessibility tests
-        run: pnpm test:a11y
+      - name: Run end-to-end tests
+        run: pnpm test:e2e
       - name: Upload report
-        # the report has each page's full axe results and a trace of every failed test
+        # the report has each page's full axe results and a trace of every failed test that was retried
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7
         with:
           name: playwright-report
           path: playwright-report
-          retention-days: 7
+          retention-days: 14
+      # the actual, expected and diff images of failed screenshot comparisons
+      - name: Upload failure screenshots
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-results
+          path: test-results
+          retention-days: 14
