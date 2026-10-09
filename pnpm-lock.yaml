@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  d3-color@<3.1.0: ^3.1.0
+
 importers:
 
   .:
@@ -2656,9 +2659,6 @@ packages:
 
   d3-collection@1.0.7:
     resolution: {integrity: sha512-ii0/r5f4sjKNTfh84Di+DpztYwqKhEyUlKoPrzUFfeSkWxjW49xU2QzO9qrPrNkpdI0XJkfzvmTu8V2Zylln6A==}
-
-  d3-color@1.4.1:
-    resolution: {integrity: sha512-p2sTHSLCJI2QKunbGb7ocOh7DgTAn8IrLx21QRc/BSnodXM4sv6aLQlnfpvehFMLZEfBc6g9pH9SWQccFYfJ9Q==}
 
   d3-color@3.1.0:
     resolution: {integrity: sha512-zg/chbXyeBtMQ1LbD/WSoW2DpC3I0mpmPdW+ynRTj/x2DAWYrIY7qeZIHidozwV24m4iavr15lNwIwLxRmOxhA==}
@@ -8985,8 +8985,6 @@ snapshots:
 
   d3-collection@1.0.7: {}
 
-  d3-color@1.4.1: {}
-
   d3-color@3.1.0: {}
 
   d3-contour@4.0.2:
@@ -9044,7 +9042,7 @@ snapshots:
 
   d3-interpolate@1.4.0:
     dependencies:
-      d3-color: 1.4.1
+      d3-color: 3.1.0
 
   d3-interpolate@3.0.1:
     dependencies:
@@ -9069,7 +9067,7 @@ snapshots:
     dependencies:
       d3-array: 1.0.1
       d3-collection: 1.0.7
-      d3-color: 1.4.1
+      d3-color: 3.1.0
       d3-format: 1.0.2
       d3-interpolate: 1.4.0
       d3-time: 1.1.0
@@ -9121,7 +9119,7 @@ snapshots:
 
   d3-transition@1.0.3:
     dependencies:
-      d3-color: 1.4.1
+      d3-color: 3.1.0
       d3-dispatch: 1.0.1
       d3-ease: 1.0.7
       d3-interpolate: 1.4.0
