@@ -22,6 +22,7 @@ pnpm lint       # eslint . — the only automated check; there is no test suite 
 
 - Commit messages and PR titles must follow [Conventional Commits](https://www.conventionalcommits.org/) (e.g. `feat: add contact form`, `fix(blog): correct styles`), using the rules in `commitlint.config.js`.
 - PRs are squash-merged with the PR title as the commit title on `main`, so the title is checked by the `PR title` workflow, not the local `commit-msg` hook. Check a title before opening the PR with `printf '%s\n' "<title>" | pnpm exec commitlint`.
+- When a branch is ready for a PR, clean up its history first: fold follow-up fixes into the commits they belong to so each commit is a self-contained Conventional Commit. Commit them with `git commit --fixup=<sha>`, then run `GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash origin/main` (the env var makes the rebase non-interactive) and push with `git push --force-with-lease`.
 
 ## Architecture
 
