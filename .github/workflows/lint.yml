@@ -1,0 +1,35 @@
+name: Lint
+
+# Runs the check from the Husky pre-commit hook (.husky/pre-commit) on pull requests,
+# so it also covers commits made without the hooks installed or with --no-verify.
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Set node version
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          cache: true
+      - name: Install modules
+        # postinstall runs nuxt prepare, which generates the .nuxt ESLint config eslint.config.mjs extends
+        run: pnpm install --frozen-lockfile
+      - name: Lint
+        run: pnpm lint

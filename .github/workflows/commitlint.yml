@@ -1,0 +1,48 @@
+name: Commitlint
+
+# Runs the check from the Husky commit-msg hook (.husky/commit-msg) on every commit in
+# the pull request, and on the PR title, which becomes the commit message on main when
+# the pull request is squash-merged.
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  commitlint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          # full history, so commitlint can walk the pull request's commits from base to head
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Set node version
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          cache: true
+      - name: Install modules
+        id: install
+        run: pnpm install --frozen-lockfile
+      - name: Lint commit messages
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: pnpm exec commitlint --from "$BASE_SHA" --to "$HEAD_SHA" --verbose
+      - name: Lint PR title
+        # report a bad title even when a commit message already failed
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: printf '%s\n' "$PR_TITLE" | pnpm exec commitlint --verbose
