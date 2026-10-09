@@ -2,6 +2,26 @@
 const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses');
 const ses = new SESClient();
 
+const HTML_ESCAPES = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+};
+
+// form fields come straight from the public contact form, so escape them before they go in the HTML body
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, (char) => HTML_ESCAPES[char]);
+}
+
+// only catches obviously malformed addresses (no @, whitespace, several addresses); SES does the rest
+const EMAIL_PATTERN = /^[^\s@<>,;"]+@[^\s@<>,;"]+\.[^\s@<>,;"]+$/;
+
+function isValidEmail(email) {
+  return typeof email === 'string' && email.length <= 254 && EMAIL_PATTERN.test(email);
+}
+
 function sendEmail(formData) {
   const emailParams = {
     Source: 'raaed.kabir@gmail.com', // send from
@@ -186,17 +206,17 @@ function sendEmail(formData) {
                       <!-- Headline -->
                       <tr>
                         <td style="padding: 20px">
-                          <h1 style="margin: 0; font-size: 32px; text-align: center">${formData.subject}</h1>
+                          <h1 style="margin: 0; font-size: 32px; text-align: center">${escapeHtml(formData.subject)}</h1>
                         </td>
                       </tr>
 
                       <!-- Body copy -->
                       <tr>
                         <td style="padding: 20px 20px 0 20px">
-                          <p style="margin: 0 0 20px 0">First Name: ${formData.firstName}</p>
-                          <p style="margin: 0 0 20px 0">Last Name: ${formData.lastName}</p>
+                          <p style="margin: 0 0 20px 0">First Name: ${escapeHtml(formData.firstName)}</p>
+                          <p style="margin: 0 0 20px 0">Last Name: ${escapeHtml(formData.lastName)}</p>
                           <p style="margin: 0 0 0 0">Message:</p>
-                          <p style="margin: 0 0 20px 0">${formData.message}</p>
+                          <p style="margin: 0 0 20px 0">${escapeHtml(formData.message)}</p>
                         </td>
                       </tr>
                       <tr>
@@ -330,16 +350,24 @@ function sendEmail(formData) {
 }
 
 module.exports.contact = async (event) => {
-  const formData = JSON.parse(event.body);
+  let formData;
+  try {
+    formData = JSON.parse(event.body);
+  } catch {}
 
   let statusCode = 200;
   let message;
 
-  try {
-    message = await sendEmail(formData);
-  } catch (err) {
-    statusCode = 500;
-    message = err.message;
+  if (!isValidEmail(formData?.email)) {
+    statusCode = 400;
+    message = 'A valid email address is required';
+  } else {
+    try {
+      message = await sendEmail(formData);
+    } catch (err) {
+      statusCode = 500;
+      message = err.message;
+    }
   }
 
   return {
