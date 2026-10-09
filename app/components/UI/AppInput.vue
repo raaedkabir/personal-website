@@ -1,10 +1,10 @@
 <template>
-  <div v-if="!textArea" class="group">
-    <input :id="id" v-bind="$attrs" v-on="listeners" />
+  <div v-if="!textArea" class="group" :class="$attrs.class" :style="$attrs.style">
+    <input :id="id" v-bind="fieldAttrs" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" />
     <label :for="id">{{ label }}</label>
   </div>
-  <div v-else class="group">
-    <textarea :id="id" v-bind="$attrs" v-on="listeners" />
+  <div v-else class="group" :class="$attrs.class" :style="$attrs.style">
+    <textarea :id="id" v-bind="fieldAttrs" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" />
     <label :for="id">{{ label }}</label>
   </div>
 </template>
@@ -26,14 +26,24 @@ export default {
       type: String,
       required: true,
     },
+    modelValue: {
+      type: String,
+      default: '',
+    },
+    // v-model modifiers such as .trim, applied by Vue when emitting
+    modelModifiers: {
+      type: Object,
+      default: () => ({}),
+    },
   },
 
+  emits: ['update:modelValue'],
+
   computed: {
-    listeners() {
-      return {
-        ...this.$listeners,
-        input: (event) => this.$emit('input', event.target.value),
-      };
+    // class and style stay on the wrapper, the rest goes to the field
+    fieldAttrs() {
+      const { class: _class, style: _style, ...attrs } = this.$attrs;
+      return attrs;
     },
   },
 };

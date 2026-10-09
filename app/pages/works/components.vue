@@ -20,7 +20,7 @@
   </main>
 </template>
 
-<script>
+<script setup>
 import MyButtons from '@/components/Pages/Components/Buttons.vue';
 import MyImages from '@/components/Pages/Components/Images.vue';
 import MyTexts from '@/components/Pages/Components/Texts.vue';
@@ -28,22 +28,9 @@ import MyMenus from '@/components/Pages/Components/Menus.vue';
 import MyLoaders from '@/components/Pages/Components/Loaders.vue';
 import MyFooter from '@/components/Pages/Components/Footer.vue';
 
-export default {
-  components: {
-    MyButtons,
-    MyImages,
-    MyTexts,
-    MyMenus,
-    MyLoaders,
-    MyFooter,
-  },
-
-  head() {
-    return {
-      title: 'CSS Only Components',
-    };
-  },
-};
+useHead({
+  title: 'CSS Only Components',
+});
 </script>
 
 <style lang="scss" scoped>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <TheNavbar />
-    <Nuxt />
+    <slot />
     <TheFooter />
     <a class="top-of-site-link" :class="{ show: displayScrollToTop }" @click="scrollToTop">
       <span class="screen-reader-text">Back to Top</span>
@@ -29,7 +29,7 @@ export default {
   mounted() {
     window.addEventListener('scroll', this.onScroll);
   },
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('scroll', this.onScroll);
   },
   methods: {

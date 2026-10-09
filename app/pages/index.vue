@@ -19,20 +19,12 @@
   </main>
 </template>
 
-<script>
+<script setup>
 import HomeHero from '@/components/Pages/Home/Hero.vue';
 import HomeWorks from '@/components/Pages/Home/Works.vue';
 import Contact from '@/components/Pages/Home/Contact.vue';
 
-export default {
-  components: {
-    HomeHero,
-    HomeWorks,
-    Contact,
-  },
-
-  head: {
-    title: 'Welcome!',
-  },
-};
+useHead({
+  title: 'Welcome!',
+});
 </script>

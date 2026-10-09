@@ -1,7 +1,7 @@
 <template>
   <div>
     <AppModal class="modal" :open="showDialog" title="Buy Me a Coffee" @close="(showDialog = false), (amount = null)">
-      <template>
+      <template #default>
         <div class="d-flex justify-between mt-3">
           <div class="modal__item">
             <img src="@/assets/images/coffee/beans.svg" alt="coffee beans" />
@@ -99,8 +99,17 @@ export default {
     },
   },
 
+  mounted() {
+    // a prerendered image can finish loading before hydration attaches @load
+    const img = document.querySelector('.about-me--image > img');
+    if (img.complete && img.naturalWidth) this.onImgLoad();
+  },
+
   methods: {
 		onImgLoad() {
+      // only draw the chart once
+      if (document.querySelector('#chart svg')) return;
+
       // Set the dimensions of the chart
       const img = document.querySelector('.about-me--image > img');
       const multiplier = 1.5;

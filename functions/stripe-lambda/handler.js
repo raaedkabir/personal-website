@@ -21,7 +21,7 @@ module.exports.stripe = async (event) => {
       }),
     };
   } catch (err) {
-    console.log(err); // eslint-disable-line
+    console.log(err);
 
     return {
       statusCode: 400,

@@ -2,7 +2,7 @@
   <nuxt-link v-if="link" :to="to" :class="{ nav: nav, flat: flat }">
     <slot />
   </nuxt-link>
-  <button v-else :class="{ flat: flat }" v-on="listeners">
+  <button v-else :class="{ flat: flat }">
     <slot />
   </button>
 </template>
@@ -28,19 +28,10 @@ export default {
     },
   },
 
-  computed: {
-    listeners() {
-      return {
-        ...this.$listeners,
-      };
-    },
-  },
-
   watch: {
     link: {
       handler(value) {
         if (value && this.to === '') {
-          // eslint-disable-next-line
           console.error('Path is Required for Links');
         }
       },

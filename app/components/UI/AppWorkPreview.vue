@@ -1,16 +1,17 @@
 <template>
   <nuxt-link v-if="!outside" :to="to">
-    <img class="bg" :src="require('@/assets/images' + imgSrc)" :alt="imgAlt" />
+    <img class="bg" :src="imageUrl(imgSrc)" :alt="imgAlt" />
     <slot />
   </nuxt-link>
   <a v-else :href="to" target="_blank" rel="noopener noreferrer">
-    <img class="bg" :src="require('@/assets/images' + imgSrc)" :alt="imgAlt" />
+    <img class="bg" :src="imageUrl(imgSrc)" :alt="imgAlt" />
     <slot />
   </a>
 </template>
 
 <script>
 // import AppButton from '@/components/UI/AppButton.vue';
+import { imageUrl } from '~/utils/images';
 
 export default {
   components: {
@@ -35,6 +36,10 @@ export default {
       default: false,
     },
   },
+
+  methods: {
+    imageUrl,
+  },
 };
 </script>
 
@@ -49,7 +54,7 @@ a {
     width: 90%;
   }
 
-  button {
+  :slotted(button) {
     margin-left: 15%;
   }
 }

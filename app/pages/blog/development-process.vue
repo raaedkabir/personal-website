@@ -1,6 +1,6 @@
 <template>
   <Layout img="/development-process/hero.jpg" title="My Development Process" date="January 2020">
-    <div slot="content">
+    <template #content>
       <div class="credit">
         Photo by
         <AppLink
@@ -68,7 +68,7 @@
         also has a contrast checker. Also, don't use pure black as it is harsh to the eyes, instead use #333 as the
         darkest black.
       </p>
-      <img src="~assets/images/blog/development-process/color-pallette.png" alt="color pallette" />
+      <img src="~/assets/images/blog/development-process/color-pallette.png" alt="color pallette" />
 
       <h2 class="heading__section">Typography</h2>
       <p>
@@ -104,7 +104,7 @@
         >
         between sites anymore.
       </p>
-      <img src="~assets/images/blog/development-process/types-of-fonts.png" alt="types of fonts" />
+      <img src="~/assets/images/blog/development-process/types-of-fonts.png" alt="types of fonts" />
 
       <h2 class="heading__section">Layout</h2>
       <p>
@@ -118,7 +118,7 @@
         clean layout with Symmetry and then breaking that layout with Assymetry to grab the eye's attention is the first
         step. That is technique of the Call-To-Action Button.
       </p>
-      <img src="~assets/images/blog/development-process/navbar.png" alt="navbar" />
+      <img src="~/assets/images/blog/development-process/navbar.png" alt="navbar" />
       <p>
         But at the same time, too much order is... boring. There is nothing novel to make the user's experience
         exciting. Nature is not inherently Symmetrical so it's not surprising that when it comes to art people usually
@@ -132,7 +132,7 @@
         I put in some diagonal lines so the design doesn't feel too flat.
       </p>
       <img
-        src="~assets/images/blog/development-process/primitive-shapes.png"
+        src="~/assets/images/blog/development-process/primitive-shapes.png"
         alt="example site using only primitive shapes"
       />
       <p>
@@ -186,7 +186,7 @@
         All the questions will be asked here. Once I reached this stage the design should already be locked in stone and
         I can move on to the core functionality and features of the app.
       </p>
-    </div>
+    </template>
   </Layout>
 </template>
 
@@ -194,8 +194,6 @@
 import Layout from '~/layout/blog.vue';
 
 export default {
-  layout: 'empty',
-
   components: {
     Layout,
   },
@@ -212,11 +210,11 @@ export default {
     twitterScript.setAttribute('async', '');
     document.head.appendChild(twitterScript);
   },
-
-  head() {
-    return {
-      title: this.title,
-    };
-  },
 };
+</script>
+
+<script setup>
+definePageMeta({
+  layout: 'empty',
+});
 </script>

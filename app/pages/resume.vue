@@ -45,7 +45,7 @@
       </div>
       <div class="category">
         <h3 class="subtitile">Projects</h3>
-        <p>See <AppLink><nuxt-link to="/works">My Works page</nuxt-link></AppLink> for full list.</p>        
+        <p>See <AppLink to="/works">My Works page</AppLink> for full list.</p>        
       </div>
       <div class="category">
         <h3 class="subtitile">Skills</h3>
@@ -62,14 +62,10 @@
   </main>
 </template>
 
-<script>
-export default {
-  head() {
-    return {
-      title: 'Resume',
-    };
-  },
-};
+<script setup>
+useHead({
+  title: 'Resume',
+});
 </script>
 
 <style lang="scss" scoped>

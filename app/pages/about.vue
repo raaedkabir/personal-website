@@ -19,23 +19,13 @@
   </main>
 </template>
 
-<script>
+<script setup>
 import AboutMe from '@/components/Pages/About/AboutMe.vue';
 import Certifications from '@/components/Pages/About/Certifications.vue';
 import Skills from '@/components/Pages/About/Skills.vue';
 
-export default {
-  components: {
-    AboutMe,
-    Certifications,
-    Skills,
-  },
-
-  head() {
-    return {
-      title: 'About Me',
-      script: [{ src: 'https://js.stripe.com/v3/' }],
-    };
-  },
-};
+useHead({
+  title: 'About Me',
+  script: [{ src: 'https://js.stripe.com/v3/' }],
+});
 </script>

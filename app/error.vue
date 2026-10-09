@@ -12,22 +12,20 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import TheNavbar from '@/components/Layout/TheNavbar.vue';
 import TheFooter from '@/components/Layout/TheFooter.vue';
 
-export default {
-  components: {
-    TheNavbar,
-    TheFooter,
+defineProps({
+  error: {
+    type: Object,
+    default: null,
   },
+});
 
-  head() {
-    return {
-      title: 'Missing Page',
-    };
-  },
-};
+useHead({
+  title: 'Missing Page',
+});
 </script>
 
 <style lang="scss" scoped>

@@ -1,6 +1,6 @@
 <template>
   <Layout img="/generativeArt/heading.png" title="Generative Art" date="December 2020">
-    <div slot="content">
+    <template #content>
       <blockquote>
         <p>Pssst. Refresh to page to re-generate the images below.</p>
       </blockquote>
@@ -48,7 +48,7 @@
       </p>
       <svg ref="svg" />
       <AppButton class="center" @click="drawSVG">Click Me!</AppButton>
-    </div>
+    </template>
   </Layout>
 </template>
 
@@ -60,8 +60,6 @@ import * as d3 from 'd3';
 import Layout from '~/layout/blog.vue';
 
 export default {
-  layout: 'empty',
-
   components: {
     Layout,
   },
@@ -378,4 +376,10 @@ export default {
     },
   },
 };
+</script>
+
+<script setup>
+definePageMeta({
+  layout: 'empty',
+});
 </script>

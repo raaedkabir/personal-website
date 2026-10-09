@@ -3,15 +3,37 @@
 </template>
 
 <script>
+import particlesUrl from 'particles.js/particles.js?url';
+
+// particles.js uses arguments.callee, which throws in strict mode,
+// so it has to run as a classic script instead of a bundled module
+const loadParticlesJS = () => {
+  if (window.particlesJS) return Promise.resolve();
+
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = particlesUrl;
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+};
+
 export default {
-  mounted() {
-    require('particles.js');
+  async mounted() {
+    await loadParticlesJS();
+    // the navbar may have been left while particles.js was loading
+    if (this.isUnmounted) return;
+
     this.$nextTick(() => {
       this.initParticlesJS();
     });
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
+    this.isUnmounted = true;
+    if (!window.pJSDom) return;
+
     // particles.js never stops an instance's animation loop on its own, so without this every
     // navigation leaves another loop drawing to a removed canvas. Its destroypJS() isn't used
     // because it also sets the global pJSDom to null, which breaks the next particlesJS() call.

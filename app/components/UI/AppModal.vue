@@ -36,6 +36,8 @@ export default {
       required: true,
     },
   },
+
+  emits: ['close'],
 };
 </script>
 
@@ -67,7 +69,7 @@ export default {
   transition: all 0.3s ease;
 }
 
-.fade-enter,
+.fade-enter-from,
 .fade-leave-to {
   opacity: 0;
 }
@@ -80,7 +82,7 @@ export default {
   transition: all 0.5s ease-in;
 }
 
-.modal-enter {
+.modal-enter-from {
   opacity: 0;
   transform: translate(-50%, -20%);
 }

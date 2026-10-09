@@ -105,7 +105,6 @@ export default {
           }, 2000);
         })
         .catch((error) => {
-          // eslint-disable-next-line
           console.error(error);
 
           this.success = true;

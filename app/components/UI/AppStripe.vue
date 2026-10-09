@@ -31,7 +31,6 @@ export default {
 
   mounted() {
     // Initialize Stripe.js
-    // eslint-disable-next-line
     this.stripe = Stripe(
       'pk_live_51I86YoE1Dvd9XZOw2p2mvVy7eNb9C186HwmFDq0f0N0WGd6NreEofjo56qdfD4doRgEg2wRnqa6QNcVzVDD4OYll00EpRPLBGF'
     );

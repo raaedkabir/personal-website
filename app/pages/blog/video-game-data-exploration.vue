@@ -1,6 +1,6 @@
 <template>
   <Layout img="/video-game-data-exploration/heading.png" title="My Data Exploration Process" date="January 2020">
-    <div slot="content">
+    <template #content>
       <p>
         I found myself opening Evernote a lot to check my notes or references and thought a making a write-up would help
         me remember. This page is meant to be a personal reference but hopefully it will be helpful to others too.
@@ -241,7 +241,7 @@
           .sortBy("year")
           .value();
         </AppPrism></pre>
-    </div>
+    </template>
   </Layout>
 </template>
 
@@ -254,19 +254,8 @@ import { legendColor } from 'd3-svg-legend';
 import Layout from '~/layout/blog.vue';
 
 export default {
-  layout: 'empty',
-
   components: {
     Layout,
-  },
-
-  async fetch() {
-    this.csvData = await d3.csv(
-      'https://gist.githubusercontent.com/raaedkabir/599a07d370dcefc6659c2b91dacaf542/raw/385abd5224858adb617552dcb96323d9d0783441/Video%2520Game%2520Sales%2520with%2520Ratings.csv'
-    );
-
-    this.vegaLiteClean(this.csvData);
-    this.d3Clean(this.csvData);
   },
 
   data() {
@@ -289,7 +278,14 @@ export default {
     };
   },
 
-  fetchOnServer: false,
+  async mounted() {
+    this.csvData = await d3.csv(
+      'https://gist.githubusercontent.com/raaedkabir/599a07d370dcefc6659c2b91dacaf542/raw/385abd5224858adb617552dcb96323d9d0783441/Video%2520Game%2520Sales%2520with%2520Ratings.csv'
+    );
+
+    this.vegaLiteClean(this.csvData);
+    this.d3Clean(this.csvData);
+  },
 
   methods: {
     vegaLiteClean(gameData) {
@@ -671,4 +667,10 @@ export default {
     },
   },
 };
+</script>
+
+<script setup>
+definePageMeta({
+  layout: 'empty',
+});
 </script>

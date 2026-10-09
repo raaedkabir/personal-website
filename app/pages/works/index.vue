@@ -75,14 +75,10 @@
   </main>
 </template>
 
-<script>
-export default {
-  head() {
-    return {
-      title: 'My Works',
-    };
-  },
-};
+<script setup>
+useHead({
+  title: 'My Works',
+});
 </script>
 
 <style lang="scss" scoped>

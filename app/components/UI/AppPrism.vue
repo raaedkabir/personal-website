@@ -37,7 +37,7 @@ export default {
   },
 
   mounted() {
-    const code = nw.normalize(this.$slots.default[0].text);
+    const code = nw.normalize(this.$slots.default()[0].children);
 
     this.html = Prism.highlight(code, Prism.languages[this.lang]);
   },

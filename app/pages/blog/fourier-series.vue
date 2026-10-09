@@ -1,6 +1,6 @@
 <template>
   <Layout img="/fourier-series/heading.png" title="Fourier Series Visualization" date="February 2020">
-    <div slot="content">
+    <template #content>
       <blockquote>
         <p>
           Many thanks to 3Blue1Brown for teaching me what is a
@@ -82,23 +82,23 @@
       <p>Try typing in the field below and watch the Fourier series do its magic!</p>
       <input v-model="text" :maxlength="12" type="text" @keydown.enter="drawText" />
       <AppButton flat @click="drawText">Draw!</AppButton>
-    </div>
+    </template>
   </Layout>
 </template>
 
 <script>
+import opentype from 'opentype.js';
+
 import Layout from '~/layout/blog.vue';
-const opentype = require('opentype.js');
+import squareWaveEquation from '~/assets/images/blog/fourier-series/square-wave-equation.png';
 
 /**
  * @callback P5Instance
- * @param {import('../../node_modules/@types/p5')} s - p5.js instance
+ * @param {import('p5')} s - p5.js instance
  * @returns {void}
  */
 
 export default {
-  layout: 'empty',
-
   components: {
     Layout,
   },
@@ -118,7 +118,7 @@ export default {
     this.isDestroyed = false;
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     // stop every draw loop, otherwise they keep running after leaving the page
     // and pile up each time the page is visited again
     this.isDestroyed = true;
@@ -245,7 +245,7 @@ export default {
         let img = null;
 
         s.preload = () => {
-          img = s.loadImage(require('../../assets/images/blog/fourier-series/square-wave-equation.png'));
+          img = s.loadImage(squareWaveEquation);
         };
 
         s.setup = () => {
@@ -601,13 +601,13 @@ export default {
       this.textCanvas = sketch;
     },
   },
-
-  head() {
-    return {
-      title: this.title,
-    };
-  },
 };
+</script>
+
+<script setup>
+definePageMeta({
+  layout: 'empty',
+});
 </script>
 
 <style lang="scss">

@@ -6,64 +6,57 @@
         <p class="date">{{ date }}</p>
         <h1 class="title heading__secondary text-center">{{ title }}</h1>
       </div>
-      <img :src="require('@/assets/images/blog' + img)" alt="cover image" />
+      <img :src="coverImage" alt="cover image" />
       <div class="write-up">
-        <slot name="content" />
+        <div>
+          <slot name="content" />
+        </div>
       </div>
     </main>
     <TheFooter />
   </div>
 </template>
 
-<script>
+<script setup>
 import TheNavbar from '@/components/Layout/TheNavbar.vue';
 import TheFooter from '@/components/Layout/TheFooter.vue';
+import { imageUrl } from '~/utils/images';
 
-export default {
-  components: {
-    TheNavbar,
-    TheFooter,
+const props = defineProps({
+  img: {
+    type: String,
+    required: true,
   },
+  title: {
+    type: String,
+    required: true,
+  },
+  date: {
+    type: String,
+    required: true,
+  },
+});
 
-  props: {
-    img: {
-      type: String,
-      required: true,
-    },
-    title: {
-      type: String,
-      required: true,
-    },
-    date: {
-      type: String,
-      required: true,
-    },
-  },
+const coverImage = computed(() => imageUrl('/blog' + props.img));
 
-  head() {
-    return {
-      title: this.title,
-      meta: [
-        {
-          hid: 'og:title',
-          property: 'og:title',
-          content: this.title,
-        },
-        {
-          hid: 'og:image',
-          property: 'og:image',
-          itemprop: 'image',
-          content: require('@/assets/images/blog' + this.img),
-        },
-        {
-          hid: 'twitter:image',
-          name: 'twitter:image',
-          content: require('@/assets/images/blog' + this.img),
-        },
-      ]
-    };
-  },
-};
+useHead({
+  title: () => props.title,
+  meta: [
+    {
+      property: 'og:title',
+      content: () => props.title,
+    },
+    {
+      property: 'og:image',
+      itemprop: 'image',
+      content: coverImage,
+    },
+    {
+      name: 'twitter:image',
+      content: coverImage,
+    },
+  ],
+});
 </script>
 
 <style lang="scss" scoped>
@@ -92,52 +85,54 @@ img {
   max-width: 700px;
   margin: 0 auto;
 
-  blockquote {
-    > * {
-      margin-left: 9px;
-    }
-
+  // the post comes in through the content slot, which scoped styles only reach via :slotted()
+  :slotted(blockquote) {
     border-left: 2px solid var(--clr-primary);
   }
 
-  .credit {
+  :slotted(blockquote > *) {
+    margin-left: 9px;
+  }
+
+  :slotted(.credit) {
     margin-top: -1.5rem;
     text-align: center;
   }
 
-  button.center {
+  :slotted(button.center) {
     display: block;
     margin-left: auto;
     margin-right: auto;
   }
 
-  ul {
+  :slotted(ul) {
     margin-left: 2.5rem;
-
-    li {
-      list-style-image: url("data:image/svg+xml,%3Csvg width='8' height='8' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle fill='%2366fcf1' cx='4' cy='4' r='4'/%3E%3C/svg%3E");
-
-      // &::before {
-      //   content: '\2022'; /* Add content: \2022 is the CSS Code/unicode for a bullet */
-      //   // transform: scale(1.5);
-      //   font-size: 28px;
-      //   color: var(--clr-primary); /* Change the color */
-      //   font-weight: bold; /* If you want it to be bold */
-      //   display: inline-block; /* Needed to add space between the bullet and the text */
-      //   width: 10px; /* Also needed for space (tweak if needed) */
-      // }
-    }
   }
 
-  * {
+  :slotted(ul li) {
+    list-style-image: url("data:image/svg+xml,%3Csvg width='8' height='8' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle fill='%2366fcf1' cx='4' cy='4' r='4'/%3E%3C/svg%3E");
+
+    // &::before {
+    //   content: '\2022'; /* Add content: \2022 is the CSS Code/unicode for a bullet */
+    //   // transform: scale(1.5);
+    //   font-size: 28px;
+    //   color: var(--clr-primary); /* Change the color */
+    //   font-weight: bold; /* If you want it to be bold */
+    //   display: inline-block; /* Needed to add space between the bullet and the text */
+    //   width: 10px; /* Also needed for space (tweak if needed) */
+    // }
+  }
+
+  > div,
+  :slotted(*) {
     margin-top: 2rem;
   }
 
-  h2 {
+  :slotted(h2) {
     margin-top: 4rem;
   }
 
-  h2 + p {
+  :slotted(h2 + p) {
     margin-top: -1.5rem;
 
     @include respond(tab-land) {
@@ -145,16 +140,16 @@ img {
     }
   }
 
-  img,
-  canvas,
-  svg {
+  :slotted(img),
+  :slotted(canvas),
+  :slotted(svg) {
     max-width: 100%;
     margin-left: auto;
     margin-right: auto;
   }
 
   @include respond(tab-port) {
-    .vega {
+    :slotted(.vega) {
       overflow-x: scroll;
     }
   }

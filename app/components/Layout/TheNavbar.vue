@@ -22,7 +22,7 @@
             </a>
           </li>
         </ul>
-        <div ref="toggleNav" class="header__toggle-nav" tabindex="0" @click="toggle" @keydown.enter="toggle">
+        <div ref="toggleButton" class="header__toggle-nav" tabindex="0" @click="toggle" @keydown.enter="toggle">
           <span class="header__toggle-nav--icon" />
         </div>
       </div>
@@ -52,14 +52,18 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
 // import gsap from 'gsap';
 
 import ParticlesJS from '@/components/ParticlesJS.vue';
+import { useNav } from '~/composables/useNav';
 
 export default {
   components: {
     ParticlesJS,
+  },
+
+  setup() {
+    return useNav();
   },
 
   data() {
@@ -73,9 +77,6 @@ export default {
   },
 
   computed: {
-    displayNav() {
-      return this.$store.state.displayNav;
-    },
     currentRouteName() {
       return this.$route.name;
     },
@@ -127,7 +128,7 @@ export default {
     this.lastItem = focusableElements[focusableElements.length - 1];
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     // chane style on scroll
     window.removeEventListener('scroll', this.onScroll);
 
@@ -139,8 +140,6 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['toggleNav', 'closeNav']),
-
     toggle(e) {
       this.event = e;
       this.toggleNav();
@@ -156,7 +155,7 @@ export default {
     },
 
     close(e) {
-      if (!this.$refs.navbar.contains(e.target) && !this.$refs.toggleNav.contains(e.target)) {
+      if (!this.$refs.navbar.contains(e.target) && !this.$refs.toggleButton.contains(e.target)) {
         this.closeNav();
       }
     },
@@ -210,7 +209,7 @@ export default {
   //       ease: Expo.easeInOut
   //     });
   //
-  //     TweenMax.from(this.$refs.toggleNav, 1, {
+  //     TweenMax.from(this.$refs.toggleButton, 1, {
   //       delay: 2.5,
   //       x: 20,
   //       opacity: 0,
