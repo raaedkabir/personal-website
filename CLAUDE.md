@@ -16,7 +16,8 @@ pnpm run audit  # dependency audit with audit-ci (see Dependency audit below)
 ```
 
 - `eslint.config.mjs` imports `./.nuxt/eslint.config.mjs`, so lint fails until `nuxt prepare` has run (`pnpm install` does it).
-- Husky: `pre-commit` runs `pnpm lint`; `commit-msg` runs commitlint on each local commit message; `pre-push` runs `pnpm run audit`.
+- Husky: `pre-commit` runs `pnpm lint`; `commit-msg` runs commitlint on each local commit message; `pre-push` runs `pnpm run audit`. PRs run the same checks in CI through the `Lint`, `Commitlint` and `Audit` workflows.
+- Every Husky hook needs a matching GitHub Actions workflow. Hooks only run where they're installed, and `--no-verify` skips them, so CI is what enforces them. When you add or change a hook in `.husky/`, add or update a `pull_request` workflow in `.github/workflows/` that runs the same command (copy the setup steps from `lint.yml`), and update the hook and workflow lists here and in the README.
 - `.prettierrc` says no semicolons, but Prettier isn't wired into any script and most files use semicolons. Match the file you're editing.
 
 ## Dependency audit
@@ -54,7 +55,7 @@ When an entry expires, the audit fails again. Check whether a fix has shipped an
 ## Commits and pull requests
 
 - Commit messages and PR titles must follow [Conventional Commits](https://www.conventionalcommits.org/) (e.g. `feat: add contact form`, `fix(blog): correct styles`), using the rules in `commitlint.config.js`.
-- PRs are squash-merged with the PR title as the commit title on `main`, so the title is checked by the `PR title` workflow, not the local `commit-msg` hook. Check a title before opening the PR with `printf '%s\n' "<title>" | pnpm exec commitlint`.
+- PRs are squash-merged with the PR title as the commit title on `main`, so the title is checked by the `Commitlint` workflow, not the local `commit-msg` hook. Check a title before opening the PR with `printf '%s\n' "<title>" | pnpm exec commitlint`.
 - When a branch is ready for a PR, clean up its history first: fold follow-up fixes into the commits they belong to so each commit is a self-contained Conventional Commit. Commit them with `git commit --fixup=<sha>`, then run `GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash origin/main` (the env var makes the rebase non-interactive) and push with `git push --force-with-lease`.
 
 ## Architecture

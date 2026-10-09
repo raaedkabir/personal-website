@@ -1,0 +1,31 @@
+name: Audit
+
+# Runs the check from the Husky pre-push hook (.husky/pre-push) on pull requests,
+# so it also covers branches pushed without the hooks installed or with --no-verify.
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit-ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Set node version
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v6
+      - name: Audit dependencies
+        # audit-ci audits pnpm-lock.yaml, so the modules don't need installing
+        run: pnpm run audit
