@@ -4,7 +4,7 @@
 
 [![forthebadge](https://forthebadge.com/images/badges/made-with-vue.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/powered-by-coffee.svg)](https://forthebadge.com)
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/raaedkabir/personal-website/main.yml?branch=master&style=for-the-badge)](https://github.com/raaedkabir/personal-website/actions/workflows/main.yml)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/raaedkabir/personal-website/main.yml?branch=main&style=for-the-badge)](https://github.com/raaedkabir/personal-website/actions/workflows/main.yml)
 
 </div>
 
@@ -38,7 +38,7 @@ pnpm generate   # static build to /dist
 
 **CI/CD Build Pipeline using GitHub Actions**
 
-1. Merge code to master branch
+1. Merge code to main branch
 2. Run build
 3. Assume the deploy IAM role via GitHub OIDC (no long-lived AWS keys)
 4. Upload /dist to S3
