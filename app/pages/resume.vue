@@ -96,7 +96,8 @@ useHead({
     }
 
     &.myone-corp-color {
-      color: #542e91;
+      // lightened from the brand purple (#542e91), which is unreadable on the dark background
+      color: #8257cb;
     }
 
     &.clearoute-color {

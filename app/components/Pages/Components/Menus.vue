@@ -113,11 +113,11 @@
           <li><a href="#">Contact</a></li>
         </ul>
         <div class="menu-effect--5">
-          <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          <a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
-          <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-          <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          <a href="#" aria-label="Google+"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a>
         </div>
       </div>
     </div>

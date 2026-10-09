@@ -3,7 +3,7 @@
     <TheNavbar />
     <main>
       <div class="container center-center">
-        <p>Welp, looks like this page doesn't exist.</p>
+        <h1>Welp, looks like this page doesn't exist.</h1>
         <p>If you're lost the button will help guide your way. Don't resist the button.</p>
         <AppButton link to="/">Go to Home Page</AppButton>
       </div>
@@ -32,6 +32,10 @@ useHead({
 main {
   display: grid;
   align-items: center;
+}
+
+h1 {
+  font: inherit;
 }
 
 .center-center {
