@@ -15,8 +15,13 @@ pnpm lint       # eslint . — the only automated check; there is no test suite 
 ```
 
 - `eslint.config.mjs` imports `./.nuxt/eslint.config.mjs`, so lint fails until `nuxt prepare` has run (`pnpm install` does it).
-- Husky: `pre-commit` runs `pnpm lint`; `commit-msg` runs commitlint, so commit messages must be Conventional Commits (`feat: …`, `fix(blog): …`, `build(deps): …`).
+- Husky: `pre-commit` runs `pnpm lint`; `commit-msg` runs commitlint on each local commit message.
 - `.prettierrc` says no semicolons, but Prettier isn't wired into any script and most files use semicolons. Match the file you're editing.
+
+## Commits and pull requests
+
+- Commit messages and PR titles must follow [Conventional Commits](https://www.conventionalcommits.org/) (e.g. `feat: add contact form`, `fix(blog): correct styles`), using the rules in `commitlint.config.js`.
+- PRs are squash-merged with the PR title as the commit title on `main`, so the title is checked by the `PR title` workflow, not the local `commit-msg` hook. Check a title before opening the PR with `printf '%s\n' "<title>" | pnpm exec commitlint`.
 
 ## Architecture
 
