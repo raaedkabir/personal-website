@@ -19,6 +19,9 @@ provider:
             - 'ses:SendEmail'
           Resource: ['*']
 
+plugins:
+  - serverless-offline
+
 functions:
   contact:
     handler: handler.contact

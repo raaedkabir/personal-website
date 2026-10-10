@@ -9,5 +9,10 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@aws-sdk/client-ses": "^3.1148.0",
+    "aws-ses-v2-local": "^2.10.2",
+    "serverless-offline": "^14.8.3"
+  }
 }

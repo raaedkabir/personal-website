@@ -1,4 +1,4 @@
-// AWS SDK v3 is included in the Lambda Node.js runtime, so it isn't a dependency here
+// AWS SDK v3 is included in the Lambda Node.js runtime, so it's only a devDependency here (for serverless offline)
 const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses');
 const ses = new SESClient();
 

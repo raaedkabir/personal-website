@@ -7,12 +7,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Uses pnpm (version pinned in `package.json` `packageManager`) and the Node version in `.nvmrc`.
 
 ```bash
-pnpm install    # also runs `nuxt prepare` (generates .nuxt/) and installs Husky hooks
-pnpm dev        # dev server on localhost:3000
-pnpm generate   # prerender the static site to .output/public (dist/ is a symlink to it)
-pnpm preview    # serve the production build
-pnpm lint       # eslint . — the only code check; there is no test suite or typecheck script
-pnpm run audit  # dependency audit with audit-ci (see Dependency audit below)
+pnpm install         # also runs `nuxt prepare` (generates .nuxt/) and installs Husky hooks
+pnpm dev             # dev server on localhost:3000
+pnpm generate        # prerender the static site to .output/public (dist/ is a symlink to it)
+pnpm preview         # serve the production build
+pnpm lint            # eslint . — the only code check; there is no test suite or typecheck script
+pnpm run audit       # dependency audit with audit-ci (see Dependency audit below)
+pnpm test:functions  # call the deployed Lambda functions with live data (see Lambda functions below)
 ```
 
 - `eslint.config.mjs` imports `./.nuxt/eslint.config.mjs`, so lint fails until `nuxt prepare` has run (`pnpm install` does it).
@@ -79,11 +80,17 @@ Personal portfolio site: a Nuxt 4 app (source under `app/`) prerendered with `nu
 
 Two independent Serverless Framework v4 services (`nodejs24.x`, `ca-central-1`, stage `dev`, CommonJS handlers). They are not part of the root pnpm workspace; each has its own `package.json`. See `functions/README.md` for `sls` commands (`sls invoke local -f <name>`, `sls deploy`, `sls logs`).
 
-- `contact-lambda`: `POST /contact`, sends the contact-form email via SES. It has no dependencies because AWS SDK v3 ships with the Lambda runtime.
-- `stripe-lambda`: `POST /stripe`, creates a Stripe PaymentIntent (CAD). It reads `STRIPE_SECRET_KEY` from a git-ignored `functions/stripe-lambda/config.js` (`module.exports = { STRIPE_SECRET_KEY: '…' }`). It has its own lockfile and `nodeLinker: hoisted` because Serverless packages `node_modules` as-is.
+- `contact-lambda`: `POST /contact`, sends the contact-form email via SES. It has no runtime dependencies because AWS SDK v3 ships with the Lambda runtime; `@aws-sdk/client-ses` is a devDependency only so the handler runs under serverless offline.
+- `stripe-lambda`: `POST /stripe`, creates a Stripe PaymentIntent (CAD). It reads `STRIPE_SECRET_KEY` from a git-ignored `functions/stripe-lambda/config.js` (`module.exports = { STRIPE_SECRET_KEY: '…' }`). `STRIPE_API_URL`, when set, points the client at another API (stripe-mock in tests).
+- Each has its own lockfile and `nodeLinker: hoisted` because Serverless packages `node_modules` as-is (it leaves out devDependencies). Both list `serverless-offline` as a plugin, so `serverless deploy` needs the devDependencies installed.
 
 The frontend calls these through hard-coded API Gateway URLs in `components/Pages/Home/Contact.vue` (axios) and `components/UI/AppStripe.vue` (fetch). A redeploy that changes an endpoint URL must be mirrored there.
 
+`functions/test-endpoints.mjs [contact|stripe] [--url <endpoint>]` sends the same CORS preflight and POST body as the site to a function's endpoint, then checks the responses. If the request body a component sends changes, update the matching `body` in the script.
+
+- With `--url`, it tests another endpoint. The deploy workflow uses this to test each function under serverless offline with mocks: aws-ses-v2-local for SES (via `AWS_ENDPOINT_URL_SES`) and stripe-mock for Stripe (via `STRIPE_API_URL`). See `functions/README.md` for running it locally.
+- Without `--url` (`pnpm test:functions`), it reads the endpoint URLs from those two components and calls the deployed functions. Those requests are real: `contact` sends an email through SES and `stripe` creates an unconfirmed $1.00 CAD PaymentIntent, so only run it when asked to.
+
 ### Deployment
 
-`.github/workflows/main.yml` runs on pushes to `main` (and on manual dispatch). It runs `pnpm generate`, syncs `.output/public` to S3 with `--delete`, and invalidates CloudFront. In parallel it deploys both Lambda functions with Serverless (the `stripe-lambda` job writes `config.js` from the `STRIPE_SECRET_KEY` secret). AWS access uses GitHub OIDC via `AWS_ROLE_ARN`; there are no long-lived keys.
+`.github/workflows/main.yml` runs on pushes to `main` (and on manual dispatch). It runs `pnpm generate`, syncs `.output/public` to S3 with `--delete`, and invalidates CloudFront. In parallel, the `test-functions` job tests each Lambda function under serverless offline with SES and Stripe mocks (it needs `SERVERLESS_ACCESS_KEY`, since Serverless v4 requires a login), and once both pass, `deploy-functions` deploys them with Serverless (the `stripe-lambda` job writes `config.js` from the `STRIPE_SECRET_KEY` secret). AWS access uses GitHub OIDC via `AWS_ROLE_ARN`; there are no long-lived keys. The build and deploy jobs only run on `main`, so dispatching the workflow on another branch runs just `test-functions`.

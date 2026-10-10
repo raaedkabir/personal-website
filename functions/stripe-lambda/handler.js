@@ -1,4 +1,11 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+// STRIPE_API_URL points the client at another Stripe API, such as stripe-mock in the offline tests
+function apiConfig(url) {
+  if (!url) return {};
+  const { hostname, port, protocol } = new URL(url);
+  return { host: hostname, port, protocol: protocol.replace(':', '') };
+}
+
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY, apiConfig(process.env.STRIPE_API_URL));
 
 module.exports.stripe = async (event) => {
   const data = JSON.parse(event.body);

@@ -1,0 +1,16 @@
+# Standalone project (not part of the site's workspace). Serverless packages
+# node_modules as-is, so keep npm's flat layout.
+nodeLinker: hoisted
+
+allowBuilds:
+  # all dev-only (serverless-offline and its serverless peer); none are needed:
+  # esbuild's binary comes from its @esbuild/* optional dependency, fsevents
+  # ships prebuilt, and serverless only pre-downloads what it fetches on first run
+  esbuild: false
+  fsevents: false
+  serverless: false
+
+overrides:
+  # aws-ses-v2-local (dev-only SES mock) pins nodemailer ^9, which has moderate and high advisories
+  # (GHSA-g57g-f23g-4646, GHSA-prgh-xp8r-p3m5, GHSA-v53p-9fqp-m79j and others); 10.0.9+ fixes them all
+  nodemailer@<10.0.9: ^10.0.9

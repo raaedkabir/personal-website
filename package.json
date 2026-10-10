@@ -11,6 +11,7 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
+    "test:functions": "node functions/test-endpoints.mjs",
     "audit": "pnpm dlx audit-ci@^7 --config ./audit-ci.json",
     "prepare": "husky"
   },

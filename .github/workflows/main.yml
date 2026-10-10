@@ -65,7 +65,67 @@ jobs:
       - name: Create CloudFront invalidation
         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths "/*"
 
+  test-functions:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - function: contact-lambda
+            endpoint: contact
+          - function: stripe-lambda
+            endpoint: stripe
+    defaults:
+      run:
+        working-directory: functions/${{ matrix.function }}
+    env:
+      # serverless offline passes AWS_* variables through to the handlers: dummy keys for the AWS SDK, and an
+      # endpoint that sends contact-lambda's SES calls to aws-ses-v2-local
+      AWS_ACCESS_KEY_ID: offline
+      AWS_SECRET_ACCESS_KEY: offline
+      AWS_ENDPOINT_URL_SES: http://127.0.0.1:8005
+      # sends stripe-lambda's Stripe calls to stripe-mock (passed through by --localEnvironment)
+      STRIPE_API_URL: http://127.0.0.1:12111
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Set node version
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v6
+      - name: Install Serverless Framework
+        run: pnpm add --global serverless@4
+      - name: Install modules
+        run: pnpm install --frozen-lockfile
+      - name: Start SES mock
+        if: matrix.function == 'contact-lambda'
+        run: |
+          nohup pnpm exec aws-ses-v2-local --host 127.0.0.1 > ses.log 2>&1 &
+          timeout 30 bash -c 'until curl --silent --fail --output /dev/null http://127.0.0.1:8005/health-check; do sleep 1; done'
+      - name: Start Stripe mock
+        if: matrix.function == 'stripe-lambda'
+        # stripe-mock accepts any test-mode key
+        run: |
+          docker run --detach --publish 12111:12111 stripe/stripe-mock:v0.206.0
+          echo "module.exports = { STRIPE_SECRET_KEY: 'sk_test_offline' };" > config.js
+      - name: Start serverless offline
+        run: |
+          nohup serverless offline start --localEnvironment > offline.log 2>&1 &
+          timeout 180 bash -c 'until curl --silent --output /dev/null http://localhost:3000; do sleep 2; done'
+        env:
+          SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
+      - name: Test endpoint
+        run: node ../test-endpoints.mjs ${{ matrix.endpoint }} --url http://localhost:3000/dev/${{ matrix.endpoint }}
+      - name: Show logs
+        if: always()
+        run: tail -n +1 *.log || true
+
   deploy-functions:
+    needs: test-functions
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
@@ -94,7 +154,7 @@ jobs:
       - name: Install Serverless Framework
         run: pnpm add --global serverless@4
       - name: Install modules
-        run: if [ -f pnpm-lock.yaml ]; then pnpm install --frozen-lockfile; fi
+        run: pnpm install --frozen-lockfile
       - name: Create config
         if: matrix.function == 'stripe-lambda'
         # config.js is git-ignored; it reads the key from the deploy step's environment
