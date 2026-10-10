@@ -48,6 +48,11 @@
   width: 50vw;
 }
 
+h1,
+h2 {
+  color: #000;
+}
+
 .showcase {
   &__btn {
     display: grid;

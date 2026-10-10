@@ -1,5 +1,9 @@
 <template>
-  <h2 ref="text" class="no-padding">&nbsp;</h2>
+  <h2 class="no-padding">
+    <!-- screen readers get the final greeting once instead of every keystroke -->
+    <span class="auto-type--label">{{ dataText.at(-1).trim() }}</span>
+    <span ref="text" aria-hidden="true">&nbsp;</span>
+  </h2>
 </template>
 
 <script>
@@ -60,6 +64,15 @@ export default {
 </script>
 
 <style lang="scss">
+.auto-type--label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .auto-type--cursor {
   padding-right: 2px;
   border-right: 0.05em solid;

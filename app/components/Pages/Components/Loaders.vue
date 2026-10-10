@@ -44,7 +44,8 @@
 @import '@/assets/scss/abstracts/_mixins.scss';
 
 h2 {
-  color: #000;
+  color: #fff;
+  mix-blend-mode: difference;
 }
 
 .showcase {

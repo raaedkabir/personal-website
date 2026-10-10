@@ -94,6 +94,13 @@ img {
     margin-left: 9px;
   }
 
+  // the tweet and CodePen embeds show their fallback links until their scripts replace them,
+  // and the browser's default link blue is unreadable on the dark background
+  :slotted(.twitter-tweet a),
+  :slotted(.codepen a) {
+    color: var(--clr-primary);
+  }
+
   :slotted(.credit) {
     margin-top: -1.5rem;
     text-align: center;

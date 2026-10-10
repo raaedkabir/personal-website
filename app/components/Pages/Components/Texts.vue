@@ -82,7 +82,7 @@ section.text {
   &--2 {
     font-size: 10rem;
     font-weight: 700;
-    color: #ccc;
+    color: #ddd;
     text-transform: uppercase;
     position: relative;
 

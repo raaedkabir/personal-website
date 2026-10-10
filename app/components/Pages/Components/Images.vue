@@ -47,6 +47,10 @@
 <style lang="scss" scoped>
 @import '@/assets/scss/abstracts/_mixins.scss';
 
+h2 {
+  color: #000;
+}
+
 .showcase {
   &__image {
     display: flex;

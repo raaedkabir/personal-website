@@ -80,7 +80,7 @@
       </p>
       <div ref="textMultiLine" />
       <p>Try typing in the field below and watch the Fourier series do its magic!</p>
-      <input v-model="text" :maxlength="12" type="text" @keydown.enter="drawText" />
+      <input v-model="text" :maxlength="12" type="text" aria-label="Text to draw" @keydown.enter="drawText" />
       <AppButton flat @click="drawText">Draw!</AppButton>
     </template>
   </Layout>
@@ -260,6 +260,7 @@ export default {
           sliderWrap.child(sliderTooltip);
 
           slider = s.createSlider(1, 50, 4);
+          slider.attribute('aria-label', 'Number of sine waves');
           sliderWrap.child(slider);
           slider.style('width', '100%');
           slider.input(() => {
