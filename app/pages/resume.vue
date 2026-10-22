@@ -20,7 +20,7 @@
         <h4 class="detail upm-color">Universiti Putra Malaysia</h4>
         <p>Bachelor of Electrical and Electronics Engineering with Honours</p>
         <br />
-        <p>Major in Control Systems</p>
+        <p>Minor in Control Systems</p>
       </div>
       <div class="category">
         <h3 class="subtitile">Experience</h3>
