@@ -21,6 +21,9 @@ const routes = [
 // pages whose content fades in, and how long that takes (the home hero's GSAP intro)
 const introDurations: Record<string, number> = { '/': 5_000 };
 
+// pages whose WebGL render loop, rendered on the CPU here, starves axe (their animation frames are stubbed out)
+const isWebGLDemo = (route: string) => route.startsWith('/works/threejs/');
+
 // WCAG 2.2 A and AA, plus axe's best practices
 const tags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'];
 
@@ -47,6 +50,11 @@ for (const route of routes) {
   test(`${route} has no axe violations`, async ({ page }, testInfo) => {
     const intro = introDurations[route];
     if (intro) await page.clock.install();
+    if (isWebGLDemo(route)) {
+      await page.addInitScript(() => {
+        window.requestAnimationFrame = () => 0;
+      });
+    }
     await page.goto(route, { waitUntil: 'networkidle' });
     // fast-forward through the intro, so axe checks the settled page instead of skipping
     // text that is still invisible or misjudging the contrast of half-faded text

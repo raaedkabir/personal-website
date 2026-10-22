@@ -6,6 +6,15 @@
 
         <div class="projects-container">
           <AppWorkPreview
+            to="/works/threejs"
+            img-src="/works/threejs/snow-globe.jpg"
+            img-alt="low-poly island of procedurally generated hexagonal tiles inside a glass snow globe"
+          >
+            <h2 class="heading__secondary">Three.js Demos</h2>
+            <AppButton>demos</AppButton>
+          </AppWorkPreview>
+
+          <AppWorkPreview
             to="/blog/fourier-series"
             img-src="/blog/fourier-series/heading.png"
             img-alt="preview of fourier series visualization"

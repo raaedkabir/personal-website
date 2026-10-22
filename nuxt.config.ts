@@ -103,6 +103,7 @@ export default defineNuxtConfig({
   },
 
   vite: {
+    assetsInclude: ['**/*.hdr', '**/*.gltf'],
     css: {
       preprocessorOptions: {
         scss: {
