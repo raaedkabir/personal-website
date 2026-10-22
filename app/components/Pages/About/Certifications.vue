@@ -4,21 +4,11 @@
 
     <div class="badges">
       <iframe
-        id="embedded-badge-52eab62f-8692-4a9c-96e5-511f98ec5972"
+        id="embedded-badge-5311ff53-a6a2-492a-a85e-afd53162c1ad"
         name="acclaim-badge"
         allowtransparency="true"
         scrolling="no"
-        src="//www.credly.com/embedded_badge/52eab62f-8692-4a9c-96e5-511f98ec5972"
-        style="width: 150px; height: 245px"
-        title="View my verified achievement on Credly."
-        frameborder="0"
-      ></iframe>
-      <iframe
-        id="embedded-badge-2b14b75d-3595-4729-90ff-1b0bd9db059d"
-        name="acclaim-badge"
-        allowtransparency="true"
-        scrolling="no"
-        src="//www.credly.com/embedded_badge/2b14b75d-3595-4729-90ff-1b0bd9db059d"
+        src="//www.credly.com/embedded_badge/5311ff53-a6a2-492a-a85e-afd53162c1ad"
         style="width: 150px; height: 245px"
         title="View my verified achievement on Credly."
         frameborder="0"

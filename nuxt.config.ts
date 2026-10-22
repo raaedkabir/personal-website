@@ -1,5 +1,5 @@
 const description =
-  "Hi! My name is Raaed. I am a web developer that loves to bring awesome ideas to life. If you're in need of a website or have an idea for a project then come check out what my work and let's hook up!";
+  "Hi! My name is Raaed. I am a web developer that loves to bring awesome ideas to life. If you're in need of a website or have an idea for a project then come check out my work and let's hook up!";
 
 export default defineNuxtConfig({
   compatibilityDate: '2026-10-08',
