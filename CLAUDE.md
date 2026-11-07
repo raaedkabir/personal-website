@@ -57,7 +57,7 @@ When an entry expires, the audit fails again. Check whether a fix has shipped an
 
 `tests/a11y.spec.ts` uses Playwright and [@axe-core/playwright](https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright) to scan the prerendered site at a desktop and a phone viewport. It checks WCAG 2.2 A and AA plus axe's best practices, and fails on any violation.
 
-- It scans every `index.html` page in `.output/public`, so new pages are covered without changes, plus `/404.html` and the open navigation menu.
+- It scans every `index.html` page in `.output/public`, so new pages are covered without changes, plus `/404.html` and the open navigation menu. The FYP dashboard's pages redirect to its login page when logged out, so they're scanned again after logging in as the demo administrator, along with its Add Employee dialog.
 - `pnpm test:a11y` runs `nuxt generate` first. To rescan the existing build, run `pnpm exec playwright test` (add `--project=desktop` or a title filter to narrow it). `playwright.config.ts` serves `.output/public` with sirv on port 4173. Run `pnpm exec playwright install chromium` once before the first local run.
 - Requests to other origins are aborted, so test runs never send analytics hits, create Stripe PaymentIntents (the About page does on load) or load embeds. Third-party content isn't scanned.
 - Pages whose content fades in are listed in `introDurations` with the length of the intro. The test fast-forwards Playwright's fake clock by that much so axe sees the settled page. Add an entry when a page gets an intro animation.

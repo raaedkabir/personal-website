@@ -1,7 +1,7 @@
 import { existsSync, readdirSync } from 'node:fs';
 import { join, sep } from 'node:path';
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test, type TestInfo } from '@playwright/test';
+import { expect, test, type Page, type TestInfo } from '@playwright/test';
 
 const outputDir = join(import.meta.dirname, '../.output/public');
 
@@ -72,4 +72,41 @@ test('the open navigation menu has no axe violations', async ({ page }, testInfo
 
   // only the menu, since the page behind it is dimmed by the mask
   await expectNoViolations(new AxeBuilder({ page }).include('nav.navbar'), testInfo);
+});
+
+// the FYP dashboard's pages send logged-out visitors to its login page, so they're scanned again as its administrator
+const logInToFypDashboard = async (page: Page) => {
+  await page.goto('/works/fyp/login', { waitUntil: 'networkidle' });
+  await page.getByRole('button', { name: 'You (administrator)' }).click();
+  await page.waitForURL('**/works/fyp/dashboard');
+};
+
+const waitForFypPage = async (page: Page) => {
+  // the page renders once the session is read from localStorage, and shows a loading overlay while its data loads
+  await expect(page.locator('.checking')).toHaveCount(0);
+  await expect(page.locator('.loading')).toHaveCount(0);
+};
+
+for (const route of ['', '/user', '/employees', '/attendance', '/notifications', '/maps'].map(
+  (path) => `/works/fyp/dashboard${path}`,
+)) {
+  test(`${route} has no axe violations when logged in`, async ({ page }, testInfo) => {
+    await logInToFypDashboard(page);
+    await page.goto(route, { waitUntil: 'networkidle' });
+    await waitForFypPage(page);
+    // the map loads Leaflet after the page's data; its tiles are blocked like any other origin
+    if (route.endsWith('/maps')) await expect(page.locator('.branch-marker')).toHaveCount(3);
+
+    await expectNoViolations(new AxeBuilder({ page }), testInfo);
+  });
+}
+
+test('the FYP add employee dialog has no axe violations', async ({ page }, testInfo) => {
+  await logInToFypDashboard(page);
+  await page.goto('/works/fyp/dashboard/employees', { waitUntil: 'networkidle' });
+  await waitForFypPage(page);
+  await page.getByRole('button', { name: 'Add Employee' }).click();
+  await expect(page.getByRole('dialog')).toBeVisible();
+
+  await expectNoViolations(new AxeBuilder({ page }).include('dialog'), testInfo);
 });

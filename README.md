@@ -33,7 +33,7 @@ Pull requests run the same checks in CI: the `Lint` workflow runs `pnpm lint`, t
 
 **Accessibility Tests**
 
-`pnpm test:a11y` prerenders the site and scans every page, the 404 page and the open navigation menu with [axe-core](https://github.com/dequelabs/axe-core) in [Playwright](https://playwright.dev/), at a desktop and a phone viewport. It fails on any WCAG 2.2 A/AA or axe best-practice violation. Run `pnpm exec playwright install chromium` once before the first run, and `pnpm exec playwright test` to rescan an existing build.
+`pnpm test:a11y` prerenders the site and scans every page, the 404 page, the open navigation menu and the FYP demo's dashboard (logged in) with [axe-core](https://github.com/dequelabs/axe-core) in [Playwright](https://playwright.dev/), at a desktop and a phone viewport. It fails on any WCAG 2.2 A/AA or axe best-practice violation. Run `pnpm exec playwright install chromium` once before the first run, and `pnpm exec playwright test` to rescan an existing build.
 
 Pull requests run it in the `Accessibility` workflow, which uploads the Playwright report with the full axe results for each page.
 
