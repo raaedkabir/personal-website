@@ -6,6 +6,15 @@
 
         <div class="projects-container">
           <AppWorkPreview
+            to="/works/fyp"
+            img-src="/works/fyp/terminal-2021.jpg"
+            img-alt="the access terminal recognizing me with a face mask on, outlined in green with my name and the mask confidence"
+          >
+            <h2 class="heading__secondary">Face Recognition Attendance System</h2>
+            <AppButton>demo</AppButton>
+          </AppWorkPreview>
+
+          <AppWorkPreview
             to="/works/threejs"
             img-src="/works/threejs/snow-globe.jpg"
             img-alt="low-poly island of procedurally generated hexagonal tiles inside a glass snow globe"

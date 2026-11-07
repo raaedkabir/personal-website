@@ -62,6 +62,26 @@ export default defineNuxtConfig({
     id: 'G-HWHNZXBHTF',
   },
 
+  runtimeConfig: {
+    public: {
+      // the FYP access terminal's TensorFlow.js models (see scripts/fyp-models); NUXT_PUBLIC_FYP_MODEL_BASE overrides it
+      fypModelBase: 'https://raaedkabir-assets.s3.amazonaws.com/fyp/models/v1',
+    },
+  },
+
+  nitro: {
+    prerender: {
+      // the FYP dashboard links to these only once someone has logged in, so the crawler never finds them
+      routes: [
+        '/works/fyp/dashboard/user',
+        '/works/fyp/dashboard/employees',
+        '/works/fyp/dashboard/attendance',
+        '/works/fyp/dashboard/notifications',
+        '/works/fyp/dashboard/maps',
+      ],
+    },
+  },
+
   pwa: {
     registerType: 'autoUpdate',
     manifest: {
