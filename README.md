@@ -45,6 +45,7 @@ Pull requests run it in the `Accessibility` workflow, which uploads the Playwrig
 - SSL Certificate from Certificate Manager
 - Static hosting on S3
 - Distribution with CloudFront
+- The FYP demo's TensorFlow.js models in the `raaedkabir-assets` S3 bucket, uploaded by hand (see `scripts/fyp-models`)
 
 ---
 
