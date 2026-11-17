@@ -116,7 +116,7 @@ export default {
   top: 50%;
   width: 50vw;
   padding: 3rem;
-  background: grey;
+  background: #767676;
   transform: translate(-50%, -50%);
   border-radius: 5px;
   z-index: 1004;
