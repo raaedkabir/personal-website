@@ -11,7 +11,11 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
+    "test": "pnpm test:stories && pnpm test:a11y",
+    "test:stories": "vitest run --project=storybook",
     "test:a11y": "nuxt generate && playwright test",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
     "audit": "pnpm dlx audit-ci@^7 --config ./audit-ci.json",
     "prepare": "husky"
   },
@@ -45,12 +49,21 @@
     "@commitlint/config-conventional": "^21.2.4",
     "@nuxt/eslint": "^1.17.0",
     "@playwright/test": "^1.64.0",
+    "@storybook-vue/nuxt": "^10.0.3",
+    "@storybook/addon-a11y": "^10.6.7",
+    "@storybook/addon-docs": "^10.6.7",
+    "@storybook/addon-vitest": "^10.6.7",
     "@types/p5": "^0.9.1",
+    "@vitest/browser-playwright": "^5.1.0",
     "eslint": "^10.15.0",
+    "eslint-plugin-storybook": "^10.6.7",
     "husky": "^9.1.7",
+    "playwright": "^1.64.0",
     "prettier": "^2.8.8",
     "sass": "^1.105.1",
     "sirv-cli": "^3.0.1",
-    "typescript": "~6.0.3"
+    "storybook": "^10.6.7",
+    "typescript": "~6.0.3",
+    "vitest": "^5.1.0"
   }
 }

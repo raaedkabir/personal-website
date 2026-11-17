@@ -18,7 +18,8 @@ Requires the Node version in `.nvmrc` and [pnpm](https://pnpm.io/installation) (
 pnpm install    # install dependencies
 pnpm dev        # dev server on localhost:3000
 pnpm generate   # static build to /dist
-pnpm test:a11y  # static build, then scan every page for accessibility issues
+pnpm storybook  # Storybook on localhost:6006
+pnpm test       # check every story and page for accessibility issues
 ```
 
 `pnpm install` also sets up [Husky](https://typicode.github.io/husky/) git hooks:
@@ -31,11 +32,20 @@ Pull requests run the same checks in CI: the `Lint` workflow runs `pnpm lint`, t
 
 ---
 
+**Storybook**
+
+`pnpm storybook` starts [Storybook](https://storybook.js.org/) with a docs page and stories for each of the `App*` UI components, built with the site's own Nuxt config and styles. Stories live next to their components (`*.stories.ts`). The [Accessibility addon](https://storybook.js.org/docs/writing-tests/accessibility-testing)'s panel checks the open story with axe, and the [Vitest addon](https://storybook.js.org/docs/writing-tests/integrations/vitest-addon)'s test widget in the sidebar runs every story as a test. `pnpm build-storybook` builds a static copy into `storybook-static/`.
+
+---
+
 **Accessibility Tests**
 
-`pnpm test:a11y` prerenders the site and scans every page, the 404 page and the open navigation menu with [axe-core](https://github.com/dequelabs/axe-core) in [Playwright](https://playwright.dev/), at a desktop and a phone viewport. It fails on any WCAG 2.2 A/AA or axe best-practice violation. Run `pnpm exec playwright install chromium` once before the first run, and `pnpm exec playwright test` to rescan an existing build.
+`pnpm test` checks the site with [axe-core](https://github.com/dequelabs/axe-core) and fails on any WCAG 2.2 A/AA or axe best-practice violation. It runs two suites, which check the same rules (`tests/axe.ts`):
 
-Pull requests run it in the `Accessibility` workflow, which uploads the Playwright report with the full axe results for each page.
+- `pnpm test:stories` renders every Storybook story in Chromium with [Vitest](https://vitest.dev/), runs its play function and checks it with the Accessibility addon. Stories reach states that pages don't show when they load, like an open modal.
+- `pnpm test:a11y` prerenders the site and scans every page, the 404 page and the open navigation menu in [Playwright](https://playwright.dev/), at a desktop and a phone viewport. Run `pnpm exec playwright test` to rescan an existing build.
+
+Run `pnpm exec playwright install chromium` once before the first run. Pull requests run both suites in the `Accessibility` workflow, which uploads the Playwright report with the full axe results for each page.
 
 ---
 

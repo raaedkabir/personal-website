@@ -7,17 +7,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Uses pnpm (version pinned in `package.json` `packageManager`) and the Node version in `.nvmrc`.
 
 ```bash
-pnpm install    # also runs `nuxt prepare` (generates .nuxt/) and installs Husky hooks
-pnpm dev        # dev server on localhost:3000
-pnpm generate   # prerender the static site to .output/public (dist/ is a symlink to it)
-pnpm preview    # serve the production build
-pnpm lint       # eslint . (there is no unit test suite or typecheck script)
-pnpm test:a11y  # prerender the site and scan every page with axe (see Accessibility tests below)
-pnpm run audit  # dependency audit with audit-ci (see Dependency audit below)
+pnpm install          # also runs `nuxt prepare` (generates .nuxt/) and installs Husky hooks
+pnpm dev              # dev server on localhost:3000
+pnpm generate         # prerender the static site to .output/public (dist/ is a symlink to it)
+pnpm preview          # serve the production build
+pnpm lint             # eslint . (there is no typecheck script)
+pnpm storybook        # Storybook on localhost:6006 (see Storybook below)
+pnpm build-storybook  # static Storybook in storybook-static/
+pnpm test             # pnpm test:stories, then pnpm test:a11y
+pnpm test:stories     # render every story in Chromium, run its play function and check it with axe
+pnpm test:a11y        # prerender the site and scan every page with axe (see Accessibility tests below)
+pnpm run audit        # dependency audit with audit-ci (see Dependency audit below)
 ```
 
-- `eslint.config.mjs` imports `./.nuxt/eslint.config.mjs`, so lint fails until `nuxt prepare` has run (`pnpm install` does it).
-- Husky: `pre-commit` runs `pnpm lint`; `commit-msg` runs commitlint on each local commit message; `pre-push` runs `pnpm run audit`. PRs run the same checks in CI through the `Lint`, `Commitlint` and `Audit` workflows, plus `pnpm test:a11y` through the `Accessibility` workflow, which has no hook because it's too slow for one.
+- `eslint.config.mjs` imports `./.nuxt/eslint.config.mjs`, so lint fails until `nuxt prepare` has run (`pnpm install` does it). It also applies `eslint-plugin-storybook`'s recommended rules to the stories.
+- Husky: `pre-commit` runs `pnpm lint`; `commit-msg` runs commitlint on each local commit message; `pre-push` runs `pnpm run audit`. PRs run the same checks in CI through the `Lint`, `Commitlint` and `Audit` workflows, plus `pnpm test:stories` and `pnpm test:a11y` through the `Accessibility` workflow, which has no hook because it's too slow for one.
 - Every Husky hook needs a matching GitHub Actions workflow. Hooks only run where they're installed, and `--no-verify` skips them, so CI is what enforces them. When you add or change a hook in `.husky/`, add or update a `pull_request` workflow in `.github/workflows/` that runs the same command (copy the setup steps from `lint.yml`), and update the hook and workflow lists here and in the README.
 - `.prettierrc` says no semicolons, but Prettier isn't wired into any script and most files use semicolons. Match the file you're editing.
 
@@ -66,19 +70,46 @@ When an entry expires, the audit fails again. Check whether a fix has shipped an
 
 An entry can also stop matching before it expires, e.g. when an upgrade removes the path or the advisory is withdrawn. The audit still passes, but audit-ci prints `Consider not allowlisting path(s): …`. Remove those entries.
 
+## Storybook
+
+Storybook 10 with the [`@storybook-vue/nuxt`](https://storybook.nuxtjs.org) framework and the Docs, Accessibility and Vitest addons, configured in `.storybook/`.
+
+- **Stories sit next to their components** as `*.stories.ts` and are titled by folder (`UI/AppButton`). `.storybook/main.ts` loads `app/components/**/*.stories.ts`, and Nuxt's component scan doesn't register them.
+- **Docs pages:** every component gets one (`tags: ['autodocs']`), with props, events and slots from the default docgen, `vue-docgen-api`. Storybook warns that it's deprecated, but leave it until Storybook 11 changes the default: `features.experimentalDocgenServer` finds no props with this framework, and the `vue-component-meta` docgen option's Vite plugin raises an error overlay whenever a story file changes.
+- **Stories are built with the Vite config from `nuxt.config.ts`**: auto-imports, the global SCSS and mixins, Nuxt plugins, and a stand-in `NuxtLink`. `nuxt.config.ts` turns off `nuxt-gtag` and the PWA when `STORYBOOK` or `VITEST` is set, so Storybook and the story tests send no analytics hits and register no service worker.
+- **`viteFinal` in `.storybook/main.ts` works around two things the framework does.** It builds Nuxt's config as for production, so `viteFinal` defines `process.env.NODE_ENV` as `development` in `storybook dev` to keep Vue's hot reload runtime. It turns off Vite's dependency discovery, so CommonJS packages that a component in a story imports have to be listed in `optimizeDeps.include` there, as `prismjs` is for `AppPrism`. Otherwise the story fails to load with "does not provide an export named …".
+- **Slots:** an arg named after a slot fills it, because docgen marks it as one (`default` in `AppButton.stories.ts`). For richer slot content, write a `render` template, and list the components it uses in its `components`: runtime-compiled templates don't get Nuxt's auto-imports.
+- **Backgrounds:** `.storybook/preview.ts` draws stories on the site's dark background, which the docs pages otherwise replace with white. Keep React-based imports such as `storybook/theming` out of `preview.ts`: the framework doesn't pre-bundle React, so the story tests would fail to load.
+- **No stories** for `AppStripe` (it creates a live Stripe PaymentIntent on mount), `ParticlesJS`, or the layout and page section components, which the page scans cover.
+- A cold run of the story tests prints a `NUXT_B7002` warning about `react` entries in `optimizeDeps.include`. `@storybook-vue/nuxt` adds them, and the warning is harmless.
+
 ## Accessibility tests
 
-`tests/a11y.spec.ts` uses Playwright and [@axe-core/playwright](https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright) to scan the prerendered site at a desktop and a phone viewport. It checks WCAG 2.2 A and AA plus axe's best practices, and fails on any violation.
+Two suites check the site with axe-core against the same rules, WCAG 2.2 A and AA plus axe's best practices (`axeTags` in `tests/axe.ts`), and fail on any violation. `pnpm test` runs both, and so does the `Accessibility` workflow on pull requests, as two steps so a failing story doesn't hide failing pages. Both run in Playwright's Chromium: run `pnpm exec playwright install chromium` once before the first local run.
+
+- Fix violations in the markup or styles. Don't disable rules or exclude elements unless axe is demonstrably wrong, and explain why in a comment.
+- axe can't judge contrast over background images, gradients or pseudo-element backgrounds. It reports those as `incomplete` rather than as violations (the home hero and the navigation menu, for example), so check them by hand.
+
+### Stories (`pnpm test:stories`)
+
+The Vitest addon (`vitest.config.ts`) turns every story into a test that renders it in Chromium, runs its play function, then runs the Accessibility addon's axe check (`parameters.a11y` in `.storybook/preview.ts`).
+
+- Stories reach states the page scans can't, such as an open modal or a filled-in field: the coffee modal's text failed contrast, and only its story caught it. Add a story, with a play function if it takes interaction, for each state worth checking.
+- `parameters.a11y.test: 'error'` fails the test on any violation. Don't lower it to `'todo'` or `'off'` to get a story through.
+- Stories are checked at Storybook's 1280px wide `desktop` viewport (pinned through `initialGlobals` in `vitest.config.ts`); the default, 1200px, is in the site's tablet breakpoint. axe checks `document.body`, so page-level rules such as landmarks and a level-one heading are left to the page scans, and the addon turns off `region`.
+- A failure prints each violation with the element and, for contrast, the measured ratio. In Storybook, the Accessibility panel checks the open story, and the test widget at the bottom of the sidebar runs the story tests (tick Accessibility to include the axe checks).
+
+### Pages (`pnpm test:a11y`)
+
+`tests/a11y.spec.ts` uses Playwright and [@axe-core/playwright](https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright) to scan the prerendered site at a desktop and a phone viewport.
 
 - It scans every `index.html` page in `.output/public`, so new pages are covered without changes, plus `/404.html` and the open navigation menu.
-- `pnpm test:a11y` runs `nuxt generate` first. To rescan the existing build, run `pnpm exec playwright test` (add `--project=desktop` or a title filter to narrow it). `playwright.config.ts` serves `.output/public` with sirv on port 4173. Run `pnpm exec playwright install chromium` once before the first local run.
+- `pnpm test:a11y` runs `nuxt generate` first. To rescan the existing build, run `pnpm exec playwright test` (add `--project=desktop` or a title filter to narrow it). `playwright.config.ts` serves `.output/public` with sirv on port 4173.
 - Requests to other origins are aborted, so test runs never send analytics hits, create Stripe PaymentIntents (the About page does on load) or load embeds. Third-party content isn't scanned.
 - `tests/modal.spec.ts` covers behaviour axe can't see, on the About page's coffee dialog (`AppModal`): focus moves in when it opens, Tab and Shift+Tab wrap inside it, Escape closes it and focus returns to its button, and its mask covers the whole page, header included.
 - Pages whose content fades in are listed in `introDurations` with the length of the intro. The test fast-forwards Playwright's fake clock by that much so axe sees the settled page. Add an entry when a page gets an intro animation.
 - The three.js demos (`isWebGLDemo`) run with `requestAnimationFrame` stubbed out. Chromium renders WebGL on the CPU in these tests (SwiftShader), and their render loops otherwise take so much of it that page loads and scans time out. axe doesn't look inside a canvas, so nothing goes unscanned. Don't pause `page.clock` for this instead: axe schedules its work with `setTimeout` and would never finish.
 - A failure lists each rule with the selectors that break it. The HTML report (`playwright-report/`, uploaded as an artifact in CI) has the full axe results for each page, including `failureSummary` with measured contrast ratios.
-- Fix violations in the markup or styles. Don't disable rules or exclude elements unless axe is demonstrably wrong, and explain why in a comment.
-- axe can't judge contrast over background images, gradients or pseudo-element backgrounds. It reports those as `incomplete` rather than as violations (the home hero and the navigation menu, for example), so check them by hand.
 
 ## Commits and pull requests
 

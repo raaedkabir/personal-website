@@ -1,6 +1,10 @@
 const description =
   "Hi! My name is Raaed. I am a web developer that loves to bring awesome ideas to life. If you're in need of a website or have an idea for a project then come check out my work and let's hook up!";
 
+// Storybook builds its component previews from this config (see .storybook/main.ts), in the storybook CLI and in
+// the Vitest runs of the stories. Previews shouldn't send analytics hits or register a service worker.
+const isStorybook = Boolean(process.env.STORYBOOK || process.env.VITEST);
+
 export default defineNuxtConfig({
   compatibilityDate: '2026-10-08',
 
@@ -60,9 +64,11 @@ export default defineNuxtConfig({
 
   gtag: {
     id: 'G-HWHNZXBHTF',
+    enabled: !isStorybook,
   },
 
   pwa: {
+    disable: isStorybook,
     registerType: 'autoUpdate',
     manifest: {
       name: 'Raaed Kabir',
