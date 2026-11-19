@@ -2,6 +2,7 @@ import { existsSync, readdirSync } from 'node:fs';
 import { join, sep } from 'node:path';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type TestInfo } from '@playwright/test';
+import { axeTags } from './axe';
 
 const outputDir = join(import.meta.dirname, '../.output/public');
 
@@ -24,11 +25,8 @@ const introDurations: Record<string, number> = { '/': 5_000 };
 // pages whose WebGL render loop, rendered on the CPU here, starves axe (their animation frames are stubbed out)
 const isWebGLDemo = (route: string) => route.startsWith('/works/threejs/');
 
-// WCAG 2.2 A and AA, plus axe's best practices
-const tags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'];
-
 async function expectNoViolations(axe: AxeBuilder, testInfo: TestInfo) {
-  const results = await axe.withTags(tags).analyze();
+  const results = await axe.withTags(axeTags).analyze();
   await testInfo.attach('axe-results.json', { body: JSON.stringify(results, null, 2), contentType: 'application/json' });
 
   // a short summary diffs better than the full results, which are attached to the report

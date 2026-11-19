@@ -84,6 +84,10 @@ dist
 /blob-report/
 /playwright/.cache/
 
+# Storybook
+/storybook-static/
+*storybook.log
+
 # Serverless directories
 .serverless
 

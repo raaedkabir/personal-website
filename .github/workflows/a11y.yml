@@ -1,6 +1,9 @@
 name: Accessibility
 
-# Prerenders the site and scans every page with axe-core in Playwright (tests/a11y.spec.ts).
+# Checks the site with axe-core against WCAG 2.2 A/AA and axe's best practices (the rules in tests/axe.ts), twice:
+# - every Storybook story, rendered by the Vitest addon and checked by the Accessibility addon (pnpm test:stories)
+# - every prerendered page, at a desktop and a phone viewport, in Playwright (pnpm test:a11y, tests/a11y.spec.ts)
+# pnpm test:a11y also runs tests/modal.spec.ts, which drives the About page's coffee dialog from the keyboard and mouse.
 # There is no matching Husky hook: building the site and driving a browser is too slow for one.
 on:
   pull_request:
@@ -31,8 +34,14 @@ jobs:
       - name: Install modules
         run: pnpm install --frozen-lockfile
       - name: Install Chromium
+        # both suites run in Playwright's Chromium
+        id: chromium
         run: pnpm exec playwright install --with-deps chromium
-      - name: Run accessibility tests
+      - name: Test stories
+        run: pnpm test:stories
+      - name: Test pages
+        # scan the pages even when a story failed
+        if: ${{ !cancelled() && steps.chromium.outcome == 'success' }}
         run: pnpm test:a11y
       - name: Upload report
         # the report has each page's full axe results and a trace of every failed test

@@ -1,7 +1,12 @@
 // @ts-check
+import storybook from 'eslint-plugin-storybook';
 import withNuxt from './.nuxt/eslint.config.mjs';
 
 export default withNuxt(
+  {
+    // the static Storybook build (pnpm build-storybook)
+    ignores: ['storybook-static/'],
+  },
   {
     rules: {
       // section components under components/Pages are named after what they render (Hero, Works, ...)
@@ -18,4 +23,6 @@ export default withNuxt(
       '@typescript-eslint/no-unused-vars': ['error', { args: 'none', ignoreRestSiblings: true }],
     },
   },
+  // the stories and .storybook/main.ts
+  ...storybook.configs['flat/recommended'],
 );
