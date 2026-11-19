@@ -27,9 +27,20 @@ pnpm run audit  # dependency audit with audit-ci (see Dependency audit below)
 
 When it fails, fix the advisory before allowlisting it:
 
-1. Upgrade the direct dependency that pulls in the vulnerable package.
-2. If no compatible upgrade exists, force the patched version with a pnpm override in `pnpm-workspace.yaml` (e.g. `d3-color@<3.1.0: ^3.1.0`), then run `pnpm install`.
+1. Upgrade the direct dependency that pulls in the vulnerable package. If the ranges already allow a patched version, `pnpm update <vulnerable-package>` updates just the lockfile.
+2. If no compatible upgrade exists, force the patched version with a pnpm override (see Overrides below), then run `pnpm install`.
 3. Check the fix with `pnpm lint`, `pnpm generate` and `pnpm run audit`.
+4. Check that every existing override and allowlist entry is still needed, and remove the ones that aren't (see below).
+
+### Overrides
+
+Overrides go under `overrides:` in `pnpm-workspace.yaml`. Use one only when the latest release of the package that depends on the vulnerable version still pins it, and the fix wasn't backported to that range.
+
+- Scope the selector to the advisory's vulnerable range and point it at the first patched release, e.g. `glob@>=9.0.0 <14.0.2: ^14.0.2`. It then rewrites only vulnerable versions, and stops matching once every parent is on a patched release.
+- If that crosses a major version, check that the package pinning the old version only uses APIs the new major keeps.
+- Put a comment above each override with the advisory ID, the package that pins the vulnerable version, why the forced version is safe for it, and what would make the override unnecessary. The existing overrides show the format.
+
+Overrides don't expire, so nothing fails when one stops being needed. Re-check them whenever you work on the audit or upgrade dependencies: remove each one in turn and run `pnpm install` and `pnpm run audit`. If the audit passes, delete the override and its comment. If it fails, put the override back, run `pnpm install` again, and update the comment if the reason changed (e.g. some of the packages it covered have since moved to a patched version).
 
 ### Allowlisting
 
@@ -52,6 +63,8 @@ Allowlist an advisory in `audit-ci.json` only when no patched release exists, or
 ```
 
 When an entry expires, the audit fails again. Check whether a fix has shipped and remove the entry if so. Otherwise, confirm the reasoning still holds and extend the expiry.
+
+An entry can also stop matching before it expires, e.g. when an upgrade removes the path or the advisory is withdrawn. The audit still passes, but audit-ci prints `Consider not allowlisting path(s): …`. Remove those entries.
 
 ## Accessibility tests
 
