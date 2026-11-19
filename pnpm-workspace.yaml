@@ -7,6 +7,18 @@ allowBuilds:
   unrs-resolver: false
 
 overrides:
-  # d3-svg-legend pins d3-scale/d3-transition 1.x, which pull in d3-color <3.1.0
-  # (GHSA-36jr-mh4h-2g58, ReDoS)
+  # d3-svg-legend 2.25.6 (the latest, from 2018) pins d3-scale/d3-transition 1.x, which
+  # pull in d3-color <3.1.0 (GHSA-36jr-mh4h-2g58, ReDoS). They only call its color
+  # constructors (rgb, hsl, lab, hcl, cubehelix), which 3.x keeps. Drop once
+  # d3-svg-legend is replaced
   d3-color@<3.1.0: ^3.1.0
+  # workbox-build 7.4.1 (the latest, via @vite-pwa/nuxt 1.x > vite-plugin-pwa) pins glob
+  # ^11, and GHSA-3g3m-2fjr-6pw4 (AbortSignal bypass) is only fixed in glob 14.0.2.
+  # workbox-build only calls globSync(), which 14 keeps. Drop once @vite-pwa/nuxt 2.x,
+  # which has no workbox-build, is in
+  glob@>=9.0.0 <14.0.2: ^14.0.2
+  # archiver 8.0.0 (the latest, via nitropack) depends on readdir-glob 3, which pins
+  # minimatch ^10, and GHSA-g3hv-75wg-m249 (DoS) is only fixed in minimatch 11.0.1.
+  # readdir-glob only calls new Minimatch() and #match, which 11 keeps. Drop once
+  # archiver uses readdir-glob 4
+  minimatch@>=7.0.0 <11.0.1: ^11.0.1
