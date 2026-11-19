@@ -19,3 +19,13 @@
     border-bottom: 3px #47ffff solid;
   }
 }
+
+// a link-styled button, for an action that doesn't navigate
+button.link {
+  font: inherit;
+  // a button is an inline block as tall as its line, which would drop the underline below the text
+  line-height: normal;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
