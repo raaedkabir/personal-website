@@ -71,20 +71,44 @@ Repository secrets: `AWS_ROLE_ARN`, `BUCKET_ID`, `CLOUDFRONT_ID`, `SERVERLESS_AC
 
 ---
 
+**Pull Request Previews**
+
+The `Preview` workflow builds every pull request and deploys it to `https://pr-<number>.preview.raaedkabir.com`. The link shows up on the pull request as a deployment to the `preview` environment, and the preview is deleted when the pull request closes. Previews don't send Google Analytics hits and tell search engines not to index them. They call the production Lambda functions, so the contact form sends real emails, and changes to `functions/` aren't previewed. Pull requests from forks aren't deployed, since their workflows get no AWS credentials.
+
+All previews share one private S3 bucket, with a folder per pull request, behind one CloudFront distribution whose CloudFront Function picks the folder from the subdomain. `infra/preview/template.yml` is a CloudFormation stack with the bucket, the distribution, a `*.preview.raaedkabir.com` certificate, the DNS records and an IAM role that can only write to the bucket. To set it up once:
+
+1. Deploy the stack in `us-east-1` (CloudFront only uses certificates from there), passing the ID of the `raaedkabir.com` Route 53 hosted zone. The role uses the account's existing GitHub OIDC provider. Validating the certificate and creating the distribution take several minutes.
+
+   ```bash
+   aws cloudformation deploy --region us-east-1 --stack-name personal-website-preview --template-file infra/preview/template.yml --capabilities CAPABILITY_IAM --parameter-overrides HostedZoneId=<hosted-zone-id>
+   ```
+
+2. Read the stack's outputs:
+
+   ```bash
+   aws cloudformation describe-stacks --region us-east-1 --stack-name personal-website-preview --query 'Stacks[0].Outputs' --output table
+   ```
+
+3. Add them as repository variables (Settings → Secrets and variables → Actions → Variables): `BucketName` as `PREVIEW_BUCKET` and `DeployRoleArn` as `PREVIEW_AWS_ROLE_ARN`. The workflow skips its jobs while `PREVIEW_BUCKET` is unset, which is why these are variables rather than secrets; neither grants access on its own. Push to an open pull request, or close and reopen it, to deploy its first preview.
+
+A pull request can edit its own workflow files, so the preview role trusts only pull request runs and can only touch the preview bucket. The production `AWS_ROLE_ARN` role should likewise trust only `main` (`repo:raaedkabir/personal-website:ref:refs/heads/main`).
+
+---
+
 **Dashboards & Consoles**
 
 Live site: [www.raaedkabir.com](https://www.raaedkabir.com/)
 
 | Provider | Console | Notes |
 | --- | --- | --- |
-| **AWS** | [Route 53](https://console.aws.amazon.com/route53/v2/hostedzones) | DNS hosted zone |
-| | [Certificate Manager](https://us-east-1.console.aws.amazon.com/acm/home?region=us-east-1#/certificates/list) | SSL certificate (`us-east-1`, as CloudFront requires) |
-| | [S3](https://console.aws.amazon.com/s3/buckets) | Site bucket (`BUCKET_ID`); resume, demo video and email images are in [`raaedkabir-assets`](https://console.aws.amazon.com/s3/buckets/raaedkabir-assets) |
-| | [CloudFront](https://console.aws.amazon.com/cloudfront/v4/home#/distributions) | Site distribution (`CLOUDFRONT_ID`) |
-| | [IAM roles](https://console.aws.amazon.com/iam/home#/roles) / [identity providers](https://console.aws.amazon.com/iam/home#/identity_providers) | Deploy role (`AWS_ROLE_ARN`) and the GitHub OIDC provider it trusts |
+| **AWS** | [Route 53](https://console.aws.amazon.com/route53/v2/hostedzones) | DNS hosted zone, including the `*.preview` records for pull request previews |
+| | [Certificate Manager](https://us-east-1.console.aws.amazon.com/acm/home?region=us-east-1#/certificates/list) | SSL certificates for the site and `*.preview.raaedkabir.com` (`us-east-1`, as CloudFront requires) |
+| | [S3](https://console.aws.amazon.com/s3/buckets) | Site bucket (`BUCKET_ID`) and preview bucket (`PREVIEW_BUCKET`); resume, demo video and email images are in [`raaedkabir-assets`](https://console.aws.amazon.com/s3/buckets/raaedkabir-assets) |
+| | [CloudFront](https://console.aws.amazon.com/cloudfront/v4/home#/distributions) | Site distribution (`CLOUDFRONT_ID`), and the preview distribution with its viewer-request function |
+| | [IAM roles](https://console.aws.amazon.com/iam/home#/roles) / [identity providers](https://console.aws.amazon.com/iam/home#/identity_providers) | Deploy roles (`AWS_ROLE_ARN`, `PREVIEW_AWS_ROLE_ARN`) and the GitHub OIDC provider they trust |
 | | [Lambda](https://ca-central-1.console.aws.amazon.com/lambda/home?region=ca-central-1#/functions) | `contact-lambda-dev-contact` and `stripe-lambda-dev-stripe` (`ca-central-1`) |
 | | [API Gateway](https://ca-central-1.console.aws.amazon.com/apigateway/main/apis?region=ca-central-1) | `POST /dev/contact` and `POST /dev/stripe` endpoints |
-| | [CloudFormation](https://ca-central-1.console.aws.amazon.com/cloudformation/home?region=ca-central-1#/stacks) | Serverless stacks `contact-lambda-dev` and `stripe-lambda-dev` |
+| | [CloudFormation](https://ca-central-1.console.aws.amazon.com/cloudformation/home?region=ca-central-1#/stacks) | Serverless stacks `contact-lambda-dev` and `stripe-lambda-dev`; the preview stack `personal-website-preview` is in [`us-east-1`](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks) |
 | | [CloudWatch Logs](https://ca-central-1.console.aws.amazon.com/cloudwatch/home?region=ca-central-1#logsV2:log-groups) | Function logs under `/aws/lambda/` |
 | | [SES](https://ca-central-1.console.aws.amazon.com/ses/home?region=ca-central-1#/identities) | Verified sender identity for the contact form |
 | **Serverless** | [Dashboard](https://app.serverless.com/raaedkabir) | Org `raaedkabir`, app `personal-website`: function deploys, and the access key for `SERVERLESS_ACCESS_KEY` |

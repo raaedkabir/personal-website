@@ -134,7 +134,7 @@ Personal portfolio site: a Nuxt 4 app (source under `app/`) prerendered with `nu
 - **Images:** literal paths use `src="@/assets/images/…"`. Paths built at runtime (blog cover images, work previews) go through `imageUrl()` in `utils/images.js`, which eagerly globs only `assets/images/{blog,works}/**`. Images in other folders won't resolve through it unless you widen the glob.
 - **Head/meta:** global meta, OG and Twitter tags are in `nuxt.config.ts`. The `"… | Raaed Kabir"` title template lives in `plugins/title-template.js` (not `app.vue`) so `error.vue` gets it too. Pages set their own title with `useHead`.
 - **Styles:** global SCSS follows the 7-1 pattern from `assets/scss/main.scss`. `abstracts/_mixins.scss` is injected into every stylesheet and `<style>` block through Vite `additionalData`, so `@include respond(phone | tab-port | tab-land | big-desktop)` and `interpolate(...)` work anywhere without an import. The stylesheets still use `@import` (the deprecation warning is silenced on purpose).
-- **PWA** (`@vite-pwa/nuxt`): precaches only hashed JS/CSS. Pages are network-first and `_nuxt` images cache-first at runtime. `navigateFallback` is null because there's no SPA shell. Analytics via `nuxt-gtag`.
+- **PWA** (`@vite-pwa/nuxt`): precaches only hashed JS/CSS. Pages are network-first and `_nuxt` images cache-first at runtime. `navigateFallback` is null because there's no SPA shell. Analytics via `nuxt-gtag`, turned off when a build runs with `DISABLE_ANALYTICS=true`, as pull request previews do.
 - **Shared state:** `composables/useNav.js` holds the fullscreen-menu open state with `useState`, shared across navbar instances.
 
 ### Lambda functions (`functions/`)
@@ -149,6 +149,13 @@ The frontend calls these through hard-coded API Gateway URLs in `components/Page
 ### Deployment
 
 `.github/workflows/main.yml` runs on pushes to `main` (and on manual dispatch). It runs `pnpm generate`, syncs `.output/public` to S3 with `--delete`, and invalidates CloudFront. In parallel it deploys both Lambda functions with Serverless (the `stripe-lambda` job writes `config.js` from the `STRIPE_SECRET_KEY` secret). AWS access uses GitHub OIDC via `AWS_ROLE_ARN`; there are no long-lived keys.
+
+`.github/workflows/preview.yml` deploys each same-repo pull request to `https://pr-<number>.preview.raaedkabir.com` and deletes it when the PR closes. It builds with `DISABLE_ANALYTICS=true`, syncs the build to the `pr-<number>/` folder of a shared preview bucket and uploads `infra/preview/not-found.html` to the bucket root as `404.html`. Its jobs are skipped until the `PREVIEW_BUCKET` and `PREVIEW_AWS_ROLE_ARN` repository variables are set (setup steps in the README).
+
+- `infra/preview/template.yml` is the CloudFormation stack (us-east-1) behind it: a private bucket, a CloudFront distribution with a `*.preview.raaedkabir.com` certificate and DNS records, and a deploy role that only trusts this repo's pull request runs and can only write to that bucket. Production's S3/CloudFront setup isn't in the repo.
+- The distribution's viewer-request CloudFront Function (inline in the template) maps `pr-<number>.` hosts to their folder and extension-less paths to `<path>/index.html`. It doesn't cache (Managed-CachingDisabled), so deploys need no invalidation.
+- CloudFront fetches custom error pages without running that function, so a missing path in any preview gets the bucket-root `404.html`, which redirects to the PR's own `/404.html`. If that's missing too, the preview doesn't exist and the page says so.
+- Previews call the production Lambda endpoints; changes under `functions/` aren't previewed.
 
 ### External services
 

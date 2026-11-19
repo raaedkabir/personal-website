@@ -1,0 +1,116 @@
+name: Preview
+
+# Deploys each pull request to https://pr-<number>.preview.raaedkabir.com and deletes the preview when the pull request
+# closes. The AWS resources are in infra/preview/template.yml. The jobs are skipped until the PREVIEW_BUCKET and
+# PREVIEW_AWS_ROLE_ARN repository variables are set (see the README), and for pull requests from forks, which get no
+# OIDC token.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+
+permissions:
+  contents: read
+
+concurrency:
+  # a newer commit, or closing the pull request, cancels a deploy that is still running
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  PREVIEW_FOLDER: pr-${{ github.event.pull_request.number }}
+
+jobs:
+  build:
+    if: >-
+      github.event.action != 'closed' && vars.PREVIEW_BUCKET != '' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Set node version
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          cache: true
+      - name: Install modules
+        run: pnpm install --frozen-lockfile
+      - name: Build application
+        run: pnpm run generate
+        env:
+          # keep preview visits out of Google Analytics
+          DISABLE_ANALYTICS: 'true'
+      - name: Upload build
+        uses: actions/upload-artifact@v7
+        with:
+          name: preview
+          path: .output/public
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 1
+
+  # Runs no code from the pull request besides this workflow, like the deploy-website job in main.yml
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    environment:
+      name: preview
+      url: https://pr-${{ github.event.pull_request.number }}.preview.raaedkabir.com
+    steps:
+      - name: Checkout not-found page
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          sparse-checkout: infra/preview/not-found.html
+          sparse-checkout-cone-mode: false
+      - name: Download build
+        uses: actions/download-artifact@v8
+        with:
+          name: preview
+          path: dist
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.PREVIEW_AWS_ROLE_ARN }}
+          aws-region: us-east-1
+          mask-aws-account-id: true
+      - name: Deploy to S3
+        # the trailing slash keeps --delete inside this pull request's folder (pr-1 is a prefix of pr-12)
+        run: aws s3 sync ./dist "s3://${PREVIEW_BUCKET}/${PREVIEW_FOLDER}/" --delete
+        env:
+          PREVIEW_BUCKET: ${{ vars.PREVIEW_BUCKET }}
+      - name: Upload not-found page
+        # CloudFront serves the bucket's root 404.html for a missing path in any preview (see the page's comment)
+        run: aws s3 cp infra/preview/not-found.html "s3://${PREVIEW_BUCKET}/404.html"
+        env:
+          PREVIEW_BUCKET: ${{ vars.PREVIEW_BUCKET }}
+
+  cleanup:
+    if: >-
+      github.event.action == 'closed' && vars.PREVIEW_BUCKET != '' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    # no environment, which would record a new deployment on the closed pull request; the role also trusts plain
+    # pull_request runs
+    permissions:
+      id-token: write
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.PREVIEW_AWS_ROLE_ARN }}
+          aws-region: us-east-1
+          mask-aws-account-id: true
+      - name: Delete preview
+        # the trailing slash matters here too: without it, closing #1 would also delete #10–#19
+        run: aws s3 rm "s3://${PREVIEW_BUCKET}/${PREVIEW_FOLDER}/" --recursive
+        env:
+          PREVIEW_BUCKET: ${{ vars.PREVIEW_BUCKET }}

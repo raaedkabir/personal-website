@@ -1,0 +1,45 @@
+<!doctype html>
+<!--
+  The Preview workflow uploads this page to the root of the preview bucket as 404.html. CloudFront serves it for every
+  missing path in every preview, because it fetches error pages without running the function that picks the pull
+  request's folder. It sends the browser on to the pull request's own /404.html, unless that is the missing path,
+  which means the preview itself doesn't exist (it was never deployed, or the pull request closed).
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Page Not Found | Preview</title>
+    <script>
+      if (location.pathname !== '/404.html') {
+        document.documentElement.style.visibility = 'hidden';
+        location.replace('/404.html');
+      }
+    </script>
+    <style>
+      body {
+        display: grid;
+        place-content: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0 1rem;
+        background: #1e1e20;
+        color: #f5f5f5;
+        font: 1.125rem/1.5 system-ui, sans-serif;
+        text-align: center;
+      }
+
+      a {
+        color: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Preview not found</h1>
+      <p>This pull request preview doesn't exist. Previews are deleted when their pull request closes.</p>
+      <p><a href="https://www.raaedkabir.com/">Go to raaedkabir.com</a></p>
+    </main>
+  </body>
+</html>

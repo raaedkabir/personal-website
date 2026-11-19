@@ -1,0 +1,238 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >-
+  Pull request previews for the personal website. Serves pr-<number>.<PreviewDomain> from the pr-<number>/ folder of a
+  private S3 bucket through CloudFront, and gives the Preview workflow (.github/workflows/preview.yml) a role that can
+  only write to that bucket. Deploy it in us-east-1; see the README for the commands.
+
+Parameters:
+  PreviewDomain:
+    Type: String
+    Default: preview.raaedkabir.com
+    Description: Each pull request is served at pr-<number>.<PreviewDomain>
+  HostedZoneId:
+    Type: AWS::Route53::HostedZone::Id
+    Description: The Route 53 hosted zone PreviewDomain belongs to (raaedkabir.com)
+  GitHubRepository:
+    Type: String
+    Default: raaedkabir/personal-website
+    Description: The owner/name of the repository whose pull request workflows may deploy previews
+
+Rules:
+  CertificateRegion:
+    Assertions:
+      - Assert: !Equals [!Ref 'AWS::Region', us-east-1]
+        AssertDescription: CloudFront only uses ACM certificates from us-east-1, so deploy this stack there
+
+Resources:
+  Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
+      LifecycleConfiguration:
+        Rules:
+          # a newer commit cancels a deploy that is still uploading, which can leave a multipart upload behind
+          - Id: AbortIncompleteMultipartUploads
+            Status: Enabled
+            AbortIncompleteMultipartUpload:
+              DaysAfterInitiation: 1
+
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref Bucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AllowCloudFrontRead
+            Effect: Allow
+            Principal:
+              Service: cloudfront.amazonaws.com
+            Action: s3:GetObject
+            Resource: !Sub '${Bucket.Arn}/*'
+            Condition:
+              StringEquals:
+                AWS:SourceArn: !Sub 'arn:${AWS::Partition}:cloudfront::${AWS::AccountId}:distribution/${Distribution}'
+
+  OriginAccessControl:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: !Sub '${AWS::StackName}-bucket'
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+
+  Certificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !Sub '*.${PreviewDomain}'
+      ValidationMethod: DNS
+      # CloudFormation adds the validation record to the hosted zone and waits for the certificate to be issued
+      DomainValidationOptions:
+        - DomainName: !Sub '*.${PreviewDomain}'
+          HostedZoneId: !Ref HostedZoneId
+
+  ViewerRequestFunction:
+    Type: AWS::CloudFront::Function
+    Properties:
+      Name: !Sub '${AWS::StackName}-viewer-request'
+      AutoPublish: true
+      FunctionConfig:
+        Comment: Serves pr-NUMBER.PreviewDomain from the pr-NUMBER folder of the bucket
+        Runtime: cloudfront-js-2.0
+      FunctionCode: |
+        // Serves pr-<number>.<PreviewDomain>/<path> from <bucket>/pr-<number>/<path>. A path without a file extension
+        // is a page, so it gets the page's index.html whether or not it ends in a slash (/about and /about/), since
+        // S3 has no directory indexes.
+        function handler(event) {
+          var request = event.request;
+          var preview = /^(pr-[1-9][0-9]*)\./.exec(request.headers.host.value);
+          if (!preview) {
+            // e.g. the distribution's own *.cloudfront.net domain
+            return { statusCode: 404, statusDescription: 'Not Found' };
+          }
+
+          var uri = request.uri;
+          if (uri.endsWith('/')) {
+            uri += 'index.html';
+          } else if (!/\.[^/]*$/.test(uri)) {
+            uri += '/index.html';
+          }
+          request.uri = '/' + preview[1] + uri;
+          return request;
+        }
+
+  ResponseHeadersPolicy:
+    Type: AWS::CloudFront::ResponseHeadersPolicy
+    Properties:
+      ResponseHeadersPolicyConfig:
+        Name: !Sub '${AWS::StackName}-headers'
+        Comment: Keeps previews out of search engines and has browsers revalidate after every deploy
+        CustomHeadersConfig:
+          Items:
+            - Header: X-Robots-Tag
+              Value: noindex, nofollow
+              Override: true
+            - Header: Cache-Control
+              Value: no-cache
+              Override: true
+
+  Distribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        Comment: !Sub 'Pull request previews at *.${PreviewDomain}'
+        Aliases:
+          - !Sub '*.${PreviewDomain}'
+        HttpVersion: http2and3
+        IPV6Enabled: true
+        PriceClass: PriceClass_100
+        Origins:
+          - Id: previews
+            DomainName: !GetAtt Bucket.RegionalDomainName
+            OriginAccessControlId: !GetAtt OriginAccessControl.Id
+            S3OriginConfig:
+              OriginAccessIdentity: ''
+        DefaultCacheBehavior:
+          TargetOriginId: previews
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods: [GET, HEAD]
+          CachedMethods: [GET, HEAD]
+          # Managed-CachingDisabled: a new deploy shows up straight away without an invalidation, and previews get
+          # too little traffic for caching to matter
+          CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad
+          ResponseHeadersPolicyId: !Ref ResponseHeadersPolicy
+          FunctionAssociations:
+            - EventType: viewer-request
+              FunctionARN: !GetAtt ViewerRequestFunction.FunctionARN
+        # S3 answers 403 for a missing key because CloudFront isn't allowed to list the bucket. CloudFront fetches the
+        # error page without running the viewer-request function, so /404.html is the bucket's root 404.html: the
+        # not-found.html page the workflow uploads, which sends the browser on to the pull request's own 404 page.
+        CustomErrorResponses:
+          - ErrorCode: 403
+            ResponseCode: 404
+            ResponsePagePath: /404.html
+            ErrorCachingMinTTL: 0
+          - ErrorCode: 404
+            ResponseCode: 404
+            ResponsePagePath: /404.html
+            ErrorCachingMinTTL: 0
+        ViewerCertificate:
+          AcmCertificateArn: !Ref Certificate
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.2_2021
+
+  DnsRecordIPv4:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !Ref HostedZoneId
+      Name: !Sub '*.${PreviewDomain}'
+      Type: A
+      AliasTarget:
+        DNSName: !GetAtt Distribution.DomainName
+        # the hosted zone of every CloudFront distribution
+        HostedZoneId: Z2FDTNDATAQYW2
+
+  DnsRecordIPv6:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !Ref HostedZoneId
+      Name: !Sub '*.${PreviewDomain}'
+      Type: AAAA
+      AliasTarget:
+        DNSName: !GetAtt Distribution.DomainName
+        HostedZoneId: Z2FDTNDATAQYW2
+
+  # Separate from the production deploy role, so a pull request (which can change its own workflow file) can only
+  # touch the preview bucket. It uses the account's existing GitHub OIDC provider.
+  DeployRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Description: Lets the Preview GitHub Actions workflow upload and delete pull request previews
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:oidc-provider/token.actions.githubusercontent.com'
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: sts.amazonaws.com
+                token.actions.githubusercontent.com:sub:
+                  # the deploy job, which runs in the preview environment
+                  - !Sub 'repo:${GitHubRepository}:environment:preview'
+                  # the cleanup job, which runs without an environment when a pull request closes
+                  - !Sub 'repo:${GitHubRepository}:pull_request'
+      Policies:
+        - PolicyName: preview-bucket
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: s3:ListBucket
+                Resource: !GetAtt Bucket.Arn
+              - Effect: Allow
+                Action:
+                  - s3:PutObject
+                  - s3:DeleteObject
+                Resource: !Sub '${Bucket.Arn}/*'
+
+Outputs:
+  BucketName:
+    Description: Set as the PREVIEW_BUCKET repository variable
+    Value: !Ref Bucket
+  DeployRoleArn:
+    Description: Set as the PREVIEW_AWS_ROLE_ARN repository variable
+    Value: !GetAtt DeployRole.Arn
+  PreviewUrl:
+    Description: Where each pull request is deployed
+    Value: !Sub 'https://pr-<number>.${PreviewDomain}'

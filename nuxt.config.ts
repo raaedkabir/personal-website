@@ -64,7 +64,8 @@ export default defineNuxtConfig({
 
   gtag: {
     id: 'G-HWHNZXBHTF',
-    enabled: !isStorybook,
+    // also off in pull request previews (.github/workflows/preview.yml), which build with DISABLE_ANALYTICS=true
+    enabled: !isStorybook && process.env.DISABLE_ANALYTICS !== 'true',
   },
 
   pwa: {
