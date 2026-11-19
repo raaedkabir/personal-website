@@ -127,10 +127,12 @@ export default {
         .append('g')
         .attr('transform', 'translate(' + (diameter / 2) + ', ' + (diameter / 2) + ')');
 
+      // blend from --clr-secondary-2 to --clr-primary, read from the stylesheet so the chart follows the palette
+      const styles = getComputedStyle(document.documentElement);
       const numColors = 10;
       const colorScale = d3.scaleLinear()
         .domain([0, (numColors - 1) / 2, numColors - 1])
-        .range(['#50c7e6', '#66fcf1'])
+        .range([styles.getPropertyValue('--clr-secondary-2').trim(), styles.getPropertyValue('--clr-primary').trim()])
         .interpolate(d3.interpolateHcl);
 
       svg.append('defs').append('radialGradient')
