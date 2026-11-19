@@ -85,6 +85,7 @@ An entry can also stop matching before it expires, e.g. when an upgrade removes 
 - Commit messages and PR titles must follow [Conventional Commits](https://www.conventionalcommits.org/) (e.g. `feat: add contact form`, `fix(blog): correct styles`), using the rules in `commitlint.config.js`.
 - PRs are squash-merged with the PR title as the commit title on `main`, so the title is checked by the `Commitlint` workflow, not the local `commit-msg` hook. Check a title before opening the PR with `printf '%s\n' "<title>" | pnpm exec commitlint`.
 - When a branch is ready for a PR, clean up its history first: fold follow-up fixes into the commits they belong to so each commit is a self-contained Conventional Commit. Commit them with `git commit --fixup=<sha>`, then run `GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash origin/main` (the env var makes the rebase non-interactive) and push with `git push --force-with-lease`.
+- Don't name or link issues or pull requests in other repositories (`owner/repo#123` or their URLs) in commit messages, PR titles and descriptions, or comments. GitHub adds a public "mentioned this" entry to that issue's timeline, and it stays there even after the text is edited. Describe what you found in words instead.
 
 ## Architecture
 
