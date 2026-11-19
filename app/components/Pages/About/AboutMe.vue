@@ -65,8 +65,8 @@
         </p>
         <br />
         <p>
-          If you'd like, <span class="link" @click="showDialog = true">click here</span> to buy me a cup of coffee and
-          help keep me awake.
+          If you'd like, <button type="button" class="link" @click="showDialog = true">click here</button> to buy me a
+          cup of coffee and help keep me awake.
         </p>
       </div>
     </div>
