@@ -149,3 +149,15 @@ The frontend calls these through hard-coded API Gateway URLs in `components/Page
 ### Deployment
 
 `.github/workflows/main.yml` runs on pushes to `main` (and on manual dispatch). It runs `pnpm generate`, syncs `.output/public` to S3 with `--delete`, and invalidates CloudFront. In parallel it deploys both Lambda functions with Serverless (the `stripe-lambda` job writes `config.js` from the `STRIPE_SECRET_KEY` secret). AWS access uses GitHub OIDC via `AWS_ROLE_ARN`; there are no long-lived keys.
+
+### External services
+
+The README's **Dashboards & Consoles** section covers every external service the site, the functions and the deploy pipeline use, in two forms: a table grouped by provider, and a Mermaid diagram of the same services below it. Each row and each diagram node links to the service's console.
+
+- **Keep both in step with the code.** When a change adds or removes a service, update the table and the diagram in the same change. That covers, for example, an AWS service a `serverless.yml` or workflow starts using, or a third-party script or SDK for payments, analytics or email. Do the same when a service moves or is renamed (a region, stage, function or stack name), because the console links and notes name them.
+- **Adding a service:** add a table row under its provider, or a new provider group, with the console link and what lives there. In the diagram, add a node in the provider's subgraph, a `click <id> href "<console URL>" _blank` line, and edges that show how a visit reaches it. **Removing one:** delete its row, node, edges and `click` line.
+- **GitHub draws the diagram with Mermaid 12's ELK layout**, not Mermaid's default layout. To keep it readable there:
+  - Style every subgraph `fill:none,stroke:#8b949e`. Grey fills wash out the text and arrows in dark mode.
+  - Don't add an edge that skips past a node in its row (A → C alongside A → B → C). ELK runs it along B's border, where B hides it. Point both sources at the shared target instead, the way CloudFormation and API Gateway both point at Lambda.
+  - Split labels longer than about 15 characters with `<br>`. The diagram is already wider than the README column, so GitHub scales it down.
+- Check a change by rendering the diagram with `mermaid@12` and `@mermaid-js/layout-elk@1` (`layout: 'elk'`, `theme: 'dark'`) in Playwright's Chromium. That matched GitHub's rendering when the diagram was added.
