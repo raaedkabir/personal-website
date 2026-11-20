@@ -5,6 +5,8 @@ const port = 4173;
 
 export default defineConfig({
   testDir: 'tests',
+  // the visual diff's screenshots, which have their own config (playwright.visual.config.ts)
+  testIgnore: '**/visual/**',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : [['list'], ['html', { open: 'never' }]],

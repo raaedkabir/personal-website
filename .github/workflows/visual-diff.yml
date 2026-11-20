@@ -1,0 +1,179 @@
+name: Visual diff
+
+# Shows what a pull request does to the site's pages (pnpm visual-diff, tests/visual/). It builds the site from the
+# base branch and from the PR's merge commit, screenshots every page of both at a desktop and a phone viewport, and
+# comments on the PR with the screenshots that changed, cropped to the change, before and after.
+#
+# GitHub's API can't attach images to a comment, so the publish job pushes them to the visual-diffs branch, in
+# pr-<number>/, and the comment embeds them from there. The branch holds a single commit, which every run replaces,
+# so its history doesn't pile up old screenshots. A PR's images are removed when it closes.
+#
+# There is no matching Husky hook: building the site twice and driving a browser is too slow for one.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  screenshots:
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          # the merge commit and its first parent, the base branch
+          fetch-depth: 2
+          persist-credentials: false
+      - name: Set node version
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          cache: true
+      - name: Install modules
+        run: pnpm install --frozen-lockfile
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Compare screenshots
+        run: pnpm visual-diff HEAD^1
+      - name: Write job summary
+        run: cat visual-diff/report/summary.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload screenshots
+        # the full-page screenshots of both builds, and the report the publish job posts
+        uses: actions/upload-artifact@v7
+        with:
+          name: visual-diff
+          path: visual-diff
+          retention-days: 14
+      - name: Upload traces
+        # a trace of each screenshot that failed, to open with pnpm exec playwright show-trace
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: visual-diff-traces
+          path: test-results/visual
+          retention-days: 7
+
+  publish:
+    needs: screenshots
+    # Runs after the screenshots, and on its own when the PR closes. PRs from forks and Dependabot get a read-only
+    # token, so for those the report stays in the job summary and the artifact.
+    if: >-
+      !cancelled() &&
+      (needs.screenshots.result == 'success' || github.event.action == 'closed') &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.user.login != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      # push the images to the visual-diffs branch
+      contents: write
+      # comment on the PR
+      pull-requests: write
+    # This job never checks out or runs the PR's code: it gets the screenshots job's report as an artifact.
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ACTION: ${{ github.event.action }}
+      PR: ${{ github.event.pull_request.number }}
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+      BRANCH: visual-diffs
+      # a folder no earlier run used, since raw.githubusercontent.com caches files for a few minutes
+      RUN_DIR: pr-${{ github.event.pull_request.number }}/${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - name: Download report
+        if: github.event.action != 'closed'
+        uses: actions/download-artifact@v8
+        with:
+          name: visual-diff
+          path: visual-diff
+      - name: Publish images
+        run: |
+          git init --quiet publish
+          cd publish
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git config http.https://github.com/.extraheader \
+            "AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          git remote add origin "https://github.com/$GITHUB_REPOSITORY.git"
+
+          # runs for other PRs replace the branch too, so start again if one pushed in between
+          for attempt in 1 2 3 4 5; do
+            status=0
+            git ls-remote --exit-code --heads origin "$BRANCH" > /dev/null || status=$?
+            if [ "$status" = 0 ]; then
+              git fetch --quiet --depth=1 origin "$BRANCH"
+              lease=$(git rev-parse FETCH_HEAD)
+              git checkout --quiet --force --detach FETCH_HEAD
+            elif [ "$status" = 2 ]; then
+              # the branch doesn't exist; an empty lease makes the push fail if another run creates it first
+              lease=
+              git read-tree --empty
+            else
+              exit "$status"
+            fi
+            git clean -dfxq
+
+            rm -rf "pr-$PR"
+            if [ "$ACTION" != closed ]; then
+              mkdir -p "$RUN_DIR"
+              cp -R ../visual-diff/report/images "$RUN_DIR/"
+            fi
+            printf '%s\n' \
+              '# Visual diffs' \
+              '' \
+              "Images for the Visual diff workflow's comments on open pull requests, in a folder for each one." \
+              "The workflow replaces this branch's only commit on every run, and removes a pull request's folder" \
+              'when it closes. Deleting the branch is safe: the next run creates it again.' > README.md
+            git add --all
+
+            tree=$(git write-tree)
+            if [ -z "$lease" ] && ! git ls-files | grep -q '\.png$'; then
+              echo 'No images to publish'
+              exit 0
+            elif [ -n "$lease" ] && [ "$tree" = "$(git rev-parse "$lease^{tree}")" ]; then
+              echo "$BRANCH is already up to date"
+              exit 0
+            fi
+            commit=$(git commit-tree "$tree" -m "Visual diff images for open pull requests")
+            if git push --quiet --force-with-lease="refs/heads/$BRANCH:$lease" origin "$commit:refs/heads/$BRANCH"; then
+              exit 0
+            fi
+            sleep $((attempt * 5))
+          done
+          echo "Couldn't update $BRANCH" >&2
+          exit 1
+      - name: Comment
+        run: |
+          ids=$(gh api "repos/$GITHUB_REPOSITORY/issues/$PR/comments" --paginate --jq \
+            '.[] | select(.user.login == "github-actions[bot]" and (.body | startswith("<!-- visual-diff -->"))) | .id')
+          id=${ids%%$'\n'*}
+
+          if [ "$ACTION" = closed ]; then
+            # the images are gone from the branch, so swap them for a note
+            [ -n "$id" ] || exit 0
+            gh api "repos/$GITHUB_REPOSITORY/issues/comments/$id" --jq .body > comment.md
+            perl -0777 -pi -e \
+              's/(<!-- visual-diff:images -->).*?<img.*?(<!-- \/visual-diff:images -->)/$1\n_The images were removed when this pull request closed._\n$2/s' \
+              comment.md
+          else
+            images="https://raw.githubusercontent.com/$GITHUB_REPOSITORY/$BRANCH/$RUN_DIR/images/"
+            sed "s#src=\"images/#src=\"$images#g" visual-diff/report/comment.md > comment.md
+            run="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            printf '\n<sub>From [this run](%s) for %s. Its <code>visual-diff</code> artifact has the full-page screenshots.</sub>\n' \
+              "$run" "$HEAD_SHA" >> comment.md
+          fi
+
+          if [ -n "$id" ]; then
+            gh api --method PATCH "repos/$GITHUB_REPOSITORY/issues/comments/$id" -F body=@comment.md > /dev/null
+          else
+            gh api "repos/$GITHUB_REPOSITORY/issues/$PR/comments" -F body=@comment.md > /dev/null
+          fi

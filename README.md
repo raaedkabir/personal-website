@@ -20,6 +20,7 @@ pnpm dev        # dev server on localhost:3000
 pnpm generate   # static build to /dist
 pnpm storybook  # Storybook on localhost:6006
 pnpm test       # check every story and page for accessibility issues
+pnpm visual-diff  # screenshot every page before and after your changes
 ```
 
 `pnpm install` also sets up [Husky](https://typicode.github.io/husky/) git hooks:
@@ -46,6 +47,16 @@ Pull requests run the same checks in CI: the `Lint` workflow runs `pnpm lint`, t
 - `pnpm test:a11y` prerenders the site and scans every page, the 404 page and the open navigation menu in [Playwright](https://playwright.dev/), at a desktop and a phone viewport. Run `pnpm exec playwright test` to rescan an existing build.
 
 Run `pnpm exec playwright install chromium` once before the first run. Pull requests run both suites in the `Accessibility` workflow, which uploads the Playwright report with the full axe results for each page.
+
+---
+
+**Visual Diff**
+
+`pnpm visual-diff` shows what a change does to the site's pages. It builds the site from the commit the branch forked from `origin/main` (or a commit passed as an argument) and from the working tree, screenshots every page of both at a desktop and a phone viewport in Playwright, and compares the screenshots pixel by pixel. `visual-diff/report/` gets the before, after and diff images of each screenshot that changed, cropped to the change.
+
+Pull requests run it in the `Visual diff` workflow, which comments on the PR with the screenshots that changed and updates the comment on every push. When nothing changed, the comment says so. The images are kept on the `visual-diffs` branch while the PR is open, and the full-page screenshots are in the workflow run's `visual-diff` artifact.
+
+Unchanged pages come out pixel for pixel the same, so nothing is reported unless it changed. Canvases (the p5, particles.js, three.js and vega drawings) and embeds are greyed out, so changes inside them don't show.
 
 ---
 

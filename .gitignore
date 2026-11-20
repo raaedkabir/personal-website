@@ -102,3 +102,6 @@ sw.*
 
 # Vim swap files
 *.swp
+
+# Visual diff (pnpm visual-diff)
+/visual-diff/

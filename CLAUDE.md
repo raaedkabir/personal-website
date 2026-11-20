@@ -17,11 +17,12 @@ pnpm build-storybook  # static Storybook in storybook-static/
 pnpm test             # pnpm test:stories, then pnpm test:a11y
 pnpm test:stories     # render every story in Chromium, run its play function and check it with axe
 pnpm test:a11y        # prerender the site and scan every page with axe (see Accessibility tests below)
+pnpm visual-diff      # screenshot every page before and after your changes, report what changed (see Visual diff below)
 pnpm run audit        # dependency audit with audit-ci (see Dependency audit below)
 ```
 
 - `eslint.config.mjs` imports `./.nuxt/eslint.config.mjs`, so lint fails until `nuxt prepare` has run (`pnpm install` does it). It also applies `eslint-plugin-storybook`'s recommended rules to the stories.
-- Husky: `pre-commit` runs `pnpm lint`; `commit-msg` runs commitlint on each local commit message; `pre-push` runs `pnpm run audit`. PRs run the same checks in CI through the `Lint`, `Commitlint` and `Audit` workflows, plus `pnpm test:stories` and `pnpm test:a11y` through the `Accessibility` workflow, which has no hook because it's too slow for one.
+- Husky: `pre-commit` runs `pnpm lint`; `commit-msg` runs commitlint on each local commit message; `pre-push` runs `pnpm run audit`. PRs run the same checks in CI through the `Lint`, `Commitlint` and `Audit` workflows, plus `pnpm test:stories` and `pnpm test:a11y` through the `Accessibility` workflow and `pnpm visual-diff` through the `Visual diff` workflow, which have no hooks because they're too slow for one.
 - Every Husky hook needs a matching GitHub Actions workflow. Hooks only run where they're installed, and `--no-verify` skips them, so CI is what enforces them. When you add or change a hook in `.husky/`, add or update a `pull_request` workflow in `.github/workflows/` that runs the same command (copy the setup steps from `lint.yml`), and update the hook and workflow lists here and in the README.
 - `.prettierrc` says no semicolons, but Prettier isn't wired into any script and most files use semicolons. Match the file you're editing.
 
@@ -103,13 +104,24 @@ The Vitest addon (`vitest.config.ts`) turns every story into a test that renders
 
 `tests/a11y.spec.ts` uses Playwright and [@axe-core/playwright](https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright) to scan the prerendered site at a desktop and a phone viewport.
 
-- It scans every `index.html` page in `.output/public`, so new pages are covered without changes, plus `/404.html` and the open navigation menu.
+- It scans every `index.html` page in `.output/public`, so new pages are covered without changes, plus `/404.html` and the open navigation menu. The page list and `isWebGLDemo` are in `tests/pages.ts`, which the visual diff shares.
 - `pnpm test:a11y` runs `nuxt generate` first. To rescan the existing build, run `pnpm exec playwright test` (add `--project=desktop` or a title filter to narrow it). `playwright.config.ts` serves `.output/public` with sirv on port 4173.
 - Requests to other origins are aborted, so test runs never send analytics hits, create Stripe PaymentIntents (the About page does on load) or load embeds. Third-party content isn't scanned.
 - `tests/modal.spec.ts` covers behaviour axe can't see, on the About page's coffee dialog (`AppModal`): focus moves in when it opens, Tab and Shift+Tab wrap inside it, Escape closes it and focus returns to its button, and its mask covers the whole page, header included.
 - Pages whose content fades in are listed in `introDurations` with the length of the intro. The test fast-forwards Playwright's fake clock by that much so axe sees the settled page. Add an entry when a page gets an intro animation.
 - The three.js demos (`isWebGLDemo`) run with `requestAnimationFrame` stubbed out. Chromium renders WebGL on the CPU in these tests (SwiftShader), and their render loops otherwise take so much of it that page loads and scans time out. axe doesn't look inside a canvas, so nothing goes unscanned. Don't pause `page.clock` for this instead: axe schedules its work with `setTimeout` and would never finish.
 - A failure lists each rule with the selectors that break it. The HTML report (`playwright-report/`, uploaded as an artifact in CI) has the full axe results for each page, including `failureSummary` with measured contrast ratios.
+
+## Visual diff
+
+`pnpm visual-diff [base]` shows what a change does to the site's pages. It builds the site at `base` (by default the commit the branch forked from `origin/main`) in a temporary git worktree, and from the working tree, uncommitted changes included. It screenshots every page of both builds at the desktop and phone viewports, plus the open navigation menu and the open coffee dialog, and compares them pixel by pixel. It takes a few minutes.
+
+- **Check your own visual changes before pushing.** After a change that can affect how the site looks (markup, styles, images, fonts, or a dependency that renders something), run `pnpm visual-diff` and look at what it reports. `visual-diff/report/report.json` lists each changed, new or removed screenshot, and `visual-diff/report/images/` has its before, after and diff images, cropped to the rows that changed. Make sure every change is one you meant to make, and that nothing else changed. A change you expected should show up too: if it doesn't, it isn't doing what you think.
+- **CI does the same on every pull request.** The `Visual diff` workflow runs `pnpm visual-diff HEAD^1` on the PR's merge commit and posts one comment, updated on every push, with the screenshots that changed. GitHub's API can't attach images to comments, so its publish job pushes them to the `visual-diffs` branch, which holds a single commit that every run replaces, and removes a PR's images when it closes. Never commit to that branch.
+- **Unchanged pages must come out identical.** Both builds are screenshotted on the same machine and compared without any tolerance, so the report has no noise and a one-pixel change still shows. `tests/visual/capture.spec.ts` makes that work: the page's clock is paused while it loads, then jumps 10s ahead in 250ms steps (past the home hero's 5s intro), `Math.random` is seeded, CSS animations are finished or paused at their start, Google Fonts load, and canvases and iframes are greyed out. If an unchanged page shows up as changed, find what still varies between runs and pin it down there. Don't add a tolerance to `tests/visual/compare.ts`, because it would hide small real changes too.
+- **Canvases and embeds are greyed out**, so changes to the p5, particles.js, three.js and vega drawings, and to the Certifications iframe, don't show. Check those by hand.
+- New pages are covered without changes (`tests/pages.ts`). For a state that only shows after an interaction, add a test to `capture.spec.ts`, as for the menu and the coffee dialog, named with `screenshotName(route, state)`.
+- Screenshots go to `visual-diff/before/` and `visual-diff/after/`. To screenshot just the current build, run `pnpm exec playwright test -c playwright.visual.config.ts` after `pnpm generate`; they go to `visual-diff/current/`. Both builds are screenshotted with the working tree's `capture.spec.ts`, so a change to the capture itself applies to both.
 
 ## Commits and pull requests
 

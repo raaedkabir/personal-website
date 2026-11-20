@@ -1,8 +1,9 @@
-import { existsSync, readdirSync } from 'node:fs';
-import { join, sep } from 'node:path';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type TestInfo } from '@playwright/test';
 import { axeTags } from './axe';
+import { isWebGLDemo, prerenderedRoutes } from './pages';
 
 const outputDir = join(import.meta.dirname, '../.output/public');
 
@@ -10,20 +11,10 @@ if (!existsSync(outputDir)) {
   throw new Error(`${outputDir} is missing. Run pnpm generate first, or use pnpm test:a11y, which does.`);
 }
 
-// every page nuxt generate prerendered (about/index.html is served at /about), plus the 404 page
-const routes = [
-  ...readdirSync(outputDir, { recursive: true, encoding: 'utf8' })
-    .filter((file) => file.split(sep).at(-1) === 'index.html')
-    .map((file) => `/${file.split(sep).slice(0, -1).join('/')}`)
-    .sort(),
-  '/404.html',
-];
+const routes = prerenderedRoutes(outputDir);
 
 // pages whose content fades in, and how long that takes (the home hero's GSAP intro)
 const introDurations: Record<string, number> = { '/': 5_000 };
-
-// pages whose WebGL render loop, rendered on the CPU here, starves axe (their animation frames are stubbed out)
-const isWebGLDemo = (route: string) => route.startsWith('/works/threejs/');
 
 async function expectNoViolations(axe: AxeBuilder, testInfo: TestInfo) {
   const results = await axe.withTags(axeTags).analyze();
