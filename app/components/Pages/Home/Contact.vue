@@ -64,6 +64,11 @@
 import axios from 'axios';
 
 export default {
+  setup() {
+    const { gtag } = useGtag();
+    return { gtag };
+  },
+
   data() {
     return {
       loading: false,
@@ -89,7 +94,10 @@ export default {
           message: this.message,
         })
         .then((response) => {
-          if (response.status === 200) this.success = true;
+          if (response.status === 200) {
+            this.success = true;
+            this.gtag('event', 'generate_lead', { form_name: 'contact' });
+          }
 
           setTimeout(() => {
             // reset fields

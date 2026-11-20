@@ -20,6 +20,11 @@ export default {
     },
   },
 
+  setup() {
+    const { gtag } = useGtag();
+    return { gtag };
+  },
+
   data() {
     return {
       // Disable the button until we have Stripe set up on the page
@@ -106,9 +111,22 @@ export default {
             this.showError(result.error.message);
           } else {
             // The payment succeeded!
+            this.trackPurchase(result.paymentIntent);
             this.orderComplete(result.paymentIntent.id);
           }
         });
+    },
+
+    // Report the donation to Google Analytics (Stripe amounts are in cents)
+    trackPurchase(paymentIntent) {
+      const value = paymentIntent.amount / 100;
+      const currency = paymentIntent.currency.toUpperCase();
+      this.gtag('event', 'purchase', {
+        transaction_id: paymentIntent.id,
+        value,
+        currency,
+        items: [{ item_id: 'coffee', item_name: 'Coffee donation', price: value, quantity: 1 }],
+      });
     },
 
     /* ------- UI helpers ------- */
