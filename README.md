@@ -91,6 +91,65 @@ Live site: [www.raaedkabir.com](https://www.raaedkabir.com/)
 | **Stripe** | [Payments](https://dashboard.stripe.com/payments) / [API keys](https://dashboard.stripe.com/apikeys) | Card payments; `STRIPE_SECRET_KEY` |
 | **Google** | [Analytics](https://analytics.google.com/) | Measurement ID `G-HWHNZXBHTF` |
 
+```mermaid
+flowchart LR
+  visitor([Visitor])
+
+  subgraph google [Google]
+    analytics[Analytics]
+  end
+
+  subgraph aws [AWS]
+    subgraph functions ["Functions (ca-central-1)"]
+      apigateway[API Gateway] --> lambda[Lambda] --> ses[SES]
+      cloudformation[CloudFormation] -.-> lambda
+      lambda -.-> logs["CloudWatch<br>Logs"]
+    end
+    subgraph site [Website]
+      route53[Route 53] --> cloudfront[CloudFront] --> s3[S3]
+      acm["Certificate<br>Manager"] -.-> cloudfront
+    end
+    iam[IAM]
+  end
+
+  subgraph serverless [Serverless]
+    dashboard[Dashboard]
+  end
+
+  subgraph stripe [Stripe]
+    payments[Payments]
+  end
+
+  visitor -.-> google
+  visitor --> site
+  visitor --> functions
+  visitor --> stripe
+  functions --> stripe
+  functions -.- serverless
+
+  %% Transparent provider boxes keep text and arrows on the page background in light and dark mode
+  style aws fill:none,stroke:#8b949e
+  style site fill:none,stroke:#8b949e
+  style functions fill:none,stroke:#8b949e
+  style serverless fill:none,stroke:#8b949e
+  style stripe fill:none,stroke:#8b949e
+  style google fill:none,stroke:#8b949e
+
+  click route53 href "https://console.aws.amazon.com/route53/v2/hostedzones" _blank
+  click acm href "https://us-east-1.console.aws.amazon.com/acm/home?region=us-east-1#/certificates/list" _blank
+  click s3 href "https://console.aws.amazon.com/s3/buckets" _blank
+  click cloudfront href "https://console.aws.amazon.com/cloudfront/v4/home#/distributions" _blank
+  click iam href "https://console.aws.amazon.com/iam/home#/roles" _blank
+  click lambda href "https://ca-central-1.console.aws.amazon.com/lambda/home?region=ca-central-1#/functions" _blank
+  click apigateway href "https://ca-central-1.console.aws.amazon.com/apigateway/main/apis?region=ca-central-1" _blank
+  click cloudformation href "https://ca-central-1.console.aws.amazon.com/cloudformation/home?region=ca-central-1#/stacks" _blank
+  click logs href "https://ca-central-1.console.aws.amazon.com/cloudwatch/home?region=ca-central-1#logsV2:log-groups" _blank
+  click ses href "https://ca-central-1.console.aws.amazon.com/ses/home?region=ca-central-1#/identities" _blank
+  click dashboard href "https://app.serverless.com/raaedkabir" _blank
+  click payments href "https://dashboard.stripe.com/payments" _blank
+  click analytics href "https://analytics.google.com/" _blank
+```
+
 ---
 
 **Problems with Configuring Client-Side Routing (for SPAs)**
